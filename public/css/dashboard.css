@@ -1,0 +1,107 @@
+/* Estadísticas del día */
+.stats-grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.stat-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.stat-card-number {
+  margin-top: 8px;
+  font-size: 34px;
+  font-weight: 700;
+  color: #ff7b00;
+}
+
+/* Bloque de gráficas */
+.charts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  margin-bottom: 10px;
+}
+
+.charts-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn {
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.filter-btn.active {
+  background: #ff7b00;
+  color: #fff;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 22px;
+  margin-top: 10px;
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px 16px 22px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.chart-card h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+/* --- ESTADO ASISTENCIA HOY (NUEVA SECCIÓN) --- */
+.attendance-status-section {
+    margin-top: 32px;
+}
+
+.attendance-status-section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.attendance-status-section .table {
+    /* Estilos de tabla del menu.css */
+    font-size: 14px;
+}
+
+.attendance-status-section .table thead {
+    background: #ff7b00; /* Color de tu marca 'Don Fano' */
+    color: #fff;
+}
+
+/* NUEVO: LAYOUT DE DOS COLUMNAS */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Una columna grande para stats, una pequeña para la tabla */
+    gap: 20px;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* Vuelve a una sola columna */
+    }
+}
+/* FIN NUEVO */

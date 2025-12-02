@@ -1,0 +1,147 @@
+/* ==============================
+      LOGIN DON FANO
+   ============================== */
+
+:root {
+  --madera: #3d2f26;
+  --panel: #ffffffdd;
+  --naranja: #ff7a3d;
+  --rojo: #d64545;
+  --amarillo: #ffd66e;
+  --verde: #7ac47a;
+  --texto: #2b1a10;
+  --oscuro: #1b140f;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--madera);
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+/* ==============================
+      CARD LOGIN
+   ============================== */
+
+.login-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 6px 20px #00000055;
+  animation: fadeIn 0.6s ease;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  padding: 5px;
+  background: #fff;
+  border: 3px solid var(--rojo);
+}
+
+.login-header h2 {
+  margin-top: 10px;
+  color: var(--amarillo);
+  font-size: 1.7rem;
+  font-weight: 800;
+}
+
+.subtitle {
+  margin-top: -4px;
+  color: var(--verde);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ==============================
+      FORMULARIO
+   ============================== */
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--texto);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: #fffefa;
+  font-size: 0.95rem;
+  margin-top: 5px;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  background: var(--rojo);
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-login:hover {
+  background: #b83737;
+}
+
+/* ==============================
+      ERROR TEXT
+   ============================== */
+
+.error-text {
+  color: var(--rojo);
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  display: none;
+}
+
+/* ==============================
+      ANIMACIONES
+   ============================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

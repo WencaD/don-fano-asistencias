@@ -1,0 +1,176 @@
+/* ==============================
+      ESTILOS DE EMPLEADO (Dashboard y Scanner)
+   ============================== */
+
+:root {
+  --primary: #ff7b00; /* Naranja de Don Fano */
+  --secondary: #e53935; /* Rojo (para botones de acción) */
+  --bg-color: #f7efe4; /* Fondo beige claro */
+  --text-color: #3d2f26;
+}
+
+body {
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: system-ui, sans-serif;
+    min-height: 100vh;
+}
+
+/* ===== LAYOUT & CONTENEDOR ===== */
+.main-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    /* (Ya definido en menu.css, pero si usas el HTML de empleado con sidebar, usa esos estilos) */
+    width: 260px;
+    background: #1e1e1e;
+    color: #fff;
+    padding: 24px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.emp-container {
+    flex: 1;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ===== ENCABEZADO ===== */
+.emp-header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.emp-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.emp-email {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-top: 3px;
+}
+
+.chip {
+    display: inline-block;
+    background: var(--secondary);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* ===== GRID DE CONTENIDO ===== */
+.emp-grid-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Más espacio para historial/status */
+    gap: 30px;
+}
+
+@media (max-width: 992px) {
+    .emp-grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ===== TARJETAS Y STATUS ===== */
+.emp-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.emp-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+/* Indicadores de Estado */
+.emp-status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.status-box {
+    text-align: center;
+    padding: 15px 10px;
+    border-radius: 8px;
+    background: #fffafa;
+    border: 1px solid #ddd;
+}
+
+.status-box .label {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.status-box .value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 5px;
+    color: var(--primary);
+}
+
+/* QR y Botones */
+.qr-img {
+    display: block;
+    width: 150px;
+    height: 150px;
+    margin: 15px auto;
+    border: 5px solid #eee;
+    border-radius: 5px;
+}
+
+.btn-qr-scan {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-qr-scan:hover {
+    background: #ff8f2a;
+}
+
+/* ===== TABLA HISTORIAL ===== */
+.emp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.emp-table th, .emp-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.emp-table th {
+    background: #f8f8f8;
+    font-weight: 600;
+    color: var(--text-color);
+}

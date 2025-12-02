@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reportes - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/menu.css" />
+  <link rel="stylesheet" href="../css/reportes.css" />
+</head>
+<body>
+<div class="main-layout">
+
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="../img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Trattoria - Pizzería</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="admin-dashboard.html" class="sidebar-link">Dashboard</a>
+        <a href="admin-trabajadores.html" class="sidebar-link">Trabajadores</a>
+        <a href="admin-turnos.html" class="sidebar-link">Turnos</a>
+        <a href="admin-reportes.html" class="sidebar-link active">Reportes</a>
+        <a href="../panel-qr.html" class="sidebar-link">Panel QR</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <button id="btnLogout">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header-top">
+      <div>
+        <h1 class="page-title">Reportes de Asistencia</h1>
+        <p class="page-subtitle">Consulta entradas, salidas, tardanzas y faltas.</p>
+      </div>
+    </header>
+
+    <!-- FILTROS -->
+    <section class="filters-section card">
+      <h2>Filtros</h2>
+
+      <form id="formReportes">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="desde">Desde</label>
+            <input type="date" id="desde" required />
+          </div>
+          <div class="form-field">
+            <label for="hasta">Hasta</label>
+            <input type="date" id="hasta" required />
+          </div>
+          <div class="form-field">
+            <label for="workerReporte">Trabajador (opcional)</label>
+            <select id="workerReporte">
+              <option value="">Todos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" style="width:100%;">
+            Buscar
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section class="list-section card">
+      <h2>Resultados</h2>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Trabajador</th>
+              <th>Entrada</th>
+              <th>Salida</th>
+              <th>Estado</th>
+              <th>Min. tarde</th>
+            </tr>
+          </thead>
+          <tbody id="tablaReportes">
+            <tr><td colspan="6">Sin datos</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<script src="../scripts/menu-admin.js"></script>
+<script src="../scripts/admin-reportes.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Turnos - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/menu.css" />
+  <link rel="stylesheet" href="../css/turnos.css" />
+</head>
+<body>
+<div class="main-layout">
+
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="../img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Trattoria - Pizzería</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="admin-dashboard.html" class="sidebar-link">Dashboard</a>
+        <a href="admin-trabajadores.html" class="sidebar-link">Trabajadores</a>
+        <a href="admin-turnos.html" class="sidebar-link active">Turnos</a>
+        <a href="admin-reportes.html" class="sidebar-link">Reportes</a>
+        <a href="../panel-qr.html" class="sidebar-link">Panel QR</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <button id="btnLogout">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header-top">
+      <div>
+        <h1 class="page-title">Gestión de Turnos</h1>
+        <p class="page-subtitle">Asigna y administra los turnos de los empleados.</p>
+      </div>
+    </header>
+
+    <!-- FORM -->
+    <section class="form-section card">
+      <h2>Crear turno</h2>
+
+      <form id="formTurno">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="workerId">Trabajador</label>
+            <select id="workerId"></select>
+          </div>
+          <div class="form-field">
+            <label for="fechaTurno">Fecha</label>
+            <input type="date" id="fechaTurno" required />
+          </div>
+          <div class="form-field">
+            <label for="horaInicio">Hora inicio</label>
+            <input type="time" id="horaInicio" required />
+          </div>
+          <div class="form-field">
+            <label for="horaFin">Hora fin</label>
+            <input type="time" id="horaFin" required />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" style="width:100%;">Registrar turno</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- LISTA -->
+    <section class="list-section card">
+      <h2>Turnos registrados</h2>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Empleado</th>
+              <th>Fecha</th>
+              <th>Hora inicio</th>
+              <th>Hora fin</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tablaTurnos">
+            <tr><td colspan="5">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<script src="../scripts/menu-admin.js"></script>
+<script src="../scripts/admin-turnos.js"></script>
+</body>
+</html>

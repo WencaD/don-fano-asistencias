@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/menu.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="main-layout">
+
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="../img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Trattoria - Pizzería</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="admin-dashboard.html" class="sidebar-link active">Dashboard</a>
+        <a href="admin-trabajadores.html" class="sidebar-link">Trabajadores</a>
+        <a href="admin-turnos.html" class="sidebar-link">Turnos</a>
+        <a href="admin-reportes.html" class="sidebar-link">Reportes</a>
+        <a href="../panel-qr.html" class="sidebar-link">Panel QR</a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <button id="btnLogout">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="dashboard-grid">
+        
+        <div class="main-stats-column">
+            <header>
+              <h1 class="page-title">Dashboard General</h1>
+              <p class="page-subtitle">Estadísticas del día</p>
+            </header>
+        
+            <section class="stats-grid">
+              <div class="card">
+                <div class="stat-card-title">Empleados activos</div>
+                <div id="empleadosActivos" class="stat-card-number">0</div>
+              </div>
+              <div class="card">
+                <div class="stat-card-title">Entradas hoy</div>
+                <div id="entradasHoy" class="stat-card-number">0</div>
+              </div>
+              <div class="card">
+                <div class="stat-card-title">Salidas hoy</div>
+                <div id="salidasHoy" class="stat-card-number">0</div>
+              </div>
+              <div class="card">
+                <div class="stat-card-title">Total trabajadores</div>
+                <div id="totalTrabajadores" class="stat-card-number">0</div>
+              </div>
+            </section>
+        
+            <section class="charts-section">
+              <div class="charts-header">
+                <h2 class="charts-title">Estadísticas por período</h2>
+                <div class="filter-buttons">
+                  <button class="filter-btn active" data-period="week">Esta semana</button>
+                  <button class="filter-btn" data-period="month">Último mes</button>
+                  <button class="filter-btn" data-period="year">Último año</button>
+                </div>
+              </div>
+        
+              <div class="charts-grid">
+                <div class="chart-card">
+                  <h3>Tardanzas / Faltas</h3>
+                  <canvas id="chartTardanzas"></canvas>
+                </div>
+                <div class="chart-card">
+                  <h3>Minutos de tardanza</h3>
+                  <canvas id="chartMinutos"></canvas>
+                </div>
+              </div>
+            </section>
+        </div>
+
+        <div class="side-attendance-column">
+             <section class="attendance-status-section card">
+              <h2>Estado de Asistencia Hoy (Refresco Automático)</h2>
+              <div class="table-wrapper">
+                <table class="table" id="tablaEstadoAsistencia">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Área</th>
+                      <th>Entrada</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td colspan="4">Cargando estado...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+        </div>
+        
+    </div>
+  </main>
+
+</div>
+
+<script src="../scripts/menu-admin.js"></script>
+<script src="../scripts/admin-dashboard.js"></script>
+</body>
+</html>

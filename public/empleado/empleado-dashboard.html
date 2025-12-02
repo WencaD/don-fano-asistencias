@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi Panel - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../css/menu.css">
+  <link rel="stylesheet" href="../css/empleado.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- Librería QR -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+    .emp-card h3 i { margin-right: 8px; color: #ff7b00; }
+    .status-box .value { font-size: 24px; }
+  </style>
+</head>
+
+<body>
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="../img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Empleado</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="empleado-dashboard.html" class="sidebar-link active">
+            <i class="fa-solid fa-gauge-high"></i> Mi Panel
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <button id="btnLogout" class="logout-btn">
+          <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="emp-container">
+
+        <header class="emp-header">
+          <h2>Hola, <span id="saludoNombre">...</span></h2> 
+          <p class="emp-email" id="empEmail"></p>
+          <p class="chip">Hoy: <span id="empToday"></span></p>
+        </header>
+
+        <div class="emp-grid-layout">
+            
+            <div class="left-column">
+                
+                <!-- ESTADO DE HOY -->
+                <section class="emp-card">
+                    <h3><i class="fa-solid fa-clock"></i> Estado de Hoy</h3>
+                    <div class="emp-grid" style="display:flex; justify-content:space-around; margin-top:10px;">
+                        <div>
+                            <p class="label">Entrada</p>
+                            <p id="entradaHoy" class="value">--</p>
+                        </div>
+                        <div>
+                            <p class="label">Salida</p>
+                            <p id="salidaHoy" class="value">--</p>
+                        </div>
+                    </div>
+
+                    <p style="text-align:center; margin:15px 0 0; font-weight:bold; color:var(--secondary);" id="estadoHoy">--</p>
+                    
+                    <button id="btnMarcarAsistencia" class="btn-qr-scan" style="margin-top:20px;">
+                        <i class="fa-solid fa-fingerprint"></i> Marcar Asistencia (Escanear QR)
+                    </button>
+                </section>
+
+                <!-- TURNOS -->
+                <section class="emp-card">
+                    <h3><i class="fa-solid fa-calendar-days"></i> Mis Próximos Turnos</h3>
+                    <table class="emp-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaTurnos">
+                            <tr><td colspan="3">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            
+            <div class="right-column">
+
+                <!-- RESUMEN MENSUAL -->
+                <section class="emp-card">
+                    <h3>Resumen Mensual</h3>
+                    <div class="emp-status-grid">
+                        <div class="status-box">
+                            <p class="label">Días</p>
+                            <p id="diasAsistidos" class="value">0</p>
+                        </div>
+                        <div class="status-box">
+                            <p class="label">Min. Tarde</p>
+                            <p id="minutosTarde" class="value">0</p>
+                        </div>
+                        <div class="status-box">
+                            <p class="label">Pago (S/)</p>
+                            <p id="pagoEstimado" class="value" style="color:#008000;">0.00</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HISTORIAL -->
+                <section class="emp-card">
+                    <h3>Historial</h3>
+                    <table class="emp-table">
+                        <thead>
+                          <tr>
+                            <th>Fecha</th>
+                            <th>Entrada</th>
+                            <th>Estado</th>
+                          </tr>
+                        </thead>
+                        <tbody id="historialTabla">
+                          <tr><td colspan="3">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </div>
+  </main>
+
+</div>
+
+<!-- =======================================================
+     🔥 MODAL QR COMPLETO — COPY & PASTE 
+=========================================================== -->
+<div id="modalQR" style="
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.75);
+    backdrop-filter: blur(4px);
+    z-index:999999;
+    justify-content:center;
+    align-items:center;
+">
+    <div style="
+        background:white;
+        padding:20px;
+        border-radius:12px;
+        width:350px;
+        text-align:center;
+        box-shadow:0 0 15px rgba(0,0,0,0.4);
+    ">
+        <h2 style="margin-bottom:15px;">Escanea tu Código QR</h2>
+
+        <div id="qr-reader" style="width:300px; margin:auto;"></div>
+
+        <button onclick="cerrarQR()" style="
+            margin-top:20px;
+            background:#d9534f;
+            padding:10px 20px;
+            color:white;
+            font-weight:bold;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+        ">
+            Cancelar
+        </button>
+    </div>
+</div>
+
+<!-- JS -->
+<script src="../scripts/logout.js"></script>
+<script src="../scripts/empleado-dashboard.js"></script>
+
+</body>
+</html>

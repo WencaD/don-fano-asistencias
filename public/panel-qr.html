@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel QR - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/menu.css" />
+  <link rel="stylesheet" href="css/dashboard.css" /> <style>
+    /* Estilos específicos para el contenido central del QR */
+    .qr-content-card {
+      margin: 30px auto;
+      max-width: 450px;
+      padding: 30px;
+      text-align: center;
+    }
+    #qr-canvas {
+      display: block;
+      margin: 20px auto;
+      border: 5px solid #ff7b00; /* Borde naranja */
+      border-radius: 8px;
+    }
+    #codigo {
+      margin-top: 15px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #008000; /* Verde para el código */
+    }
+    #timer {
+      margin-top: 8px;
+      font-size: 16px;
+      color: #333;
+    }
+    #estado {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #ff7b00;
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body>
+<div class="main-layout">
+
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Trattoria - Pizzería</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="admin/admin-dashboard.html" class="sidebar-link">Dashboard</a>
+        <a href="admin/admin-trabajadores.html" class="sidebar-link">Trabajadores</a>
+        <a href="admin/admin-turnos.html" class="sidebar-link">Turnos</a>
+        <a href="admin/admin-reportes.html" class="sidebar-link">Reportes</a>
+        <a href="panel-qr.html" class="sidebar-link active">Panel QR</a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <button id="btnLogout">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <h1 class="page-title">QR de Marcación - Pizzería</h1>
+      <p class="page-subtitle">Escanea este código para registrar tu asistencia</p>
+    </header>
+
+    <div id="qr-container" class="card qr-content-card">
+      <canvas id="qr-canvas"></canvas>
+      <div id="codigo">Cargando código...</div>
+      <div id="timer">Tiempo restante: -- s</div>
+      <div id="estado"></div>
+    </div>
+  </main>
+
+</div>
+
+<script src="scripts/menu-admin.js"></script> <script>
+  const qr = new QRious({
+    element: document.getElementById('qr-canvas'),
+    size: 260,
+    value: 'Inicializando...'
+  });
+
+  const codigoSpan = document.getElementById('codigo');
+  const timerSpan = document.getElementById('timer');
+  const estadoSpan = document.getElementById('estado');
+
+  async function actualizarQR() {
+    try {
+      // Usamos fetch sin apiRequest porque esta página es pública (siempre debe ser accesible en el local)
+      const res = await fetch('/api/qr/current'); 
+      if (!res.ok) {
+        throw new Error('Error al obtener código');
+      }
+
+      const data = await res.json();
+
+      const codigo = data.codigo;
+      const expira = data.expira_en;
+
+      // Actualizar QR
+      qr.value = codigo;
+
+      // Actualizar textos
+      codigoSpan.textContent = codigo;
+      timerSpan.textContent = 'Tiempo restante: ' + expira + ' s';
+
+      if (expira <= 5) {
+        estadoSpan.textContent = '⚠ El código está por cambiar...';
+        estadoSpan.style.color = '#ffcc00';
+      } else {
+        estadoSpan.textContent = 'Código actual';
+        estadoSpan.style.color = '#008000';
+      }
+    } catch (err) {
+        codigoSpan.textContent = 'ERROR';
+        timerSpan.textContent = 'Servidor no responde';
+        estadoSpan.textContent = 'Asegúrate que el backend esté corriendo.';
+        estadoSpan.style.color = '#d93434';
+      }
+    }
+
+    setInterval(actualizarQR, 1000);
+    actualizarQR();
+
+</script>
+</body>
+</html>

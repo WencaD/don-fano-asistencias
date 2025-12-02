@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar Sesión - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+  <div class="login-container">
+
+    <div class="login-card">
+
+      <div class="login-header">
+        <img src="img/logo.png" alt="Logo Don Fano">
+        <h2>Don Fano</h2>
+        <p class="subtitle">Control de Asistencia</p>
+      </div>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label>Usuario o correo</label>
+          <input type="text" id="username" placeholder="Ingresa tu usuario" required>
+        </div>
+
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="password" placeholder="********" required>
+        </div>
+
+        <button type="submit" class="btn-login">Ingresar</button>
+
+        <p id="errorText" class="error-text"></p>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <script src="scripts/login.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trabajadores - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/menu.css" />
+  <link rel="stylesheet" href="../css/trabajadores.css" />
+</head>
+<body>
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="../img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Trattoria - Pizzería</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="admin-dashboard.html" class="sidebar-link">Dashboard</a>
+        <a href="admin-trabajadores.html" class="sidebar-link active">Trabajadores</a>
+        <a href="admin-turnos.html" class="sidebar-link">Turnos</a>
+        <a href="admin-reportes.html" class="sidebar-link">Reportes</a>
+        <a href="../panel-qr.html" class="sidebar-link">Panel QR</a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <button id="btnLogout">Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="main-content">
+    <header class="page-header-top">
+      <div>
+        <h1 class="page-title">Gestión de Trabajadores</h1>
+        <p class="page-subtitle">
+          Administra los datos de los empleados registrados.
+        </p>
+      </div>
+      <span id="todayLabel" class="page-header-date">--/--/----</span>
+    </header>
+
+    <!-- REGISTRAR -->
+    <section class="form-section card">
+      <h2>Registrar trabajador</h2>
+      <p style="font-size:13px; opacity:.75; margin-top:4px;">
+        Crea la cuenta y los datos del nuevo empleado.
+      </p>
+
+      <form id="formTrabajador">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="nombre">Nombre completo</label>
+            <input type="text" id="nombre" required />
+          </div>
+          <div class="form-field">
+            <label for="dni">DNI</label>
+            <input type="text" id="dni" required />
+          </div>
+          <div class="form-field">
+            <label for="correo">Correo</label>
+            <input type="email" id="correo" required />
+          </div>
+          <div class="form-field">
+            <label for="area">Área</label>
+            <select id="area">
+              <option value="Cocina">Cocina</option>
+              <option value="Caja">Caja</option>
+              <option value="Delivery">Delivery</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="rol">Rol</label>
+            <select id="rol">
+              <option value="Empleado">Empleado</option>
+              <option value="Administrador">Administrador</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="salario_hora">Salario por hora (S/)</label>
+            <input type="number" id="salario_hora" value="0" min="0" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" style="width:100%;">
+            Registrar
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- LISTA -->
+    <section class="list-section card">
+      <h2>Lista de trabajadores</h2>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>DNI</th>
+              <th>Correo</th>
+              <th>Área</th>
+              <th>Rol</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tablaTrabajadores">
+            <tr><td colspan="7">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<script src="../scripts/menu-admin.js"></script>
+<script src="../scripts/admin-trabajadores.js"></script>
+</body>
+</html>
