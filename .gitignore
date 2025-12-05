@@ -4,3 +4,4 @@ ssl/
 cloudflared.exe
 *.json.bak
 node_modules/
+.vercel
