@@ -3,56 +3,36 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Worker = require("../models/Worker");
 
-// SECRETO
-const SECRET = "supersecretkey";
+// SECRETO - IMPORTANTE: Este secreto debe estar en una variable de entorno (ej: .env)
+const SECRET = "supersecretkey"; // ⚠️ Reemplazar con process.env.JWT_SECRET
 
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    console.log("LOGIN REQUEST:", username, password);
-
-    // Buscar usuario por username
+    // 1. Buscar usuario por username
     let user = await User.findOne({ where: { username } });
 
-    // Si el admin no existe pero username es "admin",
-    // hacemos fallback a ID=1 para compatibilidad
-    if (!user && username === "admin") {
-      user = await User.findByPk(1);
-    }
+    // ⚠️ SUGERENCIA: Elimina el fallback a ID=1. Si el admin no existe, que falle.
+    // if (!user && username === "admin") {
+    //   user = await User.findByPk(1);
+    // }
 
-    // Si no existe
+    // 2. Si no existe el usuario
     if (!user) {
       return res.status(400).json({ error: "Usuario o contraseña incorrecta" });
     }
-
-    let match = false;
-
-    // ==========================
-    //        ADMIN LOGIN
-    // ==========================
-    if (user.role === "ADMIN") {
-      // Caso 1: Admin por defecto con password texto plano (“123456”)
-      if (user.password_hash === "123456" && password === "123456") {
-        match = true;
-      } else {
-        // Caso 2: Admin ya cambió su contraseña (bcrypt)
-        match = await bcrypt.compare(password, user.password_hash);
-      }
-    }
-
-    // ==========================
-    //      EMPLOYEE LOGIN
-    // ==========================
-    if (user.role === "WORKER") {
-      match = await bcrypt.compare(password, user.password_hash);
-    }
-
+    
+    // 3. COMPARACIÓN UNIVERSAL DE CONTRASEÑA (Segura)
+    // Se usa bcrypt.compare() para CUALQUIER rol, asumiendo que el password_hash es un hash de bcrypt.
+    const match = await bcrypt.compare(password, user.password_hash);
+    
+    // Si la contraseña no coincide
     if (!match) {
       return res.status(400).json({ error: "Contraseña incorrecta" });
     }
 
-    // Obtener info del trabajador si es WORKER
+    // 4. Obtener info del trabajador si es WORKER
     let workerData = null;
     if (user.role === "WORKER") {
       workerData = await Worker.findOne({
@@ -61,18 +41,18 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Generar JWT
+    // 5. Generar JWT
     const token = jwt.sign(
       {
         id: user.id,
         role: user.role,
         workerId: workerData ? workerData.id : null,
       },
-      SECRET,
+      SECRET, // Usar process.env.JWT_SECRET en producción
       { expiresIn: "8h" }
     );
 
-    // Respuesta final
+    // 6. Respuesta final
     res.json({
       message: "Login exitoso",
       role: user.role,
@@ -83,17 +63,10 @@ exports.login = async (req, res) => {
         email: user.email,
         role: user.role,
         workerId: workerData ? workerData.id : null,
-        area: workerData ? workerData.area : null,
-        qr_token: workerData ? workerData.qr_token : null,
       },
     });
-
   } catch (error) {
-    console.error("❌ ERROR LOGIN:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    console.error("Error en el login:", error);
+    res.status(500).json({ error: "Error del servidor al iniciar sesión" });
   }
-};
-
-exports.logout = (req, res) => {
-  res.json({ message: "Sesión cerrada" });
 };

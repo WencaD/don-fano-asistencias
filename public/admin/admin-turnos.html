@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../css/menu.css" />
   <link rel="stylesheet" href="../css/turnos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <div class="main-layout">
@@ -14,64 +15,112 @@
     <div>
       <div class="sidebar-logo">
         <img src="../img/logo.png" alt="Don Fano Logo" />
-        <h2>Don Fano</h2>
-        <span>Trattoria - Pizzería</span>
+        <div class="logo-text">
+          <h2>Don Fano</h2>
+          <span>Trattoria - Pizzería</span>
+        </div>
       </div>
 
       <nav class="sidebar-menu">
-        <a href="admin-dashboard.html" class="sidebar-link">Dashboard</a>
-        <a href="admin-trabajadores.html" class="sidebar-link">Trabajadores</a>
-        <a href="admin-turnos.html" class="sidebar-link active">Turnos</a>
-        <a href="admin-reportes.html" class="sidebar-link">Reportes</a>
-        <a href="../panel-qr.html" class="sidebar-link">Panel QR</a>
+        <a href="admin-dashboard.html" class="sidebar-link">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="admin-trabajadores.html" class="sidebar-link">
+          <i class="fas fa-users"></i>
+          <span>Trabajadores</span>
+        </a>
+        <a href="admin-turnos.html" class="sidebar-link active">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Turnos</span>
+        </a>
+        <a href="admin-reportes.html" class="sidebar-link">
+          <i class="fas fa-file-alt"></i>
+          <span>Reportes</span>
+        </a>
+        <a href="../panel-qr.html" class="sidebar-link">
+          <i class="fas fa-qrcode"></i>
+          <span>Panel QR</span>
+        </a>
       </nav>
     </div>
     <div class="sidebar-footer">
-      <button id="btnLogout">Cerrar sesión</button>
+      <button id="btnLogout" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Cerrar sesión</span>
+      </button>
     </div>
   </aside>
 
   <main class="main-content">
-    <header class="page-header-top">
+    <header class="page-header">
       <div>
-        <h1 class="page-title">Gestión de Turnos</h1>
-        <p class="page-subtitle">Asigna y administra los turnos de los empleados.</p>
+        <h1 class="page-title">
+          <i class="fas fa-calendar-alt"></i>
+          Gestión de Turnos
+        </h1>
+        <p class="page-subtitle">Asigna y administra los turnos de los empleados</p>
       </div>
     </header>
 
     <!-- FORM -->
     <section class="form-section card">
-      <h2>Crear turno</h2>
+      <div class="card-header">
+        <h2>
+          <i class="fas fa-calendar-plus"></i>
+          Crear turno
+        </h2>
+      </div>
 
       <form id="formTurno">
         <div class="form-grid">
           <div class="form-field">
-            <label for="workerId">Trabajador</label>
+            <label for="workerId">
+              <i class="fas fa-user"></i>
+              Trabajador
+            </label>
             <select id="workerId"></select>
           </div>
           <div class="form-field">
-            <label for="fechaTurno">Fecha</label>
+            <label for="fechaTurno">
+              <i class="fas fa-calendar"></i>
+              Fecha
+            </label>
             <input type="date" id="fechaTurno" required />
           </div>
           <div class="form-field">
-            <label for="horaInicio">Hora inicio</label>
+            <label for="horaInicio">
+              <i class="fas fa-clock"></i>
+              Hora inicio
+            </label>
             <input type="time" id="horaInicio" required />
           </div>
           <div class="form-field">
-            <label for="horaFin">Hora fin</label>
+            <label for="horaFin">
+              <i class="fas fa-clock"></i>
+              Hora fin
+            </label>
             <input type="time" id="horaFin" required />
           </div>
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn-primary" style="width:100%;">Registrar turno</button>
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-save"></i>
+            Registrar Turno
+          </button>
         </div>
       </form>
     </section>
 
     <!-- LISTA -->
     <section class="list-section card">
-      <h2>Turnos registrados</h2>
+      <div class="card-header">
+        <h2>
+          <i class="fas fa-list"></i>
+          Turnos registrados
+        </h2>
+      </div>
 
       <div class="table-wrapper">
         <table class="table">

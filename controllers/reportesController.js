@@ -3,11 +3,32 @@ const Assistance = require("../models/Assistance");
 const Worker = require("../models/Worker");
 const { Op } = require("sequelize");
 
-function diffMinutos(h1, h2) {
-  if (!h1 || !h2) return 0;
-  const [aH, aM] = h1.split(":").map(Number);
-  const [bH, bM] = h2.split(":").map(Number);
-  return (aH * 60 + aM) - (bH * 60 + bM);
+/**
+ * Calcula la diferencia en minutos entre dos horas 'HH:MM:SS'
+ * Esta versión incluye segundos y redondea al minuto más cercano para el tiempo trabajado.
+ * @param {string} hora1 - Hora final (hora_salida)
+ * @param {string} hora2 - Hora inicial (hora_entrada)
+ * @returns {number} Minutos de diferencia.
+ */
+function diffMinutos(hora1, hora2) {
+  if (!hora1 || !hora2) return 0;
+
+  const totalMinutos = (horaStr) => {
+    // Convertir H:M:S a minutos totales con fracción de segundos
+    const partes = horaStr.split(":").map(Number);
+    const h = partes[0] || 0;
+    const m = partes[1] || 0;
+    const s = partes[2] || 0;
+    
+    return h * 60 + m + s / 60; 
+  };
+  
+  const minutos1 = totalMinutos(hora1);
+  const minutos2 = totalMinutos(hora2);
+
+  // Redondeamos al minuto entero más cercano para el tiempo trabajado
+  const diferencia = minutos1 - minutos2;
+  return Math.round(diferencia);
 }
 
 exports.getReportes = async (req, res) => {
@@ -35,20 +56,20 @@ exports.getReportes = async (req, res) => {
       let pagoDia = 0;
 
       if (a.hora_entrada && a.hora_salida && a.Worker) {
-        const minutos = diffMinutos(a.hora_salida, a.hora_entrada);
-        if (minutos > 0) {
-          horasTrab = minutos / 60;
-          pagoDia = horasTrab * (a.Worker.salario_hora || 0);
-        }
+        // Usamos la versión corregida de diffMinutos
+        const minutos = diffMinutos(a.hora_salida, a.hora_entrada); 
+        const horas = minutos > 0 ? minutos / 60 : 0;
+        horasTrab = horas.toFixed(2); // Dejamos dos decimales para el reporte
+        pagoDia = (horas * (a.Worker.salario_hora || 0)).toFixed(2);
       }
-
-      a.dataValues.horas_trabajadas = horasTrab;
-      a.dataValues.pago_dia = pagoDia;
+      // Añadimos las nuevas propiedades al objeto de asistencia (para el reporte)
+      a.dataValues.horasTrabajadas = horasTrab; 
+      a.dataValues.pagoDelDia = pagoDia;
     });
 
     res.json(asistencias);
   } catch (err) {
     console.error("getReportes error:", err);
-    res.status(500).json({ ok: false, error: "Error al obtener reportes" });
+    res.status(500).json({ ok: false, error: "Error al generar reportes" });
   }
 };

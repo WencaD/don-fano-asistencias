@@ -1,10 +1,12 @@
 // models/User.js
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
+const bcrypt = require("bcrypt"); // ⬅️ Nuevo: Importar bcrypt
 
 const User = sequelize.define(
   "User",
   {
+    // ... (definición de campos)
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -29,7 +31,6 @@ const User = sequelize.define(
       allowNull: false,
     },
     role: {
-      // Debe coincidir con la BD: ENUM('ADMIN','WORKER')
       type: DataTypes.ENUM("ADMIN", "WORKER"),
       allowNull: false,
       defaultValue: "WORKER",
@@ -40,5 +41,10 @@ const User = sequelize.define(
     timestamps: false,
   }
 );
+
+// ⬅️ Nuevo: Método de instancia para comparar la contraseña
+User.prototype.comparePassword = async function (candidatePassword) {
+    return await bcrypt.compare(candidatePassword, this.password_hash);
+};
 
 module.exports = User;

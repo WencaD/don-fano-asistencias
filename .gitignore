@@ -1,0 +1,5 @@
+ssl/
+.env
+cloudflared.exe
+*.json.bak
+node_modules/

@@ -1,10 +1,12 @@
 {
   "name": "pizzeria",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "start": "node index.js",
+    "https": "node index-https.js",
+    "dev": "nodemon index.js",
+    "dev-https": "nodemon index-https.js"
   },
   "keywords": [],
   "author": "",

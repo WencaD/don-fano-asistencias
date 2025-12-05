@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../css/menu.css" />
   <link rel="stylesheet" href="../css/reportes.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <div class="main-layout">
@@ -14,47 +15,84 @@
     <div>
       <div class="sidebar-logo">
         <img src="../img/logo.png" alt="Don Fano Logo" />
-        <h2>Don Fano</h2>
-        <span>Trattoria - Pizzería</span>
+        <div class="logo-text">
+          <h2>Don Fano</h2>
+          <span>Trattoria - Pizzería</span>
+        </div>
       </div>
 
       <nav class="sidebar-menu">
-        <a href="admin-dashboard.html" class="sidebar-link">Dashboard</a>
-        <a href="admin-trabajadores.html" class="sidebar-link">Trabajadores</a>
-        <a href="admin-turnos.html" class="sidebar-link">Turnos</a>
-        <a href="admin-reportes.html" class="sidebar-link active">Reportes</a>
-        <a href="../panel-qr.html" class="sidebar-link">Panel QR</a>
+        <a href="admin-dashboard.html" class="sidebar-link">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="admin-trabajadores.html" class="sidebar-link">
+          <i class="fas fa-users"></i>
+          <span>Trabajadores</span>
+        </a>
+        <a href="admin-turnos.html" class="sidebar-link">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Turnos</span>
+        </a>
+        <a href="admin-reportes.html" class="sidebar-link active">
+          <i class="fas fa-file-alt"></i>
+          <span>Reportes</span>
+        </a>
+        <a href="../panel-qr.html" class="sidebar-link">
+          <i class="fas fa-qrcode"></i>
+          <span>Panel QR</span>
+        </a>
       </nav>
     </div>
     <div class="sidebar-footer">
-      <button id="btnLogout">Cerrar sesión</button>
+      <button id="btnLogout" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Cerrar sesión</span>
+      </button>
     </div>
   </aside>
 
   <main class="main-content">
-    <header class="page-header-top">
+    <header class="page-header">
       <div>
-        <h1 class="page-title">Reportes de Asistencia</h1>
-        <p class="page-subtitle">Consulta entradas, salidas, tardanzas y faltas.</p>
+        <h1 class="page-title">
+          <i class="fas fa-file-chart-line"></i>
+          Reportes de Asistencia
+        </h1>
+        <p class="page-subtitle">Consulta entradas, salidas, tardanzas y faltas</p>
       </div>
     </header>
 
     <!-- FILTROS -->
     <section class="filters-section card">
-      <h2>Filtros</h2>
+      <div class="card-header">
+        <h2>
+          <i class="fas fa-filter"></i>
+          Filtros de búsqueda
+        </h2>
+      </div>
 
       <form id="formReportes">
         <div class="form-grid">
           <div class="form-field">
-            <label for="desde">Desde</label>
+            <label for="desde">
+              <i class="fas fa-calendar-day"></i>
+              Desde
+            </label>
             <input type="date" id="desde" required />
           </div>
           <div class="form-field">
-            <label for="hasta">Hasta</label>
+            <label for="hasta">
+              <i class="fas fa-calendar-day"></i>
+              Hasta
+            </label>
             <input type="date" id="hasta" required />
           </div>
           <div class="form-field">
-            <label for="workerReporte">Trabajador (opcional)</label>
+            <label for="workerReporte">
+              <i class="fas fa-user"></i>
+              Trabajador (opcional)
+            </label>
             <select id="workerReporte">
               <option value="">Todos</option>
             </select>
@@ -62,8 +100,9 @@
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn-primary" style="width:100%;">
-            Buscar
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-search"></i>
+            Buscar Reportes
           </button>
         </div>
       </form>
@@ -71,7 +110,12 @@
 
     <!-- RESULTADOS -->
     <section class="list-section card">
-      <h2>Resultados</h2>
+      <div class="card-header">
+        <h2>
+          <i class="fas fa-table"></i>
+          Resultados
+        </h2>
+      </div>
 
       <div class="table-wrapper">
         <table class="table">

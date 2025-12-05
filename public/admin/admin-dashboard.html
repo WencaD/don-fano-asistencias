@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../css/menu.css" />
   <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -15,96 +16,152 @@
     <div>
       <div class="sidebar-logo">
         <img src="../img/logo.png" alt="Don Fano Logo" />
-        <h2>Don Fano</h2>
-        <span>Trattoria - Pizzería</span>
+        <div class="logo-text">
+          <h2>Don Fano</h2>
+          <span>Trattoria - Pizzería</span>
+        </div>
       </div>
 
       <nav class="sidebar-menu">
-        <a href="admin-dashboard.html" class="sidebar-link active">Dashboard</a>
-        <a href="admin-trabajadores.html" class="sidebar-link">Trabajadores</a>
-        <a href="admin-turnos.html" class="sidebar-link">Turnos</a>
-        <a href="admin-reportes.html" class="sidebar-link">Reportes</a>
-        <a href="../panel-qr.html" class="sidebar-link">Panel QR</a>
+        <a href="admin-dashboard.html" class="sidebar-link active">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="admin-trabajadores.html" class="sidebar-link">
+          <i class="fas fa-users"></i>
+          <span>Trabajadores</span>
+        </a>
+        <a href="admin-turnos.html" class="sidebar-link">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Turnos</span>
+        </a>
+        <a href="admin-reportes.html" class="sidebar-link">
+          <i class="fas fa-file-alt"></i>
+          <span>Reportes</span>
+        </a>
+        <a href="../panel-qr.html" class="sidebar-link">
+          <i class="fas fa-qrcode"></i>
+          <span>Panel QR</span>
+        </a>
       </nav>
     </div>
 
     <div class="sidebar-footer">
-      <button id="btnLogout">Cerrar sesión</button>
+      <button id="btnLogout" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Cerrar sesión</span>
+      </button>
     </div>
   </aside>
 
   <main class="main-content">
-    <div class="dashboard-grid">
-        
-        <div class="main-stats-column">
-            <header>
-              <h1 class="page-title">Dashboard General</h1>
-              <p class="page-subtitle">Estadísticas del día</p>
-            </header>
-        
-            <section class="stats-grid">
-              <div class="card">
-                <div class="stat-card-title">Empleados activos</div>
-                <div id="empleadosActivos" class="stat-card-number">0</div>
-              </div>
-              <div class="card">
-                <div class="stat-card-title">Entradas hoy</div>
-                <div id="entradasHoy" class="stat-card-number">0</div>
-              </div>
-              <div class="card">
-                <div class="stat-card-title">Salidas hoy</div>
-                <div id="salidasHoy" class="stat-card-number">0</div>
-              </div>
-              <div class="card">
-                <div class="stat-card-title">Total trabajadores</div>
-                <div id="totalTrabajadores" class="stat-card-number">0</div>
-              </div>
-            </section>
-        
-            <section class="charts-section">
-              <div class="charts-header">
-                <h2 class="charts-title">Estadísticas por período</h2>
-                <div class="filter-buttons">
-                  <button class="filter-btn active" data-period="week">Esta semana</button>
-                  <button class="filter-btn" data-period="month">Último mes</button>
-                  <button class="filter-btn" data-period="year">Último año</button>
-                </div>
-              </div>
-        
-              <div class="charts-grid">
-                <div class="chart-card">
-                  <h3>Tardanzas / Faltas</h3>
-                  <canvas id="chartTardanzas"></canvas>
-                </div>
-                <div class="chart-card">
-                  <h3>Minutos de tardanza</h3>
-                  <canvas id="chartMinutos"></canvas>
-                </div>
-              </div>
-            </section>
-        </div>
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Dashboard General</h1>
+        <p class="page-subtitle">Estadísticas del día · <span id="currentDate"></span></p>
+      </div>
+      <div class="header-actions">
+        <button class="refresh-btn" onclick="location.reload()">
+          <i class="fas fa-sync-alt"></i>
+          Actualizar
+        </button>
+      </div>
+    </header>
 
-        <div class="side-attendance-column">
-             <section class="attendance-status-section card">
-              <h2>Estado de Asistencia Hoy (Refresco Automático)</h2>
-              <div class="table-wrapper">
-                <table class="table" id="tablaEstadoAsistencia">
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Área</th>
-                      <th>Entrada</th>
-                      <th>Estado</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td colspan="4">Cargando estado...</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <i class="fas fa-user-check"></i>
         </div>
-        
+        <div class="stat-content">
+          <div class="stat-label">Empleados activos</div>
+          <div id="empleadosActivos" class="stat-number">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <i class="fas fa-sign-in-alt"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Entradas hoy</div>
+          <div id="entradasHoy" class="stat-number">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange">
+          <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Salidas hoy</div>
+          <div id="salidasHoy" class="stat-number">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Total trabajadores</div>
+          <div id="totalTrabajadores" class="stat-number">1</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="dashboard-grid">
+      <div class="main-stats-column">
+        <section class="charts-section card">
+          <div class="charts-header">
+            <h2 class="section-title">
+              <i class="fas fa-chart-bar"></i>
+              Estadísticas por período
+            </h2>
+            <div class="filter-buttons">
+              <button class="filter-btn active" data-period="week">Esta semana</button>
+              <button class="filter-btn" data-period="month">Último mes</button>
+              <button class="filter-btn" data-period="year">Último año</button>
+            </div>
+          </div>
+
+          <div class="charts-grid">
+            <div class="chart-card">
+              <h3><i class="fas fa-clock"></i> Tardanzas / Faltas</h3>
+              <canvas id="chartTardanzas"></canvas>
+            </div>
+            <div class="chart-card">
+              <h3><i class="fas fa-hourglass-half"></i> Minutos de tardanza</h3>
+              <canvas id="chartMinutos"></canvas>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="side-attendance-column">
+        <section class="attendance-status-section card">
+          <h2 class="section-title">
+            <i class="fas fa-list-check"></i>
+            Estado de Asistencia Hoy
+            <span class="live-indicator">
+              <i class="fas fa-circle"></i>
+              En vivo
+            </span>
+          </h2>
+          <div class="table-wrapper">
+            <table class="attendance-table" id="tablaEstadoAsistencia">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Área</th>
+                  <th>Entrada</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="4" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> Cargando estado...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
     </div>
   </main>
 
@@ -112,5 +169,13 @@
 
 <script src="../scripts/menu-admin.js"></script>
 <script src="../scripts/admin-dashboard.js"></script>
+<script>
+  // Mostrar fecha actual
+  document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+</script>
 </body>
 </html>

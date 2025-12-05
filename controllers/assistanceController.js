@@ -1,19 +1,46 @@
 // controllers/assistanceController.js
 const Assistance = require("../models/Assistance");
 const Worker = require("../models/Worker");
+const Shift = require("../models/Shift"); // 👈 IMPORTANTE: Se necesita para buscar el turno
 const { Op } = require("sequelize");
 
-// calcula diferencia de minutos entre dos horas "HH:MM:SS"
+/**
+ * Calcula la diferencia en minutos entre dos horas 'HH:MM:SS'
+ * @param {string} hora1 - Hora de llegada/fin (ej: '10:30:15')
+ * @param {string} hora2 - Hora límite/inicio (ej: '09:00:00')
+ * @returns {number} Minutos de diferencia, redondeados al minuto superior si es tardanza.
+ */
 function diffMinutos(hora1, hora2) {
-  const [h1, m1] = hora1.split(":").map(Number);
-  const [h2, m2] = hora2.split(":").map(Number);
-  return (h1 * 60 + m1) - (h2 * 60 + m2);
+  // Función auxiliar para convertir H:M:S a minutos totales
+  const totalMinutos = (horaStr) => {
+    // Aseguramos que todas las partes (H, M, S) existan
+    // Utilizamos el patrón regex para ser más seguros en la división, aunque split(':') debería funcionar
+    const partes = horaStr.split(":").map(Number);
+    const h = partes[0] || 0;
+    const m = partes[1] || 0;
+    const s = partes[2] || 0;
+    
+    // Devolvemos minutos totales con segundos incluidos como fracción
+    return h * 60 + m + s / 60; 
+  };
+  
+  const minutos1 = totalMinutos(hora1); // Hora de marcación (entrada/salida)
+  const minutos2 = totalMinutos(hora2); // Hora límite (inicio de turno)
+
+  const diferencia = minutos1 - minutos2;
+  
+  // Si la diferencia es positiva (tardanza), redondeamos hacia arriba 
+  // (ej: 0.1 minutos -> 1 minuto tarde)
+  // Si es negativa (llegó antes), lo dejamos como está.
+  return diferencia > 0 ? Math.ceil(diferencia) : Math.floor(diferencia);
 }
+
 
 // MARCAR ASISTENCIA CON QR TOKEN DEL WORKER
 exports.markAssistance = async (req, res) => {
   try {
-    const { qr_token } = req.body;
+    // Nota: El frontend puede enviar 'codigo' o 'qr_token'. Usaremos 'qr_token' como en tu archivo.
+    const { qr_token } = req.body; 
     if (!qr_token) {
       return res.status(400).json({ ok: false, error: "QR requerido" });
     }
@@ -26,22 +53,34 @@ exports.markAssistance = async (req, res) => {
     }
 
     const now = new Date();
-    const fecha = now.toISOString().split("T")[0];
-    const hora = now.toTimeString().split(" ")[0];
+    const fecha = now.toISOString().split("T")[0]; // 'AAAA-MM-DD'
+    const hora = now.toTimeString().split(" ")[0]; // 'HH:MM:SS'
 
     let asistencia = await Assistance.findOne({
       where: { workerId: worker.id, fecha },
     });
+    
+    // 1. OBTENER TURNO PROGRAMADO PARA HOY
+    const shiftHoy = await Shift.findOne({
+        where: { workerId: worker.id, fecha: fecha }
+    });
+    
+    // 2. Definir la hora límite de ingreso (Dinámico)
+    // Usamos la hora de inicio del turno, o un valor por defecto si no hay turno.
+    // Usamos slice(0, 8) para asegurar que el formato sea "HH:MM:SS".
+    const horaLimite = shiftHoy ? shiftHoy.hora_inicio.slice(0, 8) : "09:00:00"; 
 
+    // 3. LÓGICA DE MARCACIÓN
     if (!asistencia) {
       // Registrar entrada
-      const horaLimite = "09:00:00"; // tu hora oficial de ingreso
       let estado = "Puntual";
       let minutos_tarde = 0;
 
-      if (hora > horaLimite) {
-        minutos_tarde = diffMinutos(hora, horaLimite);
-        if (minutos_tarde < 0) minutos_tarde = 0;
+      // Comparamos horas usando la función diffMinutos
+      const minutosDiferencia = diffMinutos(hora, horaLimite);
+
+      if (minutosDiferencia > 0) {
+        minutos_tarde = minutosDiferencia;
         estado = "Tardanza";
       }
 
@@ -53,7 +92,7 @@ exports.markAssistance = async (req, res) => {
         workerId: worker.id,
       });
 
-      return res.json({ ok: true, message: "Entrada registrada", asistencia });
+      return res.json({ ok: true, message: `Entrada registrada (${estado})`, asistencia });
     } else if (!asistencia.hora_salida) {
       // Registrar salida
       asistencia.hora_salida = hora;
@@ -76,7 +115,9 @@ exports.markAssistance = async (req, res) => {
 // Asistencias de hoy para dashboard
 exports.getTodayAssistance = async (req, res) => {
   try {
-    const hoy = new Date().toISOString().split("T")[0];
+    // NOTA: Si ya implementaste la corrección de timezone en db.js,
+    // puedes usar new Date() sin problemas.
+    const hoy = new Date().toISOString().split("T")[0]; 
 
     const asistencias = await Assistance.findAll({
       where: { fecha: hoy },
@@ -119,6 +160,7 @@ exports.getMonthlyHistory = async (req, res) => {
       totalMinTarde += a.minutos_tarde || 0;
 
       if (a.hora_entrada && a.hora_salida && a.Worker) {
+        // La función diffMinutos ahora calcula correctamente la diferencia de horas trabajadas
         const minutos = diffMinutos(a.hora_salida, a.hora_entrada);
         const horas = minutos > 0 ? minutos / 60 : 0;
         totalHoras += horas;

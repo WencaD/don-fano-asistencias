@@ -1,7 +1,8 @@
-// index.js
+// index-https.js - Servidor HTTPS para desarrollo local
 const express = require("express");
+const https = require("https");
+const fs = require("fs");
 const cors = require("cors");
-const os = require("os");
 const path = require("path");
 const sequelize = require("./config/db");
 
@@ -20,14 +21,14 @@ const assistanceRoutes = require("./routes/assistanceRoutes");
 const statsRoutes = require("./routes/statsRoutes");
 const shiftRoutes = require("./routes/shiftRoutes");
 const reportesRoutes = require("./routes/reportesRoutes");
-const qrRoutes = require("./routes/qrRoutes"); // si no la usas, coméntala
+const qrRoutes = require("./routes/qrRoutes");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Prefix de API
+// Rutas API
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/workers", workerRoutes);
@@ -38,22 +39,47 @@ app.use("/api/reportes", reportesRoutes);
 app.use("/api/qr", qrRoutes);
 
 const PORT = process.env.PORT || 3000;
+const HTTPS_PORT = 3443;
+
+// Opciones SSL - NECESITAS GENERAR CERTIFICADOS PRIMERO
+// Ejecuta en PowerShell:
+// New-SelfSignedCertificate -DnsName localhost -CertStoreLocation cert:\LocalMachine\My -NotAfter (Get-Date).AddYears(10)
+// Luego exporta el certificado y clave
+
+let httpsOptions;
+try {
+  httpsOptions = {
+    key: fs.readFileSync(path.join(__dirname, "ssl", "key.pem")),
+    cert: fs.readFileSync(path.join(__dirname, "ssl", "cert.pem"))
+  };
+} catch (err) {
+  console.error("❌ No se encontraron certificados SSL en ./ssl/");
+  console.error("📝 Para generar certificados locales, ejecuta:");
+  console.error("   npm install -g mkcert");
+  console.error("   mkcert -install");
+  console.error("   mkdir ssl");
+  console.error("   mkcert -key-file ssl/key.pem -cert-file ssl/cert.pem localhost 127.0.0.1 ::1");
+  process.exit(1);
+}
 
 sequelize
   .authenticate()
   .then(async () => {
     console.log("Conectado a MySQL ✔");
+    await sequelize.sync();
 
-    // =======================================================
-    // === MODO SEGURO: NO TOCAR LA ESTRUCTURA DE LA BD ===
-    // =======================================================
-    // Como ya corriste init.js, las tablas ya existen.
-    // Usamos sync() vacío solo para verificar conexión, sin alterar nada.
-    await sequelize.sync(); 
+    // Servidor HTTP (redirige a HTTPS)
+    const httpApp = express();
+    httpApp.use((req, res) => {
+      res.redirect(`https://${req.headers.host.split(':')[0]}:${HTTPS_PORT}${req.url}`);
+    });
+    httpApp.listen(PORT, () => {
+      console.log(`🔓 HTTP Server (redirect): http://localhost:${PORT}`);
+    });
 
-    app.listen(PORT, () => {
-      // mostrar IP local para celular
-      const ifaces = require('os').networkInterfaces(); 
+    // Servidor HTTPS
+    https.createServer(httpsOptions, app).listen(HTTPS_PORT, () => {
+      const ifaces = require('os').networkInterfaces();
       let ipLocal = "localhost";
       for (let name in ifaces) {
         for (let net of ifaces[name]) {
@@ -64,10 +90,10 @@ sequelize
       }
 
       console.log("=========================================");
-      console.log("  Pizzería Backend Iniciado ✔");
+      console.log("  🔒 Pizzería HTTPS Iniciado ✔");
       console.log("=========================================");
-      console.log(` Localhost:      http://localhost:${PORT}`);
-      console.log(` Desde celular:  http://${ipLocal}:${PORT}`);
+      console.log(` Local:          https://localhost:${HTTPS_PORT}`);
+      console.log(` Red local:      https://${ipLocal}:${HTTPS_PORT}`);
       console.log("=========================================");
     });
   })

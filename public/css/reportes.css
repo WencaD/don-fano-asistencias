@@ -1,40 +1,92 @@
-.page-header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.filters-section {
+  margin-top: 1.5rem;
 }
 
-.filters-section {
-  margin-top: 24px;
+.card-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.card-header h2 {
+  font-size: 1.4rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.card-header h2 i {
+  color: #ff7b00;
+}
+
+.filters-section h2 {
+  font-size: 1.3rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 14px;
-  margin-top: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1.2rem;
 }
 
 .form-field label {
-  font-size: 13px;
+  font-size: 0.9rem;
   font-weight: 600;
-  display: block;
-  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.form-field label i {
+  color: #ff7b00;
 }
 
 .form-field input,
 .form-field select {
   width: 100%;
-  padding: 7px 9px;
-  border-radius: 7px;
-  border: 1px solid #ccc;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
   background: #fff;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  outline: none;
+  border-color: #ff7b00;
+  box-shadow: 0 0 0 3px rgba(255, 123, 0, 0.1);
 }
 
 .form-actions {
-  margin-top: 14px;
+  margin-top: 1.5rem;
+}
+
+.form-actions .btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .list-section {
-  margin-top: 30px;
+  margin-top: 2rem;
+}
+
+.list-section h2 {
+  font-size: 1.3rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-weight: 700;
 }
