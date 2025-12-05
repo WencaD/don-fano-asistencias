@@ -1,5 +1,6 @@
 ssl/
 .env
+.env.local
 cloudflared.exe
 *.json.bak
 node_modules/
