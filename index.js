@@ -1,5 +1,7 @@
 // index.js
 // Deployed to Railway with MySQL
+require('dotenv').config(); // IMPORTANTE: Cargar variables de entorno primero
+
 const express = require("express");
 const cors = require("cors");
 const os = require("os");
