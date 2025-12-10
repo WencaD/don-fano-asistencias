@@ -45,33 +45,21 @@ app.use("/api/qr", qrRoutes);
 
 const PORT = process.env.PORT || 3000;
 
+// Iniciar servidor primero (Railway lo necesita)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log("=========================================");
+  console.log("  Servidor iniciado en puerto:", PORT);
+  console.log("=========================================");
+});
+
+// Conectar DB después
 sequelize
   .authenticate()
   .then(async () => {
-    console.log("Conectado a MySQL ✔");
-
-    await sequelize.sync(); 
-
-    app.listen(PORT, () => {
-      const ifaces = os.networkInterfaces(); 
-      let ipLocal = "localhost";
-      
-      for (let name in ifaces) {
-        for (let net of ifaces[name]) {
-          if (net.family === "IPv4" && !net.internal) {
-            ipLocal = net.address;
-          }
-        }
-      }
-
-      console.log("=========================================");
-      console.log("  Pizzería Backend Iniciado ✔");
-      console.log("=========================================");
-      console.log(` Localhost:      http://localhost:${PORT}`);
-      console.log(` Desde celular:  http://${ipLocal}:${PORT}`);
-      console.log("=========================================");
-    });
+    console.log("✅ Conectado a MySQL");
+    await sequelize.sync();
+    console.log("✅ Base de datos sincronizada");
   })
   .catch((err) => {
-    console.error("Error al conectar con la BD:", err);
+    console.error("❌ Error al conectar con la BD:", err.message);
   });
