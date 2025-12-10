@@ -1,4 +1,4 @@
-// routes/shiftRoutes.js (CORREGIDO)
+// routes/shiftRoutes.js
 const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middlewares/authMiddleware"); 
@@ -8,15 +8,15 @@ const {
   createShift,
   getAllShifts,
   deleteShift,
-  getShiftsByWorker 
+  getShiftsByWorker
 } = require("../controllers/shiftController");
 
-// Rutas Admin (se mantienen)
+// Rutas Admin
 router.get("/", authMiddleware, isAdmin, getAllShifts);
 router.post("/create", authMiddleware, isAdmin, createShift);
 router.delete("/:id", authMiddleware, isAdmin, deleteShift);
 
-// Ruta Empleado: Solo requiere estar logueado (authMiddleware)
-router.get("/worker/:id", authMiddleware, getShiftsByWorker); // <-- Asegurar con authMiddleware
+// Ruta Empleado (Solo requiere estar logueado)
+router.get("/worker/:id", authMiddleware, getShiftsByWorker);
 
 module.exports = router;

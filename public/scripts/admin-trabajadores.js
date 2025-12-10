@@ -2,7 +2,9 @@
 
 // --- Helper para llamadas a la API con token (Definición Única y Estándar) ---
 async function apiRequest(url, options = {}) {
-  const token = localStorage.getItem("token");
+  // Gestión de trabajadores (crear, listar, eliminar)
+
+const token = localStorage.getItem("token");
 
   const res = await fetch(url, {
     ...options,

@@ -1,65 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Escaner QR - Don Fano</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/menu.css">
-    <link rel="stylesheet" href="../css/empleado.css">
-    <script src="https://unpkg.com/html5-qrcode"></script>
-    
-    <style>
-        .scanner-container {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 20px;
-            text-align: center;
-        }
-        #reader {
-            width: 100%;
-            border: 2px solid #ff7b00;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>Escaner QR - Don Fano</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/empleado.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    
+
 </head>
 <body>
 
 <div class="main-layout">
-    <aside class="sidebar">
-        <div>
-            <div class="sidebar-logo">
-                <img src="../img/logo.png" alt="Don Fano Logo" />
-                <h2>Don Fano</h2>
-                <span>Empleado</span>
-            </div>
-            <nav class="sidebar-menu">
-                <a href="empleado-dashboard.html" class="sidebar-link">Mi asistencia</a>
-                <a href="scanner.html" class="sidebar-link active">Escanear QR</a>
-            </nav>
-        </div>
-        <div class="sidebar-footer">
-            <button id="btnLogout" class="logout-btn">Cerrar sesión</button>
-        </div>
-    </aside>
+    <aside class="sidebar">
+        <div>
+            <div class="sidebar-logo">
+                <img src="../img/logo.png" alt="Don Fano Logo" />
+                <h2>Don Fano</h2>
+                <span>Empleado</span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="empleado-dashboard.html" class="sidebar-link">Mi asistencia</a>
+                <a href="scanner.html" class="sidebar-link active">Escanear QR</a>
+            </nav>
+        </div>
+        <div class="sidebar-footer">
+            <button id="btnLogout" class="logout-btn">Cerrar sesión</button>
+        </div>
+    </aside>
 
-    <main class="main-content">
-        <div class="scanner-container">
-            <h2>Escanear Código QR</h2>
-            <p>Apunta tu cámara al código de marcación de la pizzería.</p>
+    <main class="main-content">
+        <div class="scanner-container">
+            <h2>Escanear Código QR</h2>
+            <p>Apunta tu cámara al código de marcación de la pizzería.</p>
 
-            <div id="reader"></div>
+            <div id="reader"></div>
 
-            <p id="result" style="margin-top: 15px; font-weight: bold; color: green;"></p>
-        </div>
-    </main>
+            <p id="result" style="margin-top: 15px; font-weight: bold; color: green;"></p>
+        </div>
+    </main>
 </div>
 
 <script src="../scripts/logout.js"></script>
 <script>
-  // =========================================================================
-  // === LÓGICA DE VERIFICACIÓN DE SESIÓN ===
-  // =========================================================================
   const token = localStorage.getItem("token");
   const userRaw = localStorage.getItem("user");
   let workerId = null;
@@ -76,24 +60,22 @@
     return;
   }
 
-  // --- Variables Globales del Escáner ---
   const resultDiv = document.getElementById("result");
-  const html5QrCode = new Html5Qrcode("reader"); // Usar el objeto Html5Qrcode
+  const html5QrCode = new Html5Qrcode("reader");
 
-  // =========================================================================
-  // === 1. FUNCIÓN DE ÉXITO (Manejo de la Petición al Servidor) ===
-  // =========================================================================
   async function onScanSuccess(decodedText, decodedResult) {
-    // Detener el escáner al tener éxito
     html5QrCode.stop().catch(err => console.error("Error deteniendo el escáner:", err));
 
     resultDiv.textContent = "Código detectado. Marcando asistencia...";
-    resultDiv.style.color = '#ff7b00'; 
+    resultDiv.style.color = '#ff7b00';
 
     try {
       const res = await fetch("/api/qr/mark", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({
           workerId: workerId,
           codigo: decodedText.trim()
@@ -108,7 +90,7 @@
 
       resultDiv.textContent = "✅ " + (data.message || "Asistencia marcada correctamente.");
       resultDiv.style.color = 'green';
-      
+
       setTimeout(() => {
           window.location.href = "empleado-dashboard.html";
       }, 2000);
@@ -116,45 +98,51 @@
     } catch (err) {
       resultDiv.textContent = "❌ ERROR: " + err.message;
       resultDiv.style.color = 'red';
-      
-      // En caso de error, volvemos a la página para reiniciar la cámara
+
       setTimeout(() => {
           window.location.href = "scanner.html";
       }, 3000);
     }
   }
 
-  // =========================================================================
-  // === 2. FUNCIÓN DE INICIALIZACIÓN (ASÍNCRONA) ===
-  // =========================================================================
   async function startScanner() {
-      // 1. Obtener listado de cámaras disponibles
-      const cameraDevices = await Html5Qrcode.getCameras();
+    try {
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            facingMode: "environment"
+        };
 
-      if (cameraDevices && cameraDevices.length) {
-          // 2. Usar la cámara trasera por defecto (la última en el listado)
-          const cameraId = cameraDevices[0].id;
-          
-          await html5QrCode.start(
-              cameraId, 
-              { fps: 10, qrbox: { width: 250, height: 250 } }, 
-              onScanSuccess, 
-              (errorMessage) => { /* Ignorar fallos de lectura */ }
-          );
-      } else {
-          resultDiv.textContent = "❌ Error: No se encontraron cámaras disponibles.";
-          resultDiv.style.color = 'red';
-      }
+        resultDiv.textContent = "Intentando iniciar la cámara...";
+        resultDiv.style.color = 'blue';
+
+        await html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            onScanSuccess,
+            (errorMessage) => {}
+        );
+
+        resultDiv.textContent = "Cámara iniciada. Apunta al QR.";
+
+    } catch (error) {
+        let errorMessage = "Error al acceder a la cámara. ";
+        if (error.message.includes("Permission denied")) {
+             errorMessage += "Debe conceder permiso de cámara.";
+        } else if (window.location.protocol === "http:" && window.location.hostname !== "localhost") {
+             errorMessage += "Bloqueado por protocolo HTTP. Pruebe con HTTPS o localhost.";
+        } else {
+             errorMessage += "Verifique los permisos en la configuración del navegador.";
+        }
+
+        resultDiv.textContent = "❌ " + errorMessage;
+        resultDiv.style.color = 'red';
+        console.error("Error iniciando el escáner:", error);
+    }
   }
 
-  // =========================================================================
-  // === 3. INICIO EN EL EVENTO DE CARGA ===
-  // =========================================================================
   document.addEventListener("DOMContentLoaded", () => {
-      // Pequeño retraso para asegurar que la librería esté 100% cargada
-      setTimeout(startScanner, 500); 
+      setTimeout(startScanner, 500);
   });
-</script>
-
-</body>
+</script></body>
 </html>

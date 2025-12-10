@@ -1,3 +1,4 @@
+// Modelo de asistencias de trabajadores
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 

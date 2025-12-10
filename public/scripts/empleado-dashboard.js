@@ -1,279 +1,299 @@
-console.log("CARGANDO DASHBOARD EMPLEADO...");
+// Variables globales y verificación de sesión
+// Dashboard del empleado con escaneo QR y visualización de asistencias
 
 const token = localStorage.getItem("token");
-const user = JSON.parse(localStorage.getItem("user"));
+const userRaw = localStorage.getItem("user");
+const modalQR = document.getElementById("modalQR");
+const qrReaderDiv = document.getElementById("qr-reader");
 
-if (!token || !user || user.role !== "WORKER") {
-    window.location.href = "/login.html";
+// Elementos del modal: creamos un párrafo para mensajes de estado
+let html5QrCode = null; // Se inicializará al abrir el modal
+const resultDisplay = document.createElement('p');
+resultDisplay.style.cssText = 'margin-top: 10px; font-weight: bold;';
+if (qrReaderDiv && qrReaderDiv.parentNode) {
+    qrReaderDiv.parentNode.insertBefore(resultDisplay, qrReaderDiv.nextSibling);
 }
 
-// =====================
-// DOM CORREGIDO SEGÚN TU HTML
-// =====================
-const saludoNombre = document.getElementById("saludoNombre");
-const empEmail = document.getElementById("empEmail");
-const empToday = document.getElementById("empToday");
+let workerId = null;
+let userData = null;
 
-const entradaHoy = document.getElementById("entradaHoy");
-const salidaHoy = document.getElementById("salidaHoy");
-const estadoHoy = document.getElementById("estadoHoy");
-
-const tablaTurnos = document.getElementById("tablaTurnos");
-
-// Resumen
-const diasAsistidos = document.getElementById("diasAsistidos");
-const minutosTarde = document.getElementById("minutosTarde");
-const pagoEstimado = document.getElementById("pagoEstimado");
-
-// Historial
-const historialTabla = document.getElementById("historialTabla");
-
-// Helpers
-function safeSet(el, content) {
-    if (el) el.innerHTML = content;
-}
-function safeAdd(el, html) {
-    if (el) el.insertAdjacentHTML("beforeend", html);
+try {
+    userData = JSON.parse(userRaw);
+    workerId = userData.workerId;
+    
+    // Verificación básica del token y rol
+    if (!token || !workerId || userData.role !== "WORKER") {
+        throw new Error("Sesión inválida.");
+    }
+} catch (e) {
+    // Redirigir al login si falla la verificación
+    localStorage.clear();
+    window.location.href = "../login.html";
 }
 
-// =====================
-// MOSTRAR INFO DEL USUARIO
-// =====================
-safeSet(saludoNombre, user?.nombre || "");
-safeSet(empEmail, user?.email || "");
-safeSet(empToday, new Date().toLocaleDateString("es-PE"));
 
-// =====================
-// ESTADO DE HOY
-// =====================
-async function cargarEstadoHoy() {
+// Funciones de utilidad y lógica del modal QR
+
+// Formatea hora a HH:MM
+function formatTime(timeValue) { 
+    if (!timeValue) {
+        return '--';
+    }
+    
+    if (typeof timeValue === 'string' && timeValue.match(/^\d{2}:\d{2}:\d{2}/)) {
+        return timeValue.slice(0, 5); 
+    }
+    
     try {
-        const res = await fetch(`/api/assistance/today/${user.workerId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        const date = new Date(timeValue);
+        if (!isNaN(date.getTime())) { 
+            return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        }
+    } catch (e) {}
+    
+    return '--';
+}
 
-        const data = await res.json();
-        console.log("ESTADO HOY:", data);
+// Detiene el escáner y cierra el modal
+function cerrarQR() {
+    modalQR.style.display = 'none';
+    if (html5QrCode && html5QrCode.isScanning) {
+        html5QrCode.stop().catch(err => console.error("Error deteniendo el escáner:", err));
+    }
+}
 
-        if (!data || !data.id) {
-            safeSet(entradaHoy, "--");
-            safeSet(salidaHoy, "--");
-            safeSet(estadoHoy, "--");
-            return;
+// Se ejecuta al escanear un código QR con éxito
+async function onScanSuccess(decodedText, decodedResult) {
+    // Detener el escáner y cerrar el modal al tener éxito
+    cerrarQR(); 
+
+    // Mostrar mensaje de espera en el dashboard
+    const estadoHoyEl = document.getElementById('estadoHoy');
+    estadoHoyEl.textContent = "Código detectado. Marcando asistencia...";
+    estadoHoyEl.style.color = '#ff7b00'; 
+
+    try {
+        // Petición al servidor para marcar asistencia
+        const res = await fetch("/api/qr/mark", { 
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` 
+            }, 
+            body: JSON.stringify({
+                workerId: workerId,
+                codigo: decodedText.trim()
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || "Fallo de servidor al marcar.");
+        }
+
+        estadoHoyEl.textContent = "✅ " + (data.message || "Asistencia marcada correctamente.");
+        estadoHoyEl.style.color = 'green';
+        
+        fetchDashboardData();    } catch (err) {
+        estadoHoyEl.textContent = "❌ ERROR: " + err.message;
+        estadoHoyEl.style.color = 'red';
+        console.error("Error en onScanSuccess:", err);
+    }
+}
+
+// Inicia el escáner con el modo de cámara especificado
+async function startScanner(mode) {
+    if (!html5QrCode) {
+        html5QrCode = new Html5Qrcode("qr-reader");
+    }
+
+    if (html5QrCode.isScanning) {
+        await html5QrCode.stop().catch(err => console.error("Error deteniendo el escáner:", err));
+    }
+    
+    const config = { 
+        fps: 10, 
+        qrbox: { width: 250, height: 250 },
+    };
+    
+    const cameraConstraint = { facingMode: mode }; 
+
+    resultDisplay.textContent = `Intentando iniciar cámara (${mode === 'environment' ? 'Trasera' : 'Frontal'})...`;
+    resultDisplay.style.color = 'blue';
+
+    try {
+        await html5QrCode.start(
+            cameraConstraint, 
+            config,
+            onScanSuccess, 
+            (errorMessage) => { /* Ignorar fallos de lectura */ }
+        );
+        
+        resultDisplay.textContent = "Cámara iniciada. Apunta al QR.";
+        resultDisplay.style.color = 'green';
+
+    } catch (error) {
+        let errorMessage = "Error al acceder a la cámara. ";
+        
+        if (error.message.includes("Permission denied")) {
+             errorMessage += "Debe conceder permiso de cámara. Revise la configuración del navegador.";
+        } else if (window.location.protocol === "http:" && window.location.hostname !== "localhost") {
+             errorMessage += "Bloqueado por protocolo HTTP. Pruebe con HTTPS (ej. ngrok) o localhost.";
+        } else {
+             errorMessage += "No se pudo iniciar la cámara. Pruebe con la otra opción.";
         }
 
-        safeSet(entradaHoy, data.hora_entrada || "--");
-        safeSet(salidaHoy, data.hora_salida || "--");
-        safeSet(estadoHoy, data.estado || "--");
-
-    } catch (err) {
-        console.error("Error cargarEstadoHoy:", err);
+        resultDisplay.textContent = "❌ " + errorMessage;
+        resultDisplay.style.color = 'red';
+        console.error("Error iniciando el escáner:", error);
     }
 }
 
-// =====================
-// TURNOS
-// =====================
-async function cargarTurnos() {
+
+// Lógica del dashboard (datos y eventos)
+
+// Carga los datos del dashboard del empleado
+async function fetchDashboardData() {
+    // 1. Mostrar datos básicos
+    document.getElementById('saludoNombre').textContent = userData.nombre.split(' ')[0];
+    document.getElementById('empEmail').textContent = userData.email;
+    document.getElementById('empToday').textContent = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Referencias a elementos del DOM
+    const entradaHoyEl = document.getElementById('entradaHoy');
+    const salidaHoyEl = document.getElementById('salidaHoy');
+    const estadoHoyEl = document.getElementById('estadoHoy');
+    const diasAsistidosEl = document.getElementById('diasAsistidos');
+    const minutosTardeEl = document.getElementById('minutosTarde');
+    const pagoEstimadoEl = document.getElementById('pagoEstimado');
+    const tablaTurnosBody = document.getElementById('tablaTurnos');
+    const historialTablaBody = document.getElementById('historialTabla');
+
+    // Inicializar estados
+    entradaHoyEl.textContent = '--';
+    salidaHoyEl.textContent = '--';
+    estadoHoyEl.textContent = 'Cargando datos...';
+    estadoHoyEl.style.color = 'gray';
+    tablaTurnosBody.innerHTML = '<tr><td colspan="3">Cargando...</td></tr>';
+    historialTablaBody.innerHTML = '<tr><td colspan="3">Cargando...</td></tr>';
+
     try {
-        const res = await fetch(`/api/shifts/worker/${user.workerId}`, {
-            headers: { Authorization: `Bearer ${token}` }
+        const res = await fetch(`/api/stats/worker/${workerId}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         });
 
         const data = await res.json();
-        console.log("TURNOS:", data);
 
-        safeSet(tablaTurnos, "");
-
-        if (!data || data.length === 0) {
-            safeAdd(tablaTurnos, `<tr><td colspan="3">No tienes turnos programados.</td></tr>`);
-            return;
+        if (!res.ok) {
+            throw new Error(data.error || "Fallo al cargar los datos del dashboard.");
         }
 
-        data.forEach(t => {
-            safeAdd(
-                tablaTurnos,
-                `
-                <tr>
-                    <td>${t.fecha}</td>
-                    <td>${t.hora_inicio}</td>
-                    <td>${t.hora_fin}</td>
-                </tr>
-                `
-            );
-        });
+        // Estado de hoy
+        if (data.todayAssistance) {
+            const a = data.todayAssistance;
+            
+            entradaHoyEl.textContent = formatTime(a.hora_entrada);
+            salidaHoyEl.textContent = formatTime(a.hora_salida);
+            
+            if (a.hora_entrada && a.hora_salida) {
+                 estadoHoyEl.textContent = 'Jornada completa. ¡Bien hecho!';
+                 estadoHoyEl.style.color = 'green';
+            } else if (a.hora_entrada) {
+                 estadoHoyEl.textContent = `En curso: Entrada marcada como ${a.estado}.`;
+                 estadoHoyEl.style.color = a.estado === 'Tardanza' ? '#ff7b00' : 'green';
+            } else {
+                 estadoHoyEl.textContent = 'Esperando marcación de entrada.';
+                 estadoHoyEl.style.color = 'gray';
+            }
+        } else {
+            estadoHoyEl.textContent = 'Esperando marcación de entrada.';
+            estadoHoyEl.style.color = 'gray';
+        }
 
-    } catch (err) {
-        console.error("Error cargarTurnos:", err);
-    }
-}
+        // Resumen mensual
+        const stats = data.monthlyStats;
+        diasAsistidosEl.textContent = stats.diasAsistidos || 0;
+        minutosTardeEl.textContent = stats.minutosTarde || 0;
+        pagoEstimadoEl.textContent = (stats.pagoEstimado || 0).toFixed(2); 
 
-// =====================
-// HISTORIAL Y RESUMEN
-// =====================
-async function cargarHistorialYResumen() {
-    try {
-        const res = await fetch(`/api/stats/${user.workerId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-
-        const data = await res.json();
-        console.log("STATS:", data);
-
-        // Resumen
-        safeSet(diasAsistidos, data.resumen?.dias_asistidos || 0);
-        safeSet(minutosTarde, data.resumen?.total_minutos_tarde || 0);
-
-        const totalPago = data.resumen?.total_pago || 0;
-        safeSet(pagoEstimado, Number(totalPago).toFixed(2));
+        // Próximos turnos
+        tablaTurnosBody.innerHTML = '';
+        if (data.nextShifts && data.nextShifts.length > 0) {
+            data.nextShifts.forEach(shift => {
+                const row = tablaTurnosBody.insertRow();
+                const fecha = new Date(shift.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                row.insertCell().textContent = fecha;
+                row.insertCell().textContent = shift.hora_inicio.slice(0, 5); // HH:MM
+                row.insertCell().textContent = shift.hora_fin.slice(0, 5); // HH:MM
+            });
+        } else {
+            tablaTurnosBody.innerHTML = '<tr><td colspan="3">No hay turnos próximos programados.</td></tr>';
+        }
 
         // Historial
-        safeSet(historialTabla, "");
+        historialTablaBody.innerHTML = '';
+        if (data.history && data.history.length > 0) {
+            data.history.forEach(a => {
+                const row = historialTablaBody.insertRow();
+                // CORRECCIÓN: Agregamos el año para evitar "Invalid Date" en la hora de entrada
+                const fecha = new Date(a.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                const entrada = a.hora_entrada ? formatTime(a.hora_entrada) : '--';
+                
+                let estadoText = 'Falta';
+                let color = 'red';
 
-        if (!data.asistencias || data.asistencias.length === 0) {
-            safeAdd(historialTabla, `<tr><td colspan="3">Sin historial.</td></tr>`);
-            return;
+                if (a.hora_entrada) {
+                    const esTardanza = a.estado === 'Tardanza' && (a.minutos_tarde > 0);
+                    
+                    if (a.hora_salida) {
+                        estadoText = esTardanza ? `Completa (${a.minutos_tarde}m Tarde)` : 'Completa';
+                        color = esTardanza ? '#ff7b00' : 'green';
+                    } else {
+                        estadoText = esTardanza ? `Pendiente (${a.minutos_tarde}m Tarde)` : 'Pendiente';
+                        color = esTardanza ? '#ff7b00' : 'gray';
+                    }
+                }
+
+                row.insertCell().textContent = fecha;
+                row.insertCell().textContent = entrada;
+                
+                const estadoCell = row.insertCell();
+                estadoCell.textContent = estadoText;
+                estadoCell.style.color = color;
+            });
+        } else {
+            historialTablaBody.innerHTML = '<tr><td colspan="3">No hay historial de asistencia.</td></tr>';
         }
 
-        data.asistencias.forEach(a => {
-            safeAdd(
-                historialTabla,
-                `
-                <tr>
-                    <td>${a.fecha}</td>
-                    <td>${a.hora_entrada || "--"}</td>
-                    <td>${a.estado || "--"}</td>
-                </tr>
-                `
-            );
-        });
-
     } catch (err) {
-        console.error("Error cargarHistorialYResumen:", err);
+        console.error("Error al cargar datos:", err);
+        estadoHoyEl.textContent = '❌ Error al cargar los datos: ' + err.message;
+        estadoHoyEl.style.color = 'red';
+        tablaTurnosBody.innerHTML = '<tr><td colspan="3">Error al cargar.</td></tr>';
+        historialTablaBody.innerHTML = '<tr><td colspan="3">Error al cargar.</td></tr>';
     }
 }
 
-// =====================
-// EJECUTAR
-// =====================
-cargarEstadoHoy();
-cargarTurnos();
-cargarHistorialYResumen();
 
-// ======================================================
-// 🔥 ESCANEAR QR – OPCIÓN 1 (Selector de cámaras)
-// ======================================================
+// Inicio de la aplicación y event listeners
+document.addEventListener("DOMContentLoaded", () => {
+    window.cerrarQR = cerrarQR; 
+    
+    fetchDashboardData();
 
-let scanner = null;
-
-const btnMarcarAsistencia = document.getElementById("btnMarcarAsistencia");
-if (btnMarcarAsistencia) {
-    btnMarcarAsistencia.addEventListener("click", abrirQR);
-}
-
-function abrirQR() {
-    const modal = document.getElementById("modalQR");
-    modal.style.display = "flex";
-
-    iniciarSelectorCamaras();
-}
-
-async function iniciarSelectorCamaras() {
-    const qrBox = document.getElementById("qr-reader");
-    qrBox.innerHTML = "Cargando cámaras...";
-
-    try {
-        const cameras = await Html5Qrcode.getCameras();
-
-        if (!cameras.length) {
-            qrBox.innerHTML = "<p>No se encontraron cámaras.</p>";
-            return;
-        }
-
-        // Crear selector de cámaras
-        const select = document.createElement("select");
-        select.id = "cameraSelect";
-        select.style.width = "100%";
-        select.style.padding = "10px";
-        select.style.marginBottom = "10px";
-
-        cameras.forEach(cam => {
-            const opt = document.createElement("option");
-            opt.value = cam.id;
-            opt.textContent = cam.label || "Cámara disponible";
-            select.appendChild(opt);
-        });
-
-        qrBox.innerHTML = "";
-        qrBox.appendChild(select);
-
-        const camDiv = document.createElement("div");
-        camDiv.id = "qr-cam-container";
-        camDiv.style.width = "100%";
-        qrBox.appendChild(camDiv);
-
-        scanner = new Html5Qrcode("qr-cam-container");
-
-        select.onchange = () => iniciarCamara(select.value);
-
-        iniciarCamara(select.value);
-
-    } catch (err) {
-        console.error(err);
-        qrBox.innerHTML = "<p>Error accediendo a cámara.</p>";
-    }
-}
-
-async function iniciarCamara(cameraId) {
-    try {
-        if (scanner._isScanning) {
-            await scanner.stop();
-            await scanner.clear();
-        }
-    } catch {}
-
-    scanner.start(
-        cameraId,
-        { fps: 10, qrbox: 250 },
-        (decoded) => {
-            registrarAsistencia(decoded);
-            cerrarQR();
-        },
-        (err) => {}
-    ).catch(err => {
-        console.error("Error iniciando cámara:", err);
+    // 1. Botón principal para abrir el modal
+    document.getElementById('btnMarcarAsistencia').addEventListener('click', () => {
+        modalQR.style.display = 'flex';
+        // Iniciar la cámara trasera ('environment') por defecto
+        setTimeout(() => startScanner('environment'), 200); 
     });
-}
 
-function cerrarQR() {
-    const modal = document.getElementById("modalQR");
-    modal.style.display = "none";
-
-    if (scanner) {
-        scanner.stop().then(() => scanner.clear()).catch(() => {});
-    }
-}
-
-async function registrarAsistencia(qr_token) {
-    try {
-        const res = await fetch("/api/assistance/mark", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ qr_token })
-        });
-
-        const data = await res.json();
-
-        alert(data.message || "Marcado correctamente");
-
-        cargarEstadoHoy();
-        cargarHistorialYResumen();
-
-    } catch (err) {
-        alert("Error al registrar asistencia");
-        console.error(err);
-    }
-}
+    // 2. Botón "Trasera" dentro del modal
+    document.getElementById('cam-back').addEventListener('click', () => startScanner('environment'));
+    
+    // 3. Botón "Frontal" dentro del modal
+    document.getElementById('cam-front').addEventListener('click', () => startScanner('user'));
+});

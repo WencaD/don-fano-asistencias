@@ -1,35 +1,13 @@
 // public/scripts/admin-dashboard.js
 
-async function apiRequest(url, options = {}) {
-  const token = localStorage.getItem("token");
-
-  const res = await fetch(url, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, 
-      ...(options.headers || {}),
-    },
-  });
-
-  let data;
-  try {
-    data = await res.json();
-  } catch {
-    data = {};
-  }
-
-  if (!res.ok) {
-    throw new Error(data.error || "Error en la petición");
-  }
-  return data;
-}
 let chartTardanzas = null;
 let chartMinutos = null;
 
-// --- Helper para llamadas a la API con token (HACEMOS ESTE HELPER GLOBAL) ---
+// --- Helper para llamadas a la API con token ---
 async function apiRequest(url, options = {}) {
-  const token = localStorage.getItem("token");
+  // Dashboard administrativo con estadísticas y gráficos
+
+const token = localStorage.getItem("token");
 
   const res = await fetch(url, {
     ...options,
@@ -56,14 +34,20 @@ async function apiRequest(url, options = {}) {
 // Cargar cards (ahora usa apiRequest)
 async function cargarResumen() {
   try {
+    console.log("🔍 Cargando resumen...");
     const data = await apiRequest("/api/stats");
+    console.log("✅ Datos recibidos:", data);
 
-    document.getElementById("empleadosActivos").textContent = data.empleadosActivos;
-    document.getElementById("entradasHoy").textContent = data.entradasHoy;
-    document.getElementById("salidasHoy").textContent = data.salidasHoy;
-    document.getElementById("totalTrabajadores").textContent = data.totalTrabajadores;
+    document.getElementById("empleadosActivos").textContent = data.empleadosActivos || 0;
+    document.getElementById("entradasHoy").textContent = data.entradasHoy || 0;
+    document.getElementById("salidasHoy").textContent = data.salidasHoy || 0;
+    document.getElementById("totalTrabajadores").textContent = data.totalTrabajadores || 0;
   } catch (err) {
-    console.error("Error cargando resumen:", err);
+    console.error("❌ Error cargando resumen:", err);
+    document.getElementById("empleadosActivos").textContent = "Error";
+    document.getElementById("entradasHoy").textContent = "Error";
+    document.getElementById("salidasHoy").textContent = "Error";
+    document.getElementById("totalTrabajadores").textContent = "Error";
   }
 }
 
@@ -81,12 +65,14 @@ function activarBotones() {
 // Cargar datos para gráficos (ahora usa apiRequest)
 async function cargarPeriodo(period) {
   try {
+    console.log("📊 Cargando período:", period);
     const data = await apiRequest(`/api/stats/period?period=${period}`);
+    console.log("✅ Datos período recibidos:", data);
 
-    const labels = data.labels;
-    const tardanzas = data.tardanzas;
-    const minutos = data.minutosTarde;
-    const faltas = data.faltas;
+    const labels = data.labels || [];
+    const tardanzas = data.tardanzas || [];
+    const minutos = data.minutosTarde || [];
+    const faltas = data.faltas || [];
 
     // gráfico tardanza/faltas
     const ctx1 = document.getElementById("chartTardanzas");
@@ -109,7 +95,10 @@ async function cargarPeriodo(period) {
           },
         ],
       },
-      options: { responsive: true },
+      options: { 
+        responsive: true,
+        maintainAspectRatio: true,
+      },
     });
 
     // gráfico minutos
@@ -130,9 +119,14 @@ async function cargarPeriodo(period) {
           },
         ],
       },
+      options: { 
+        responsive: true,
+        maintainAspectRatio: true,
+      },
     });
   } catch (err) {
-    console.error("Error cargando periodo:", err);
+    console.error("❌ Error cargando periodo:", err);
+    alert("Error al cargar las estadísticas. Revisa la consola para más detalles.");
   }
 }
 
@@ -207,7 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
   cargarPeriodo("week");
   activarBotones();
   
-  // Tabla de estado en tiempo real
   cargarTablaEstado();
-  setInterval(cargarTablaEstado, 30000); // Refrescar cada 30 segundos
+  setInterval(cargarTablaEstado, 30000);
 });

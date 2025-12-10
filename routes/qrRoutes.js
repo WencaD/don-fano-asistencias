@@ -4,13 +4,11 @@ const qrService = require("../service/qrService");
 const assistanceController = require("../controllers/assistanceController");
 const Worker = require("../models/Worker");
 
-// QR actual
 router.get("/current", (req, res) => {
   const actual = qrService.getCodigoActual();
   res.json(actual);
 });
 
-// Marcar asistencia usando QR dinámico
 router.post("/mark", async (req, res) => {
   try {
     const { workerId, codigo } = req.body;
@@ -30,7 +28,6 @@ router.post("/mark", async (req, res) => {
       return res.status(404).json({ error: "Trabajador no encontrado o sin QR" });
     }
 
-    // inyectar qr_token al body y usar markAssistance
     req.body.qr_token = worker.qr_token;
     return assistanceController.markAssistance(req, res);
   } catch (err) {

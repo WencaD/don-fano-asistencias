@@ -8,17 +8,8 @@ const {
   getMonthlyHistory
 } = require("../controllers/assistanceController");
 
-// ===============================
-// RUTAS QUE EL DASHBOARD USA
-// ===============================
-
-// Asistencias de hoy (admin)
 router.get("/today", authMiddleware, getTodayAssistance);
-
-// Historial mensual (empleado)
 router.get("/history/:id", authMiddleware, getMonthlyHistory);
-
-// Registrar entrada / salida (según QR)
 router.post("/mark", authMiddleware, markAssistance);
 
 module.exports = router;

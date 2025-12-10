@@ -1,6 +1,5 @@
-// admin-reportes.js
+// Lógica de reportes de asistencias
 
-// --- Helper para llamadas a la API con token (CRUCIAL) ---
 async function apiRequest(url, options = {}) {
   const token = localStorage.getItem("token");
 
@@ -93,8 +92,8 @@ document.getElementById("formReportes").addEventListener("submit", async (e) => 
           <td>${a.hora_salida || "-"}</td>
           <td>${a.estado || "-"}</td>
           <td>${a.minutos_tarde || 0}</td>
-          <td>${(a.horas_trabajadas || 0).toFixed(2)} h</td>
-          <td>S/ ${(a.pago_dia || 0).toFixed(2)}</td>
+          <td>${(a.horasTrabajadas || 0).toFixed(2)} h</td>
+          <td>S/ ${(a.pagoDelDia || 0).toFixed(2)}</td>
         </tr>
       `;
       tbody.innerHTML += row;

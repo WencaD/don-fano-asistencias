@@ -1,7 +1,5 @@
-// public/scripts/menu-admin.js
+// Validación de acceso para administradores
 
-// PROTECCIÓN ADMIN
-// Verifica el token Y que el rol almacenado sea el correcto.
 if (!localStorage.getItem("token") || localStorage.getItem("role") !== "ADMIN") { 
   window.location.href = "../login.html";
 }

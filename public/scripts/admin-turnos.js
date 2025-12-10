@@ -2,7 +2,9 @@
 
 // --- Helper para llamadas a la API con token ---
 async function apiRequest(url, options = {}) {
-  const token = localStorage.getItem("token");
+  // Gestión de turnos de trabajo
+
+const token = localStorage.getItem("token");
 
   const res = await fetch(url, {
     ...options,
@@ -90,7 +92,6 @@ document.getElementById("formTurno").addEventListener("submit", async (e) => {
   }
 });
 
-// Cargar turnos
 async function cargarTurnos() {
   const tbody = document.getElementById("tablaTurnos");
   tbody.innerHTML = `<tr><td colspan="5">Cargando...</td></tr>`;

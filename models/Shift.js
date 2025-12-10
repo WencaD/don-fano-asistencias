@@ -1,3 +1,4 @@
+// Modelo de turnos de trabajo
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 

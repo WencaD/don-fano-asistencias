@@ -1,9 +1,8 @@
-// Toggle del menú
+// Utilidades generales del frontend
 document.getElementById("toggleMenu").addEventListener("click", () => {
   document.getElementById("sidebar").classList.toggle("closed");
 });
 
-// Cerrar sesión global
 const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
   logoutBtn.onclick = () => {

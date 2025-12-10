@@ -1,11 +1,7 @@
-/* ==============================
-      ESTILOS DE EMPLEADO (Dashboard y Scanner)
-   ============================== */
-
 :root {
-  --primary: #ff7b00; /* Naranja de Don Fano */
-  --secondary: #e53935; /* Rojo (para botones de acción) */
-  --bg-color: #f7efe4; /* Fondo beige claro */
+  --primary: #ff7b00;
+  --secondary: #e53935;
+  --bg-color: #f7efe4;
   --text-color: #3d2f26;
 }
 
@@ -16,14 +12,12 @@ body {
     min-height: 100vh;
 }
 
-/* ===== LAYOUT & CONTENEDOR ===== */
 .main-layout {
     display: flex;
     min-height: 100vh;
 }
 
 .sidebar {
-    /* (Ya definido en menu.css, pero si usas el HTML de empleado con sidebar, usa esos estilos) */
     width: 260px;
     background: #1e1e1e;
     color: #fff;
@@ -40,7 +34,6 @@ body {
     margin: 0 auto;
 }
 
-/* ===== ENCABEZADO ===== */
 .emp-header {
     text-align: center;
     margin-bottom: 25px;
@@ -72,10 +65,9 @@ body {
     margin-top: 10px;
 }
 
-/* ===== GRID DE CONTENIDO ===== */
 .emp-grid-layout {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Más espacio para historial/status */
+    grid-template-columns: 2fr 1fr;
     gap: 30px;
 }
 
@@ -85,8 +77,6 @@ body {
     }
 }
 
-
-/* ===== TARJETAS Y STATUS ===== */
 .emp-card {
     background: white;
     padding: 25px;
@@ -103,8 +93,7 @@ body {
     margin-bottom: 15px;
 }
 
-/* Indicadores de Estado */
-.emp-status-grid {
+.emp-status-line {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 15px;
@@ -131,7 +120,6 @@ body {
     color: var(--primary);
 }
 
-/* QR y Botones */
 .qr-img {
     display: block;
     width: 150px;
@@ -156,7 +144,6 @@ body {
     background: #ff8f2a;
 }
 
-/* ===== TABLA HISTORIAL ===== */
 .emp-table {
     width: 100%;
     border-collapse: collapse;

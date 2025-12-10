@@ -1,6 +1,7 @@
-// models/User.js
+// Modelo de usuarios del sistema
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
+const bcrypt = require("bcrypt");
 
 const User = sequelize.define(
   "User",
@@ -29,7 +30,6 @@ const User = sequelize.define(
       allowNull: false,
     },
     role: {
-      // Debe coincidir con la BD: ENUM('ADMIN','WORKER')
       type: DataTypes.ENUM("ADMIN", "WORKER"),
       allowNull: false,
       defaultValue: "WORKER",
@@ -40,5 +40,9 @@ const User = sequelize.define(
     timestamps: false,
   }
 );
+
+User.prototype.comparePassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password_hash);
+};
 
 module.exports = User;

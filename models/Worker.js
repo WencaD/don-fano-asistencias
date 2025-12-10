@@ -1,4 +1,4 @@
-// models/Worker.js
+// Modelo de trabajadores de la pizzería
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 

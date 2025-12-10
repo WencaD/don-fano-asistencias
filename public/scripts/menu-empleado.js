@@ -1,6 +1,5 @@
-// public/scripts/menu-empleado.js
+// Validación de acceso para empleados
 
-// === CORRECCIÓN CLAVE: El rol debe ser "WORKER" ===
 if (!localStorage.getItem("token") || localStorage.getItem("role") !== "WORKER") {
   window.location.href = "../login.html";
 }

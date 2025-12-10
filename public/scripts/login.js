@@ -1,4 +1,4 @@
-// public/scripts/login.js
+// Lógica de inicio de sesión
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();

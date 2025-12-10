@@ -62,7 +62,8 @@
                 <!-- ESTADO DE HOY -->
                 <section class="emp-card">
                     <h3><i class="fa-solid fa-clock"></i> Estado de Hoy</h3>
-                    <div class="emp-grid" style="display:flex; justify-content:space-around; margin-top:10px;">
+
+                    <div style="display:flex; justify-content:space-around; margin-top:10px;">
                         <div>
                             <p class="label">Entrada</p>
                             <p id="entradaHoy" class="value">--</p>
@@ -73,7 +74,10 @@
                         </div>
                     </div>
 
-                    <p style="text-align:center; margin:15px 0 0; font-weight:bold; color:var(--secondary);" id="estadoHoy">--</p>
+                    <p id="estadoHoy"
+                       style="text-align:center; margin:15px 0 0; font-weight:bold; color:var(--secondary);">
+                       --
+                    </p>
                     
                     <button id="btnMarcarAsistencia" class="btn-qr-scan" style="margin-top:20px;">
                         <i class="fa-solid fa-fingerprint"></i> Marcar Asistencia (Escanear QR)
@@ -142,16 +146,16 @@
 
 </div>
 
+
 <!-- =======================================================
-     🔥 MODAL QR COMPLETO — COPY & PASTE 
-=========================================================== -->
+     🔥 MODAL QR — FUNCIONA CON FRONTAL Y TRASERA
+========================================================= -->
 <div id="modalQR" style="
     display:none;
     position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
+    inset:0;
     background:rgba(0,0,0,0.75);
-    backdrop-filter: blur(4px);
+    backdrop-filter:blur(4px);
     z-index:999999;
     justify-content:center;
     align-items:center;
@@ -161,11 +165,37 @@
         padding:20px;
         border-radius:12px;
         width:350px;
+        max-width:90%;
         text-align:center;
         box-shadow:0 0 15px rgba(0,0,0,0.4);
     ">
+
         <h2 style="margin-bottom:15px;">Escanea tu Código QR</h2>
 
+        <!-- BOTONES -->
+        <div style="display:flex; gap:10px; justify-content:center; margin-bottom:12px;">
+            <button id="cam-back" style="
+                padding:8px 12px;
+                background:#ff7a00;
+                color:white;
+                border:none;
+                border-radius:6px;
+                font-weight:bold;
+                cursor:pointer;
+            ">Trasera</button>
+
+            <button id="cam-front" style="
+                padding:8px 12px;
+                background:#007bff;
+                color:white;
+                border:none;
+                border-radius:6px;
+                font-weight:bold;
+                cursor:pointer;
+            ">Frontal</button>
+        </div>
+
+        <!-- CONTENEDOR QR -->
         <div id="qr-reader" style="width:300px; margin:auto;"></div>
 
         <button onclick="cerrarQR()" style="
@@ -177,13 +207,12 @@
             border:none;
             border-radius:6px;
             cursor:pointer;
-        ">
-            Cancelar
-        </button>
+        ">Cancelar</button>
     </div>
 </div>
 
-<!-- JS -->
+
+<!-- Scripts -->
 <script src="../scripts/logout.js"></script>
 <script src="../scripts/empleado-dashboard.js"></script>
 

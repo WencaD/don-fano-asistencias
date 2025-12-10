@@ -1,3 +1,4 @@
+// Script para resetear contraseña de usuario
 const User = require("./models/User");
 const bcrypt = require("bcrypt");
 const sequelize = require("./config/db");

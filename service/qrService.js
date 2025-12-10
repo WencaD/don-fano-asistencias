@@ -1,39 +1,52 @@
-let codigoActual = null;
-let tiempoExpira = 60; // segundos
+// Servicio para generación de códigos QR dinámicos
+class QRService {
+    constructor() {
+        this.currentCode = null;
+        this.expirationTime = 60;
+        this.generateCode();
+        this.startTimer();
+    }
 
-function generarCodigo() {
-    const codigo = Math.random().toString(36).substring(2, 8).toUpperCase();
+    generateCode() {
+        const code = Math.random().toString(36).substring(2, 8).toUpperCase();
 
-    codigoActual = {
-        codigo,
-        expira_en: tiempoExpira,
-        creado: Date.now()
-    };
+        this.currentCode = {
+            code,
+            expiresIn: this.expirationTime,
+            createdAt: Date.now()
+        };
+    }
+
+    startTimer() {
+        setInterval(() => {
+            if (!this.currentCode) return;
+
+            const secondsPassed = Math.floor((Date.now() - this.currentCode.createdAt) / 1000);
+            const remaining = this.expirationTime - secondsPassed;
+
+            if (remaining <= 0) {
+                this.generateCode();
+            } else {
+                this.currentCode.expiresIn = remaining;
+            }
+        }, 1000);
+    }
+
+    getCurrentCode() {
+        return {
+            codigo: this.currentCode.code,
+            expira_en: this.currentCode.expiresIn
+        };
+    }
+
+    validateCode(code) {
+        return code === this.currentCode.code;
+    }
 }
 
-// Generar el primer código
-generarCodigo();
-
-// Temporizador que actualiza expira_en cada segundo
-setInterval(() => {
-    if (!codigoActual) return;
-
-    const segundosPasados = Math.floor((Date.now() - codigoActual.creado) / 1000);
-    const restante = tiempoExpira - segundosPasados;
-
-    if (restante <= 0) {
-        generarCodigo(); // generar uno nuevo
-    } else {
-        codigoActual.expira_en = restante;
-    }
-}, 1000);
+const qrService = new QRService();
 
 module.exports = {
-    getCodigoActual: () => ({
-        codigo: codigoActual.codigo,
-        expira_en: codigoActual.expira_en
-    }),
-
-    validarCodigo: (codigo) =>
-        codigo === codigoActual.codigo
+    getCodigoActual: () => qrService.getCurrentCode(),
+    validarCodigo: (code) => qrService.validateCode(code)
 };

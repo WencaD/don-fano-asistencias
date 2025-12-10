@@ -1,4 +1,3 @@
-/* Estadísticas del día */
 .stats-grid {
   margin-top: 24px;
   display: grid;
@@ -19,7 +18,6 @@
   color: #ff7b00;
 }
 
-/* Bloque de gráficas */
 .charts-header {
   display: flex;
   justify-content: space-between;
@@ -70,7 +68,7 @@
   font-size: 15px;
   margin-bottom: 8px;
 }
-/* --- ESTADO ASISTENCIA HOY (NUEVA SECCIÓN) --- */
+
 .attendance-status-section {
     margin-top: 32px;
 }
@@ -82,26 +80,22 @@
 }
 
 .attendance-status-section .table {
-    /* Estilos de tabla del menu.css */
     font-size: 14px;
 }
 
 .attendance-status-section .table thead {
-    background: #ff7b00; /* Color de tu marca 'Don Fano' */
+    background: #ff7b00;
     color: #fff;
 }
 
-/* NUEVO: LAYOUT DE DOS COLUMNAS */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Una columna grande para stats, una pequeña para la tabla */
+    grid-template-columns: 2fr 1fr;
     gap: 20px;
 }
 
-/* Ajuste para móviles */
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
     .dashboard-grid {
-        grid-template-columns: 1fr; /* Vuelve a una sola columna */
+        grid-template-columns: 1fr;
     }
 }
-/* FIN NUEVO */

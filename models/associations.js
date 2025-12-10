@@ -1,3 +1,4 @@
+// Relaciones entre modelos de la base de datos
 const User = require("./User");
 const Worker = require("./Worker");
 const Assistance = require("./Assistance");
