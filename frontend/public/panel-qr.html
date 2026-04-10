@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel QR - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Panel QR de marcación de asistencia - Don Fano Pizzería">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/menu.css" />
+  <link rel="stylesheet" href="css/admin-pages.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+  <style>
+    .qr-page-wrapper {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 10px;
+    }
+
+    .qr-main-card {
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 44px 40px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      position: relative;
+    }
+
+    .qr-main-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 20px; right: 20px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--pizza-red), var(--pizza-amber), var(--pizza-red));
+      border-radius: 0 0 4px 4px;
+    }
+
+    .qr-pizza-emoji {
+      font-size: 40px;
+      margin-bottom: 12px;
+      display: block;
+      animation: spin 8s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .qr-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .qr-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+    }
+
+    .qr-canvas-wrapper {
+      display: inline-block;
+      padding: 16px;
+      background: white;
+      border-radius: 16px;
+      border: 3px solid rgba(192,57,43,0.2);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+    }
+
+    #qr-canvas {
+      display: block;
+      border-radius: 8px;
+    }
+
+    .qr-code-display {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: var(--pizza-red);
+      margin-bottom: 12px;
+    }
+
+    .qr-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-alt);
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+
+    .qr-timer i { color: var(--pizza-amber); }
+
+    #estado {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .qr-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    .qr-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-align: left;
+    }
+
+    .qr-info i {
+      color: var(--pizza-amber);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="main-layout">
+
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Panel Admin</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="admin/admin-dashboard.html" class="sidebar-link">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+        <a href="admin/admin-trabajadores.html" class="sidebar-link">
+          <i class="fas fa-users"></i> Trabajadores
+        </a>
+        <a href="admin/admin-turnos.html" class="sidebar-link">
+          <i class="fas fa-calendar-alt"></i> Turnos
+        </a>
+        <a href="admin/admin-reportes.html" class="sidebar-link">
+          <i class="fas fa-file-alt"></i> Reportes
+        </a>
+        <a href="panel-qr.html" class="sidebar-link active">
+          <i class="fas fa-qrcode"></i> Panel QR
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <button id="btnLogout" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content qr-page-wrapper">
+
+    <div class="qr-main-card">
+      <span class="qr-pizza-emoji">🍕</span>
+      <h1 class="qr-title">Código QR de Asistencia</h1>
+      <p class="qr-subtitle">Muestra este código a los empleados para marcar su entrada</p>
+
+      <div class="qr-canvas-wrapper">
+        <canvas id="qr-canvas"></canvas>
+      </div>
+
+      <div id="codigo" class="qr-code-display">------</div>
+
+      <div class="qr-timer">
+        <i class="fas fa-hourglass-half"></i>
+        <span id="timer">Cargando...</span>
+      </div>
+
+      <br>
+      <span id="estado"></span>
+
+      <div class="qr-divider"></div>
+
+      <div class="qr-info">
+        <i class="fas fa-info-circle"></i>
+        <span>El código se renueva automáticamente cada 30 segundos por seguridad. Los empleados deben escanearlo desde su panel personal.</span>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<script src="scripts/menu-admin.js"></script>
+<script>
+  const qr = new QRious({
+    element: document.getElementById('qr-canvas'),
+    size: 220,
+    value: 'Inicializando...',
+    background: '#ffffff',
+    foreground: '#2d1b0e',
+    level: 'H'
+  });
+
+  const codigoEl = document.getElementById('codigo');
+  const timerEl  = document.getElementById('timer');
+  const estadoEl = document.getElementById('estado');
+
+  async function actualizarQR() {
+    try {
+      const res = await fetch('/api/qr/current');
+      if (!res.ok) throw new Error('Error al obtener código');
+
+      const data = await res.json();
+      const codigo = data.codigo;
+      const expira = data.expira_en;
+
+      qr.value = codigo;
+      codigoEl.textContent = codigo;
+      timerEl.textContent = 'Tiempo restante: ' + expira + ' s';
+
+      if (expira <= 5) {
+        estadoEl.textContent = '⚠️ El código está por cambiar...';
+        estadoEl.style.cssText = 'color:#d97706;background:rgba(217,119,6,0.1);border:1px solid rgba(217,119,6,0.25)';
+      } else {
+        estadoEl.textContent = '✓ Código activo';
+        estadoEl.style.cssText = 'color:#166534;background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.25)';
+      }
+    } catch (err) {
+      codigoEl.textContent = 'ERROR';
+      timerEl.textContent = 'Sin conexión';
+      estadoEl.textContent = 'Verifica que el servidor esté activo.';
+      estadoEl.style.cssText = 'color:#c0392b;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.25)';
+    }
+  }
+
+  setInterval(actualizarQR, 1000);
+  actualizarQR();
+</script>
+</body>
+</html>

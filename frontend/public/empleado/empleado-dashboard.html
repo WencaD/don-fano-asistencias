@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi Panel - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Panel personal de asistencias - Don Fano">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/menu.css">
+  <link rel="stylesheet" href="../css/empleado.css">
+
+  <!-- Librería QR -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+
+<body>
+<div id="toast-container"></div>
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="../img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Empleado</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="empleado-dashboard.html" class="sidebar-link active">
+          <i class="fas fa-gauge-high"></i> Mi Panel
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <button id="btnLogout" class="logout-btn">
+        <i class="fas fa-right-from-bracket"></i> Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="emp-container">
+
+        <header class="emp-header">
+          <h2>Hola, <span id="saludoNombre">...</span> 👋</h2>
+          <p class="emp-email" id="empEmail"></p>
+          <p class="chip"><i class="fas fa-calendar-day"></i> <span id="empToday"></span></p>
+        </header>
+
+        <div class="emp-grid-layout">
+            
+            <div class="left-column">
+                
+                <!-- Estado de Hoy -->
+                <section class="emp-card">
+                    <h3><i class="fas fa-clock"></i> Estado de Hoy</h3>
+
+                    <div class="status-entry-container">
+                        <div>
+                            <p class="label">Entrada</p>
+                            <p id="entradaHoy" class="value">--</p>
+                        </div>
+                        <div>
+                            <p class="label">Salida</p>
+                            <p id="salidaHoy" class="value">--</p>
+                        </div>
+                    </div>
+
+                    <p id="estadoHoy" class="estado-hoy">Cargando...</p>
+                    
+                    <button id="btnMarcarAsistencia" class="btn-qr-scan btn-spacing">
+                        <i class="fas fa-fingerprint"></i> Marcar Asistencia (Escanear QR)
+                    </button>
+                </section>
+
+                <!-- TURNOS -->
+                <section class="emp-card">
+                    <h3><i class="fas fa-calendar-days"></i> Mis Próximos Turnos</h3>
+                    <table class="emp-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaTurnos">
+                            <tr><td colspan="3" style="text-align:center;padding:16px;color:var(--text-secondary)">
+                              <i class="fas fa-spinner fa-spin"></i> Cargando...
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            
+            <div class="right-column">
+
+                <!-- RESUMEN MENSUAL -->
+                <section class="emp-card">
+                    <h3><i class="fas fa-chart-pie"></i> Resumen Mensual</h3>
+                    <div class="emp-status-grid">
+                        <div class="status-box">
+                            <p class="label">Días</p>
+                            <p id="diasAsistidos" class="value">0</p>
+                        </div>
+                        <div class="status-box">
+                            <p class="label">Min. Tarde</p>
+                            <p id="minutosTarde" class="value">0</p>
+                        </div>
+                        <div class="status-box">
+                            <p class="label">Pago (S/)</p>
+                            <p id="pagoEstimado" class="value pago-estimado">0.00</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HISTORIAL -->
+                <section class="emp-card">
+                    <h3><i class="fas fa-history"></i> Historial</h3>
+                    <table class="emp-table">
+                        <thead>
+                          <tr>
+                            <th>Fecha</th>
+                            <th>Entrada</th>
+                            <th>Estado</th>
+                          </tr>
+                        </thead>
+                        <tbody id="historialTabla">
+                          <tr><td colspan="3" style="text-align:center;padding:16px;color:var(--text-secondary)">
+                            <i class="fas fa-spinner fa-spin"></i> Cargando...
+                          </td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </div>
+  </main>
+
+</div>
+
+<!-- Modal QR - Escaneo de códigos con múltiples cámaras -->
+<div id="modalQR">
+    <div class="modal-qr-content">
+
+        <h2><i class="fas fa-qrcode" style="color:var(--primary);margin-right:8px"></i>Escanea tu Código QR</h2>
+
+        <!-- Botones para cambiar de cámara -->
+        <div class="modal-qr-buttons">
+            <button id="cam-back" class="btn-camera back">
+              <i class="fas fa-camera"></i> Trasera
+            </button>
+            <button id="cam-front" class="btn-camera front">
+              <i class="fas fa-camera-rotate"></i> Frontal
+            </button>
+        </div>
+
+        <!-- Contenedor para el lector QR -->
+        <div id="qr-reader"></div>
+
+        <button onclick="cerrarQR()" class="btn-cancel">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+    </div>
+</div>
+
+
+<!-- Scripts -->
+<script src="../scripts/logout.js"></script>
+<script src="../scripts/empleado-dashboard.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Escaner QR - Don Fano</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/empleado.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    
+
+</head>
+<body>
+
+<div class="main-layout">
+    <aside class="sidebar">
+        <div>
+            <div class="sidebar-logo">
+                <img src="../img/logo.png" alt="Don Fano Logo" />
+                <h2>Don Fano</h2>
+                <span>Empleado</span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="empleado-dashboard.html" class="sidebar-link">Mi asistencia</a>
+                <a href="scanner.html" class="sidebar-link active">Escanear QR</a>
+            </nav>
+        </div>
+        <div class="sidebar-footer">
+            <button id="btnLogout" class="logout-btn">Cerrar sesión</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="scanner-container">
+            <h2>Escanear Código QR</h2>
+            <p>Apunta tu cámara al código de marcación de la pizzería.</p>
+
+            <div id="reader"></div>
+
+            <p id="result" style="margin-top: 15px; font-weight: bold; color: green;"></p>
+        </div>
+    </main>
+</div>
+
+<script src="../scripts/logout.js"></script>
+<script>
+  const token = localStorage.getItem("token");
+  const userRaw = localStorage.getItem("user");
+  let workerId = null;
+
+  try {
+    const usuario = JSON.parse(userRaw);
+    workerId = usuario.workerId;
+    if (!token || !workerId || usuario.role !== "WORKER") {
+      throw new Error("Sesión inválida.");
+    }
+  } catch (e) {
+    localStorage.clear();
+    window.location.href = "../login.html";
+    return;
+  }
+
+  const resultDiv = document.getElementById("result");
+  const html5QrCode = new Html5Qrcode("reader");
+
+  async function onScanSuccess(decodedText, decodedResult) {
+    html5QrCode.stop().catch(err => console.error("Error deteniendo el escáner:", err));
+
+    resultDiv.textContent = "Código detectado. Marcando asistencia...";
+    resultDiv.style.color = '#ff7b00';
+
+    try {
+      const res = await fetch("/api/qr/mark", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          workerId: workerId,
+          codigo: decodedText.trim()
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Fallo de servidor al marcar.");
+      }
+
+      resultDiv.textContent = (data.message || "Asistencia marcada correctamente.");
+      resultDiv.style.color = 'green';
+
+      setTimeout(() => {
+          window.location.href = "empleado-dashboard.html";
+      }, 2000);
+
+    } catch (err) {
+      resultDiv.textContent = "Error: " + err.message;
+      resultDiv.style.color = 'red';
+
+      setTimeout(() => {
+          window.location.href = "scanner.html";
+      }, 3000);
+    }
+  }
+
+  async function startScanner() {
+    try {
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            facingMode: "environment"
+        };
+
+        resultDiv.textContent = "Intentando iniciar la cámara...";
+        resultDiv.style.color = 'blue';
+
+        await html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            onScanSuccess,
+            (errorMessage) => {}
+        );
+
+        resultDiv.textContent = "Cámara iniciada. Apunta al QR.";
+
+    } catch (error) {
+        let errorMessage = "Error al acceder a la cámara. ";
+        if (error.message.includes("Permission denied")) {
+             errorMessage += "Debe conceder permiso de cámara.";
+        } else if (window.location.protocol === "http:" && window.location.hostname !== "localhost") {
+             errorMessage += "Bloqueado por protocolo HTTP. Pruebe con HTTPS o localhost.";
+        } else {
+             errorMessage += "Verifique los permisos en la configuración del navegador.";
+        }
+
+        resultDiv.textContent = "Error: " + errorMessage;
+        resultDiv.style.color = 'red';
+        console.error("Error iniciando el escáner:", error);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(startScanner, 500);
+  });
+</script></body>
+</html>

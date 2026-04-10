@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dashboard administrativo Don Fano - Estadísticas de asistencia en tiempo real">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/menu.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="main-layout">
+
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="../img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Panel Admin</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="admin-dashboard.html" class="sidebar-link active">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+        <a href="admin-trabajadores.html" class="sidebar-link">
+          <i class="fas fa-users"></i> Trabajadores
+        </a>
+        <a href="admin-turnos.html" class="sidebar-link">
+          <i class="fas fa-calendar-alt"></i> Turnos
+        </a>
+        <a href="admin-reportes.html" class="sidebar-link">
+          <i class="fas fa-file-alt"></i> Reportes
+        </a>
+        <a href="../panel-qr.html" class="sidebar-link">
+          <i class="fas fa-qrcode"></i> Panel QR
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <button id="btnLogout" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="dashboard-grid">
+        
+        <div class="main-stats-column">
+            <header>
+              <h1 class="page-title">Dashboard General</h1>
+              <p class="page-subtitle">Estadísticas del día en tiempo real</p>
+            </header>
+        
+            <section class="stats-grid">
+              <div class="card">
+                <div class="stat-card-title"><i class="fas fa-user-check" style="color:#16a34a;margin-right:6px"></i>Empleados activos</div>
+                <div id="empleadosActivos" class="stat-card-number">0</div>
+              </div>
+              <div class="card">
+                <div class="stat-card-title"><i class="fas fa-sign-in-alt" style="color:#d97706;margin-right:6px"></i>Entradas hoy</div>
+                <div id="entradasHoy" class="stat-card-number">0</div>
+              </div>
+              <div class="card">
+                <div class="stat-card-title"><i class="fas fa-sign-out-alt" style="color:#0284c7;margin-right:6px"></i>Salidas hoy</div>
+                <div id="salidasHoy" class="stat-card-number">0</div>
+              </div>
+              <div class="card">
+                <div class="stat-card-title"><i class="fas fa-users" style="color:#7c3aed;margin-right:6px"></i>Total trabajadores</div>
+                <div id="totalTrabajadores" class="stat-card-number">0</div>
+              </div>
+            </section>
+        
+            <section class="charts-section">
+              <div class="charts-header">
+                <h2 class="charts-title"><i class="fas fa-chart-bar" style="color:var(--primary);margin-right:8px"></i>Estadísticas por período</h2>
+                <div class="filter-buttons">
+                  <button class="filter-btn active" data-period="week">Esta semana</button>
+                  <button class="filter-btn" data-period="month">Último mes</button>
+                  <button class="filter-btn" data-period="year">Último año</button>
+                </div>
+              </div>
+        
+              <div class="charts-grid">
+                <div class="chart-card">
+                  <h3><i class="fas fa-exclamation-circle" style="color:#dc2626;margin-right:6px"></i>Tardanzas / Faltas</h3>
+                  <canvas id="chartTardanzas"></canvas>
+                </div>
+                <div class="chart-card">
+                  <h3><i class="fas fa-clock" style="color:#d97706;margin-right:6px"></i>Minutos de tardanza</h3>
+                  <canvas id="chartMinutos"></canvas>
+                </div>
+              </div>
+            </section>
+        </div>
+
+        <div class="side-attendance-column">
+             <section class="attendance-status-section card">
+              <h2>Estado de Asistencia Hoy</h2>
+              <div class="table-wrapper">
+                <table class="table" id="tablaEstadoAsistencia">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Área</th>
+                      <th>Entrada</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td colspan="4" style="text-align:center;padding:24px;color:var(--text-secondary)">
+                      <i class="fas fa-spinner fa-spin" style="margin-right:8px"></i>Cargando estado...
+                    </td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+        </div>
+        
+    </div>
+  </main>
+
+</div>
+
+<script src="../scripts/menu-admin.js"></script>
+<script src="../scripts/admin-dashboard.js"></script>
+</body>
+</html>

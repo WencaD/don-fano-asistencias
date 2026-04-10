@@ -1,0 +1,206 @@
+/* =====================================================
+   Don Fano - Dashboard Admin 🍕 Estilo Premium
+   ===================================================== */
+
+/* Grid del dashboard adaptativo */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 1400px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+.dashboard-header {
+  margin-bottom: 48px;
+}
+
+/* === Cards de estadísticas (Estilo Pizarra) === */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.stats-grid .card {
+  background: #1a1a1a;
+  background-image: url('https://www.transparenttextures.com/patterns/black-paper.png');
+  border: 12px solid #2d2419; /* Marco de madera oscura */
+  border-radius: 12px;
+  padding: 40px 32px;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stats-grid .card:hover {
+  transform: translateY(-8px) rotate(-1deg) scale(1.02);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+}
+
+.stat-card-title {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-card-number {
+  font-size: clamp(48px, 6vw, 72px);
+  font-weight: 900;
+  font-family: 'Playfair Display', serif;
+  color: #fff;
+  letter-spacing: -2px;
+  line-height: 1;
+  text-shadow: 6px 6px 0 rgba(0,0,0,0.3);
+}
+
+/* Colores de tiza vibrantes */
+.stats-grid .card:nth-child(1) .stat-card-number { color: #5ef3c7; }
+.stats-grid .card:nth-child(2) .stat-card-number { color: #ffca3a; }
+.stats-grid .card:nth-child(3) .stat-card-number { color: #4cc9f0; }
+.stats-grid .card:nth-child(4) .stat-card-number { color: #ff595e; }
+
+/* === Sección de gráficos === */
+.charts-section {
+  background: var(--bg-card);
+  border-radius: 24px;
+  padding: 48px;
+  box-shadow: var(--shadow-lg);
+  border: 4px solid var(--border);
+  position: relative;
+  background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+  margin-bottom: 40px;
+}
+
+.charts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.charts-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 900;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 32px;
+}
+
+@media (max-width: 992px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.chart-card {
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 40px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s;
+}
+
+.chart-card:hover {
+    transform: scale(1.01);
+    background: rgba(255,255,255,0.9);
+}
+
+.chart-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 24px;
+    color: var(--text);
+}
+
+/* === Columna lateral de asistencia === */
+.side-attendance-column {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.attendance-status-section {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--border);
+}
+
+.attendance-status-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--bg-warm);
+}
+
+/* Table refinements for "encaje" perfect */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    background: var(--pizza-warm-dk);
+    padding: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--pizza-gold);
+    text-align: left;
+}
+
+.table td {
+    padding: 16px 20px;
+    font-size: 15px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}

@@ -1,0 +1,150 @@
+/* =====================================================
+   Don Fano - Páginas de Admin (Trabajadores, Turnos, Reportes)
+   Complementa menu.css con estilos específicos de tablas y formularios
+   ===================================================== */
+
+/* ===== Sección formulario ===== */
+.form-section {
+  margin-bottom: 32px;
+}
+
+.form-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--dark);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-section h2::before {
+  content: '';
+  width: 6px;
+  height: 24px;
+  background: var(--primary);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.form-hint {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 24px;
+  margin-top: -4px;
+  padding-left: 16px;
+}
+
+/* ===== Sección lista ===== */
+.list-section {
+  margin-bottom: 32px;
+}
+
+.list-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--dark);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.list-section h2::before {
+  content: '';
+  width: 6px;
+  height: 24px;
+  background: var(--secondary);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ===== Badge de estado en tablas ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-success {
+  background: rgba(47, 133, 90, 0.1);
+  color: var(--secondary);
+  border: 1px solid rgba(47, 133, 90, 0.2);
+}
+
+.badge-warning {
+  background: rgba(217,119,6,0.1);
+  color: var(--warning);
+  border: 1px solid rgba(217,119,6,0.2);
+}
+
+.badge-danger {
+  background: rgba(197, 48, 48, 0.1);
+  color: var(--primary);
+  border: 1px solid rgba(197, 48, 48, 0.2);
+}
+
+.badge-info {
+  background: rgba(43, 108, 176, 0.1);
+  color: var(--info);
+  border: 1px solid rgba(43, 108, 176, 0.2);
+}
+
+/* ===== Panel QR ===== */
+.qr-content-card {
+  max-width: 450px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 60px 40px;
+  background: var(--white);
+  background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 4px solid var(--dark);
+}
+
+#qr-canvas {
+  border-radius: var(--radius-md);
+  padding: 24px;
+  background: white;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 32px;
+  border: 2px solid var(--border);
+}
+
+#codigo {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: var(--primary);
+  margin-bottom: 16px;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
+}
+
+#timer {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-light);
+  background: var(--bg-warm);
+  padding: 10px 24px;
+  border-radius: 50px;
+  border: 1px solid var(--border-warm);
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+#estado {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--secondary);
+}
+

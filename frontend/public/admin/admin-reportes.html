@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reportes - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Reportes de asistencia - Don Fano">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/menu.css" />
+  <link rel="stylesheet" href="../css/admin-pages.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="main-layout">
+
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="../img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Panel Admin</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="admin-dashboard.html" class="sidebar-link">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+        <a href="admin-trabajadores.html" class="sidebar-link">
+          <i class="fas fa-users"></i> Trabajadores
+        </a>
+        <a href="admin-turnos.html" class="sidebar-link">
+          <i class="fas fa-calendar-alt"></i> Turnos
+        </a>
+        <a href="admin-reportes.html" class="sidebar-link active">
+          <i class="fas fa-file-alt"></i> Reportes
+        </a>
+        <a href="../panel-qr.html" class="sidebar-link">
+          <i class="fas fa-qrcode"></i> Panel QR
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">
+      <button id="btnLogout" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header-top">
+      <div>
+        <h1 class="page-title">Reportes de Asistencia</h1>
+        <p class="page-subtitle">Consulta entradas, salidas, tardanzas y faltas.</p>
+      </div>
+    </header>
+
+    <!-- FILTROS -->
+    <section class="filters-section card">
+      <h2>Filtros de búsqueda</h2>
+
+      <form id="formReportes">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="desde"><i class="fas fa-calendar-plus" style="color:var(--primary)"></i> Desde</label>
+            <input type="date" id="desde" required />
+          </div>
+          <div class="form-field">
+            <label for="hasta"><i class="fas fa-calendar-minus" style="color:var(--primary)"></i> Hasta</label>
+            <input type="date" id="hasta" required />
+          </div>
+          <div class="form-field">
+            <label for="workerReporte"><i class="fas fa-user-circle" style="color:var(--primary)"></i> Trabajador (opcional)</label>
+            <select id="workerReporte">
+              <option value="">Todos los trabajadores</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-search"></i> Buscar reportes
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section class="list-section card">
+      <h2>Resultados</h2>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Trabajador</th>
+              <th>Entrada</th>
+              <th>Salida</th>
+              <th>Estado</th>
+              <th>Min. tarde</th>
+            </tr>
+          </thead>
+          <tbody id="tablaReportes">
+            <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-secondary)">
+              <i class="fas fa-search" style="margin-right:8px;color:var(--primary)"></i>Usa los filtros para buscar reportes
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<script src="../scripts/menu-admin.js"></script>
+<script src="../scripts/admin-reportes.js"></script>
+</body>
+</html>

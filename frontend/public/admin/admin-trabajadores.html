@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trabajadores - Don Fano</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Gestión de trabajadores - Don Fano">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/menu.css" />
+  <link rel="stylesheet" href="../css/admin-pages.css" />
+</head>
+<body>
+<div id="toast-container"></div>
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">
+        <img src="../img/logo.png" alt="Don Fano Logo" />
+        <h2>Don Fano</h2>
+        <span>Panel Admin</span>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="admin-dashboard.html" class="sidebar-link">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+        <a href="admin-trabajadores.html" class="sidebar-link active">
+          <i class="fas fa-users"></i> Trabajadores
+        </a>
+        <a href="admin-turnos.html" class="sidebar-link">
+          <i class="fas fa-calendar-alt"></i> Turnos
+        </a>
+        <a href="admin-reportes.html" class="sidebar-link">
+          <i class="fas fa-file-alt"></i> Reportes
+        </a>
+        <a href="../panel-qr.html" class="sidebar-link">
+          <i class="fas fa-qrcode"></i> Panel QR
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <button id="btnLogout" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main class="main-content">
+    <header class="page-header-top">
+      <div>
+        <h1 class="page-title">Gestión de Trabajadores</h1>
+        <p class="page-subtitle">Administra los datos de los empleados registrados.</p>
+      </div>
+      <span id="todayLabel" class="page-header-date">--/--/----</span>
+    </header>
+
+    <!-- REGISTRAR -->
+    <section class="form-section card">
+      <h2>Registrar trabajador</h2>
+      <p class="form-hint">Crea la cuenta y los datos del nuevo empleado.</p>
+
+      <form id="formTrabajador">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="nombre"><i class="fas fa-user" style="color:var(--primary)"></i> Nombre completo</label>
+            <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required />
+          </div>
+          <div class="form-field">
+            <label for="dni"><i class="fas fa-id-card" style="color:var(--primary)"></i> DNI</label>
+            <input type="text" id="dni" placeholder="Ej: 12345678" required />
+          </div>
+          <div class="form-field">
+            <label for="correo"><i class="fas fa-envelope" style="color:var(--primary)"></i> Correo</label>
+            <input type="email" id="correo" placeholder="correo@ejemplo.com" required />
+          </div>
+          <div class="form-field">
+            <label for="area"><i class="fas fa-briefcase" style="color:var(--primary)"></i> Área</label>
+            <select id="area">
+              <option value="Cocina">Cocina</option>
+              <option value="Caja">Caja</option>
+              <option value="Delivery">Delivery</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="rol"><i class="fas fa-tag" style="color:var(--primary)"></i> Rol</label>
+            <select id="rol">
+              <option value="Empleado">Empleado</option>
+              <option value="Administrador">Administrador</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="salario_hora"><i class="fas fa-coins" style="color:var(--primary)"></i> Salario por hora (S/)</label>
+            <input type="number" id="salario_hora" value="0" min="0" step="0.50" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-user-plus"></i> Registrar trabajador
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- LISTA -->
+    <section class="list-section card">
+      <h2>Lista de trabajadores</h2>
+
+      <div class="table-wrapper">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>DNI</th>
+              <th>Correo</th>
+              <th>Área</th>
+              <th>Rol</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tablaTrabajadores">
+            <tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-secondary)">
+              <i class="fas fa-spinner fa-spin" style="margin-right:8px"></i>Cargando...
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<script src="../scripts/menu-admin.js"></script>
+<script src="../scripts/admin-trabajadores.js"></script>
+</body>
+</html>

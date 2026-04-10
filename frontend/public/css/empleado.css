@@ -1,0 +1,302 @@
+/* =====================================================
+   Don Fano - Panel Empleado 🍕 Estilo Pizzería Premium
+   ===================================================== */
+
+.emp-container {
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Header del empleado con estilo pizzería */
+.emp-header {
+  padding: 60px;
+  background: var(--pizza-warm-dk);
+  background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+  border-radius: 24px;
+  color: #fffaf0;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--sidebar-bd);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+@media (max-width: 768px) {
+    .emp-header {
+        padding: 40px 24px;
+    }
+}
+
+.emp-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 900;
+  color: #fffaf0;
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+
+.emp-header h2 span {
+  color: var(--pizza-gold);
+  text-shadow: 0 0 20px rgba(237, 137, 54, 0.3);
+}
+
+.emp-email {
+  font-size: clamp(14px, 2vw, 18px);
+  color: rgba(255,250,240,0.5);
+  font-weight: 500;
+}
+
+/* Grid Adaptativo Multinivel */
+.emp-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 40px;
+}
+
+@media (max-width: 1200px) {
+    .emp-grid-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .emp-grid-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+}
+
+/* Cards del empleado */
+.emp-card {
+  background: var(--bg-card);
+  background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+  border-radius: 24px;
+  padding: 48px;
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+}
+
+.emp-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 768px) {
+    .emp-card {
+        padding: 32px 24px;
+    }
+}
+
+.emp-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border-warm);
+}
+
+.status-entry-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.status-entry-container > div {
+  background: white;
+  border-radius: 18px;
+  padding: 32px 20px;
+  text-align: center;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s;
+}
+
+.status-entry-container > div:hover {
+    background: var(--bg-alt);
+    border-color: var(--pizza-gold);
+}
+
+.label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-light);
+    margin-bottom: 12px;
+}
+
+.value {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 900;
+  color: var(--text);
+  font-family: 'Playfair Display', serif;
+  line-height: 1;
+}
+
+
+.btn-qr-scan {
+  width: 100%;
+  padding: 24px;
+  background: var(--pizza-red);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 15px 35px var(--shadow-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: auto; /* Empuja el botón al final de la tarjeta */
+}
+
+.btn-qr-scan:hover {
+  transform: translateY(-6px) scale(1.02);
+  background: var(--pizza-red-light);
+  box-shadow: 0 20px 45px rgba(197, 48, 48, 0.4);
+}
+
+.emp-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .emp-status-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.status-box {
+  background: white;
+  border-radius: 18px;
+  padding: 32px 16px;
+  text-align: center;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.status-box .value {
+  font-size: clamp(24px, 4vw, 36px);
+  color: var(--pizza-red);
+  font-weight: 900;
+}
+
+.emp-table-wrapper {
+    overflow-x: auto;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+}
+
+.emp-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.emp-table thead tr {
+  background: var(--pizza-warm-dk);
+  color: white;
+}
+
+.emp-table th {
+  padding: 20px;
+  font-family: 'Playfair Display', serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+  text-align: left;
+}
+
+.emp-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+}
+
+/* === Modal QR === */
+#modalQR {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(30,13,0,0.8);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-qr-content {
+  background: var(--bg-card);
+  border-radius: 32px;
+  padding: 48px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+  text-align: center;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.modal-qr-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+#qr-reader {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 3px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.btn-cancel {
+  padding: 16px 40px;
+  background: var(--bg-alt);
+  color: var(--text-secondary);
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-cancel:hover {
+  background: var(--pizza-red);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
+}
+
