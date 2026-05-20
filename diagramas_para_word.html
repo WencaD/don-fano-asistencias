@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramas Don Fano Asistencias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .diagram-container {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 10px;
+        }
+        .instruction {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-left: 5px solid #0066cc;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
+</head>
+<body>
+
+    <h1>Diagramas del Proyecto: Don Fano Asistencias</h1>
+    
+    <div class="instruction">
+        <strong>💡 Instrucciones para pasar a Word:</strong><br>
+        1. Haz clic derecho sobre el dibujo del diagrama (no sobre el texto).<br>
+        2. Selecciona <strong>"Copiar imagen"</strong>.<br>
+        3. Ve a tu documento de Word y presiona <strong>Pegar (Ctrl+V)</strong>.
+    </div>
+
+    <!-- 1. Casos de Uso -->
+    <div class="diagram-container">
+        <h2>1. Diagrama de Casos de Uso</h2>
+        <div class="mermaid">
+flowchart LR
+    %% Actores
+    Trabajador((Trabajador))
+    Admin((Administrador))
+
+    %% Sistema y Casos de Uso
+    subgraph Sistema ["Sistema Don Fano Asistencias"]
+        UC1(UC01: Registrar Asistencia por QR)
+        UC2(UC02: Registrar Asistencia Manual)
+        UC3(UC03: Consultar Asistencias Propias)
+        UC4(UC04: Gestionar Trabajadores)
+        UC5(UC05: Gestionar Turnos)
+        UC6(UC06: Monitor de Asistencia en Vivo)
+        UC7(UC07: Generar Reportes PDF/Excel)
+        UC8(UC08: Autenticación)
+        UC9(UC09: Gestionar Organización)
+    end
+
+    Trabajador --> UC1
+    Trabajador --> UC2
+    Trabajador --> UC3
+    Trabajador --> UC8
+
+    Admin --> UC4
+    Admin --> UC5
+    Admin --> UC6
+    Admin --> UC7
+    Admin --> UC9
+    Admin --> UC8
+    
+    UC1 -.->|includes| UC8
+    UC2 -.->|includes| UC8
+    UC7 -.->|extends| UC4
+        </div>
+    </div>
+
+    <!-- 2. Flujo Principal -->
+    <div class="diagram-container">
+        <h2>2. Caso de Uso en Flujo Principal (Registro de Asistencia)</h2>
+        <div class="mermaid">
+flowchart TD
+    Inicio((Inicio)) --> Autenticacion
+    
+    subgraph Cliente ["App Web / Móvil"]
+        Autenticacion[Inicia sesión] --> LectorQR[Abre lector QR]
+        LectorQR --> CapturaDatos[Escanea Código QR]
+    end
+    
+    subgraph Servidor ["API Backend (Node.js)"]
+        CapturaDatos --> ValidarTrabajador[Valida identidad del Trabajador]
+        ValidarTrabajador --> ExisteTrabajador{¿Existe trabajador?}
+        
+        ExisteTrabajador -->|No| ErrorNoExiste[Generar Error de Validación]
+        ExisteTrabajador -->|Sí| ValidarTurno[Validar Turno Asignado]
+        
+        ValidarTurno --> CalcularTardanza[Calcular Minutos de Tardanza]
+        CalcularTardanza --> RegistrarAsistencia[Crear Registro de Asistencia]
+    end
+    
+    subgraph DB ["Base de Datos SQL Server"]
+        RegistrarAsistencia --> GuardarEnSQL[(Guardar en Tabla Assistances)]
+    end
+    
+    GuardarEnSQL --> MostrarMensajeExito[Muestra Mensaje de Éxito en pantalla]
+    ErrorNoExiste --> MostrarMensajeError[Muestra Mensaje de Error en pantalla]
+    
+    MostrarMensajeExito --> Fin((Fin))
+    MostrarMensajeError --> Fin((Fin))
+        </div>
+    </div>
+
+    <!-- 3. Diagrama de Paquetes -->
+    <div class="diagram-container">
+        <h2>3. Diagrama de Paquetes</h2>
+        <div class="mermaid">
+flowchart TB
+    subgraph Frontend ["Frontend App (React/Vite)"]
+        Vistas[Vistas / Pages]
+        Componentes[Componentes UI]
+        ServiciosAPI[Servicios de API]
+    end
+    
+    subgraph Backend ["Backend API (Express.js)"]
+        subgraph RouterLayer ["Capa de Rutas"]
+            Routes[Routes]
+            Middlewares[Middlewares]
+        end
+        
+        subgraph BusinessLayer ["Capa de Negocios"]
+            Controllers[Controllers]
+            Services[Services]
+        end
+        
+        subgraph DataAccessLayer ["Capa de Acceso a Datos"]
+            Models[Models]
+            ConfigDB[Configuración DB]
+        end
+    end
+    
+    subgraph Persistencia ["Persistencia"]
+        DBMS[(SQL Server)]
+    end
+
+    ServiciosAPI -.->|HTTP Request JSON| Routes
+    
+    Routes --> Middlewares
+    Routes --> Controllers
+    Controllers --> Services
+    Services --> Models
+    Models --> ConfigDB
+    ConfigDB -.->|TCP/IP Sequelize| DBMS
+        </div>
+    </div>
+
+    <!-- 4. Diagrama de Clases -->
+    <div class="diagram-container">
+        <h2>4. Diagrama de Clases (Dominio)</h2>
+        <div class="mermaid">
+classDiagram
+    class Organization {
+        +int Id
+        +String Nombre
+        +String Ruc
+        +int PlanId
+        +registrar()
+        +actualizarPlan()
+    }
+    
+    class User {
+        +int Id
+        +String Nombre
+        +String Email
+        +String Password
+        +String Role
+        +int OrganizationId
+        +autenticar()
+        +cambiarPassword()
+    }
+    
+    class Worker {
+        +int Id
+        +String Nombre
+        +String Dni
+        +String Correo
+        +Decimal SalarioHora
+        +String QrToken
+        +Boolean Activo
+        +int OrganizationId
+        +int UserId
+        +int AreaId
+        +int CargoId
+        +generarTokenQR()
+        +desactivar()
+    }
+    
+    class Assistance {
+        +bigint Id
+        +Date Fecha
+        +Time HoraEntrada
+        +Time HoraSalida
+        +int MinutosTarde
+        +String Notas
+        +Date CreatedAt
+        +int WorkerId
+        +int EstadoId
+        +marcarEntrada()
+        +marcarSalida()
+        +calcularTardanza()
+    }
+    
+    class Shift {
+        +int Id
+        +String Nombre
+        +Time HoraInicio
+        +Time HoraFin
+        +int WorkerId
+        +asignarTrabajador()
+    }
+
+    Organization "1" *-- "0..*" User : Gestiona
+    Organization "1" *-- "0..*" Worker : Emplea
+    User "1" -- "0..1" Worker : Es perfil de
+    Worker "1" -- "0..*" Assistance : Registra
+    Worker "1" -- "0..*" Shift : Tiene asignado
+        </div>
+    </div>
+
+    <!-- 5. Diagrama de Arquitectura -->
+    <div class="diagram-container">
+        <h2>5. Diagrama de Arquitectura de Software</h2>
+        <div class="mermaid">
+flowchart TD
+    %% Usuarios
+    Trabajador((Trabajador))
+    Admin((Administrador))
+    
+    %% Capa Presentación
+    subgraph Frontend ["Capa de Presentación (Frontend)"]
+        WebApp[Aplicación Web HTML5/CSS/JS]
+        Dispositivo[Dispositivo Lector QR]
+    end
+    
+    %% Capa de Servicios
+    subgraph Backend ["Capa de Lógica de Negocios (Backend)"]
+        Auth[Autenticación & JWT]
+        API[API REST Controladores]
+        ORM[Sequelize ORM]
+    end
+    
+    %% Capa Persistencia
+    subgraph BaseDatos ["Capa de Datos"]
+        SQL[(Microsoft SQL Server)]
+    end
+    
+    %% Relaciones
+    Trabajador -->|Visualiza / Escanea| WebApp
+    Admin -->|Gestiona| WebApp
+    Dispositivo -->|Lee Código| WebApp
+    
+    WebApp -->|HTTPS / JSON| API
+    WebApp -.->|Bearer Token| Auth
+    
+    Auth --> API
+    API --> ORM
+    
+    ORM -->|T-SQL / TCP Port 1433| SQL
+        </div>
+    </div>
+
+    <!-- 6. Diagrama ER -->
+    <div class="diagram-container">
+        <h2>6. Diagrama de Base de Datos (Entidad-Relación)</h2>
+        <div class="mermaid">
+erDiagram
+    ORGANIZATIONS ||--o{ USERS : "tiene"
+    ORGANIZATIONS ||--o{ WORKERS : "emplea"
+    USERS ||--o| WORKERS : "perfil_de_cuenta"
+    WORKERS ||--o{ ASSISTANCES : "genera"
+    WORKERS ||--o{ SHIFTS : "cumple"
+    
+    ORGANIZATIONS {
+        int Id PK
+        string Nombre
+        string Ruc
+        int PlanId FK
+    }
+    
+    USERS {
+        int Id PK
+        string Nombre
+        string Email
+        string Password
+        string Role
+        int OrganizationId FK
+    }
+    
+    WORKERS {
+        int Id PK
+        string Nombre
+        string Dni
+        string Correo
+        decimal SalarioHora
+        string QrToken
+        boolean Activo
+        int UserId FK
+        int OrganizationId FK
+        smallint AreaId
+        smallint CargoId
+    }
+    
+    ASSISTANCES {
+        bigint Id PK
+        string Fecha
+        time HoraEntrada
+        time HoraSalida
+        smallint MinutosTarde
+        string Notas
+        datetime CreatedAt
+        int WorkerId FK
+        tinyint EstadoId
+    }
+    
+    SHIFTS {
+        int Id PK
+        string Nombre
+        time HoraInicio
+        time HoraFin
+        int WorkerId FK
+    }
+        </div>
+    </div>
+
+</body>
+</html>
