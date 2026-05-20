@@ -1,5 +1,4 @@
 // Modelo Organization - Pizzerías/Empresas del sistema
-// Cada organización tiene sus propios usuarios y trabajadores
 
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
@@ -9,75 +8,87 @@ const Organization = sequelize.define("Organization", {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
+    field: "Id"
   },
   nombre: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.STRING(150),
     allowNull: false,
-    comment: "Nombre de la pizzería/empresa"
+    field: "Nombre"
   },
   alias: {
     type: DataTypes.STRING(100),
     unique: true,
     allowNull: false,
-    comment: "Alias único para el dominio (ej: pizzeria-donfano)"
+    field: "Alias"
   },
   correo: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.STRING(150),
     allowNull: false,
-    comment: "Email de contacto de la organización"
+    field: "Correo"
   },
   telefono: {
     type: DataTypes.STRING(20),
     allowNull: true,
+    field: "Telefono"
   },
   pais: {
     type: DataTypes.STRING(100),
     defaultValue: "Paraguay",
+    field: "Pais"
   },
   ciudad: {
     type: DataTypes.STRING(100),
     allowNull: true,
+    field: "Ciudad"
   },
   direccion: {
     type: DataTypes.STRING(255),
     allowNull: true,
+    field: "Direccion"
   },
   logo_url: {
     type: DataTypes.STRING(255),
     allowNull: true,
-    comment: "URL del logo de la organización"
+    field: "LogoUrl"
   },
   color_primario: {
     type: DataTypes.STRING(7),
     defaultValue: "#d97706",
-    comment: "Color primario personalizado"
+    field: "ColorPrimario"
   },
   color_secundario: {
     type: DataTypes.STRING(7),
     defaultValue: "#dc2626",
-    comment: "Color secundario personalizado"
+    field: "ColorSecundario"
   },
   activo: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
+    field: "Activo"
   },
-  plan: {
-    type: DataTypes.ENUM("basico", "profesional", "empresarial"),
-    defaultValue: "basico",
-    comment: "Plan de suscripción"
-  },
-  limite_trabajadores: {
-    type: DataTypes.INTEGER,
-    defaultValue: 50,
-    comment: "Límite de trabajadores según el plan"
+  Planid: {
+    type: DataTypes.TINYINT,
+    defaultValue: 1,
+    field: "PlanId"
   },
   fecha_suscripcion: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
+    field: "FechaSuscripcion"
   },
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+    field: "CreatedAt"
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+    field: "UpdatedAt"
+  }
 }, {
-  timestamps: true,
-  tableName: "organizations"
+  timestamps: false, // Usamos los definidos manuales
+  tableName: "Organizations"
 });
 
 module.exports = Organization;

@@ -1,7 +1,4 @@
-// Controlador HTTP para gestión de trabajadores
-// Controlador Worker - Endpoints CRUD de trabajadores
-// GET, POST, PUT, DELETE para gestión de empleados
-
+// Endpoints CRUD de trabajadores
 const workerService = require("../services/workerService");
 
 exports.getAllWorkers = async (req, res) => {

@@ -18,11 +18,22 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
+    const catalogService = require("../services/catalogService");
     const users = await userRepository.findAll({
       include: [{ model: require("../models/Worker") }],
       order: [["id", "ASC"]],
     });
-    res.json(users);
+
+    const mappedUsers = await Promise.all(users.map(async (u) => {
+      const plainUser = u.get({ plain: true });
+      if (plainUser.Worker) {
+        plainUser.Worker.area = await catalogService.getAreaName(plainUser.Worker.area);
+        plainUser.Worker.rol = await catalogService.getCargoName(plainUser.Worker.rol);
+      }
+      return plainUser;
+    }));
+
+    res.json(mappedUsers);
   } catch (error) {
     console.error("getAllUsers error:", error);
     res.status(500).json({ ok: false, error: "Error al obtener usuarios" });

@@ -1,7 +1,4 @@
-// Controlador HTTP para estadísticas y dashboards
-// Controlador Stats - Endpoints de estadísticas y reportes
-// Datos de dashboard, tardanzas, horas trabajadas
-
+// Endpoints de estadísticas y dashboards
 const statsService = require("../services/statsService");
 
 exports.getDashboardStats = async (req, res) => {
@@ -28,7 +25,7 @@ exports.getStatsByPeriod = async (req, res) => {
 exports.getWorkerDashboard = async (req, res) => {
   try {
     const workerId = req.params.workerId;
-    
+
     if (!workerId) {
       return res.status(400).json({ error: "Worker ID es requerido." });
     }

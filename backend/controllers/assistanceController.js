@@ -1,9 +1,6 @@
-// Controlador HTTP para registro de asistencias
-// Controlador Assistance - Endpoints de registro de asistencias
-// Marcación de entrada/salida, historial y estadísticas
+// Controlador HTTP para registro de asistencias — Marcación de entrada/salida, historial y estadísticas
 
 const assistanceService = require("../services/assistanceService");
-const { Op } = require("sequelize");
 
 exports.markAssistance = async (req, res) => {
   try {

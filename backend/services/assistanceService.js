@@ -3,6 +3,7 @@ const assistanceRepository = require("../repositories/assistanceRepository");
 const workerRepository = require("../repositories/workerRepository");
 const shiftRepository = require("../repositories/shiftRepository");
 const timeHelper = require("../utils/timeHelper");
+const catalogService = require("./catalogService");
 
 class AssistanceService {
   async markAssistance(qrToken) {
@@ -51,7 +52,7 @@ class AssistanceService {
     const assistance = await assistanceRepository.create({
       fecha,
       hora_entrada: hora,
-      estado,
+      estado: await catalogService.getEstadoId(estado),
       minutos_tarde,
       workerId
     });

@@ -37,15 +37,13 @@ class ReportService {
         
         reportData.horasTrabajadas = parseFloat(hours.toFixed(2));
         reportData.pagoDelDia = parseFloat((hours * salarioHora).toFixed(2));
-        
-        console.log(`Reporte - Fecha: ${assistance.fecha}, Horas: ${hours.toFixed(2)}, Salario/hora: ${salarioHora}, Pago: ${reportData.pagoDelDia}`);
-      } else {
-        console.log(`Sin cálculo - Entrada: ${assistance.hora_entrada}, Salida: ${assistance.hora_salida}, Worker: ${assistance.Worker ? 'SI' : 'NO'}`);
       }
 
       return reportData;
     });
-  }  _calculateWorkedHours(horaEntrada, horaSalida) {
+  }
+
+  _calculateWorkedHours(horaEntrada, horaSalida) {
     if (!horaEntrada || !horaSalida) return 0;
 
     const entradaParts = horaEntrada.split(':').map(Number);

@@ -1,59 +1,77 @@
 /* =====================================================
-   Don Fano - Dashboard Admin 🍕 Estilo Premium
+   Don Fano - Dashboard Admin 🚀 Estilo Premium Moderno
    ===================================================== */
 
 /* Grid del dashboard adaptativo */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
   gap: 40px;
   align-items: start;
 }
 
 @media (max-width: 1400px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-        gap: 32px;
-    }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
 }
 
 .dashboard-header {
   margin-bottom: 48px;
 }
 
-/* === Cards de estadísticas (Estilo Pizarra) === */
+/* === Cards de estadísticas Premium === */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 24px;
   margin-bottom: 48px;
 }
 
 .stats-grid .card {
-  background: #1a1a1a;
-  background-image: url('https://www.transparenttextures.com/patterns/black-paper.png');
-  border: 12px solid #2d2419; /* Marco de madera oscura */
-  border-radius: 12px;
-  padding: 40px 32px;
-  box-shadow: var(--shadow-lg);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-grid .card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.stats-grid .card:hover::after {
+  opacity: 1;
 }
 
 .stats-grid .card:hover {
-  transform: translateY(-8px) rotate(-1deg) scale(1.02);
-  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px var(--primary-glow);
 }
 
 .stat-card-title {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 2.5px;
-  color: rgba(255,255,255,0.4);
+  letter-spacing: 2px;
+  color: var(--text-secondary);
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -61,30 +79,47 @@
 }
 
 .stat-card-number {
-  font-size: clamp(48px, 6vw, 72px);
-  font-weight: 900;
-  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
   color: #fff;
-  letter-spacing: -2px;
   line-height: 1;
-  text-shadow: 6px 6px 0 rgba(0,0,0,0.3);
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, #FFF, #A0A0AB);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Colores de tiza vibrantes */
-.stats-grid .card:nth-child(1) .stat-card-number { color: #5ef3c7; }
-.stats-grid .card:nth-child(2) .stat-card-number { color: #ffca3a; }
-.stats-grid .card:nth-child(3) .stat-card-number { color: #4cc9f0; }
-.stats-grid .card:nth-child(4) .stat-card-number { color: #ff595e; }
+/* Colores de neón sutiles para los íconos */
+.stats-grid .card:nth-child(1) .stat-card-title i {
+  color: #10B981;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.stats-grid .card:nth-child(2) .stat-card-title i {
+  color: #F59E0B;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+.stats-grid .card:nth-child(3) .stat-card-title i {
+  color: #3B82F6;
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.stats-grid .card:nth-child(4) .stat-card-title i {
+  color: #8B5CF6;
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
 
 /* === Sección de gráficos === */
 .charts-section {
   background: var(--bg-card);
-  border-radius: 24px;
-  padding: 48px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  padding: 40px;
   box-shadow: var(--shadow-lg);
-  border: 4px solid var(--border);
-  position: relative;
-  background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+  border: 1px solid var(--border);
   margin-bottom: 40px;
 }
 
@@ -98,109 +133,128 @@
 }
 
 .charts-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(24px, 4vw, 32px);
-  font-weight: 900;
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(24px, 3vw, 28px);
+  font-weight: 700;
   color: var(--text);
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
+.filter-buttons {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.filter-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.filter-btn:hover {
+  color: var(--text);
+}
+
+.filter-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 32px;
 }
 
-@media (max-width: 992px) {
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 .chart-card {
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 40px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-md);
+  padding: 32px;
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
   transition: all 0.3s;
 }
 
 .chart-card:hover {
-    transform: scale(1.01);
-    background: rgba(255,255,255,0.9);
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .chart-card h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 900;
-    margin-bottom: 24px;
-    color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
 }
 
 /* === Columna lateral de asistencia === */
 .side-attendance-column {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 .attendance-status-section {
-  background: white;
-  border-radius: 24px;
-  padding: 40px;
-  box-shadow: var(--shadow-lg);
-  border: 2px solid var(--border);
+  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  border: 1px solid var(--border);
 }
 
 .attendance-status-section h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 900;
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--text);
   margin-bottom: 24px;
   display: flex;
   align-items: center;
   gap: 16px;
   padding-bottom: 20px;
-  border-bottom: 2px solid var(--bg-warm);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Table refinements for "encaje" perfect */
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    border-radius: 16px;
-    border: 1px solid var(--border);
+/* Estado Pills */
+.estado-pill {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
+.estado-pill.presente {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-.table th {
-    background: var(--pizza-warm-dk);
-    padding: 20px;
-    font-size: 12px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--pizza-gold);
-    text-align: left;
+.estado-pill.tarde {
+  background: rgba(245, 158, 11, 0.1);
+  color: #FBBF24;
+  border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
-.table td {
-    padding: 16px 20px;
-    font-size: 15px;
-    border-bottom: 1px solid var(--border);
-    color: var(--text);
-}
-
-.table tr:last-child td {
-    border-bottom: none;
+.estado-pill.ausente {
+  background: rgba(239, 68, 68, 0.1);
+  color: #F87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }

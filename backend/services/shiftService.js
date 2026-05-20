@@ -11,9 +11,7 @@ class ShiftService {
       throw new Error("Faltan datos del turno");
     }
 
-    console.log("Fecha recibida del frontend:", fecha);
     const normalizedDate = timeHelper.normalizeDateString(fecha);
-    console.log("Fecha normalizada:", normalizedDate);
 
     const existingAssistance = await assistanceRepository.findByWorkerAndDate(workerId, normalizedDate);
     

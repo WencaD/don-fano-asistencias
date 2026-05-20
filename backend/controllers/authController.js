@@ -1,13 +1,8 @@
-// Controlador HTTP para autenticación
-// Controlador Auth - Endpoints de autenticación (login, registro)
-// Retorna tokens JWT y datos del usuario
-
+// Endpoints de autenticación (login, registro)
 const authService = require("../services/authService");
 const workerRepository = require("../repositories/workerRepository");
 
 exports.login = async (req, res) => {
-  // Controlador para login de usuarios
-  // Valida credenciales y retorna token JWT
   try {
     const { username, password } = req.body;
 
@@ -39,8 +34,6 @@ exports.login = async (req, res) => {
 };
 
 exports.register = async (req, res) => {
-  // Controlador para registro de nuevas organizaciones
-  // Crea organización + usuario administrador
   try {
     const registrationData = {
       organizationName: req.body.organizationName,
@@ -56,7 +49,6 @@ exports.register = async (req, res) => {
     };
 
     const result = await authService.register(registrationData);
-
     const token = authService.generateToken(result.user);
 
     res.status(201).json({

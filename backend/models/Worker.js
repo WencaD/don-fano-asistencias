@@ -1,5 +1,4 @@
 // Modelo Worker - Trabajadores/Empleados
-// Campos: nombre, dni, correo, área, rol, salario por hora, token QR, organizationId
 
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
@@ -11,48 +10,61 @@ const Worker = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      field: "Id"
     },
-    organizationId: {
+    Organizationid: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      comment: "ID de la organización a la que pertenece"
-    },
-    nombre: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    dni: {
-      type: DataTypes.STRING(20),
-      allowNull: false,
-      comment: "DNI único por organización"
-    },
-    correo: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    area: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    rol: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    salario_hora: {
-      type: DataTypes.FLOAT,
-      defaultValue: 0,
-    },
-    qr_token: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
+      field: "OrganizationId"
     },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      field: "UserId"
     },
+    area: {
+      type: DataTypes.SMALLINT,
+      allowNull: true,
+      field: "AreaId"
+    },
+    rol: {
+      type: DataTypes.SMALLINT,
+      allowNull: true,
+      field: "CargoId"
+    },
+    nombre: {
+      type: DataTypes.STRING(150),
+      allowNull: false,
+      field: "Nombre"
+    },
+    dni: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      field: "Dni"
+    },
+    correo: {
+      type: DataTypes.STRING(150),
+      allowNull: true,
+      field: "Correo"
+    },
+    salario_hora: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0,
+      field: "SalarioHora"
+    },
+    qr_token: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+      field: "QrToken"
+    },
+    activo: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      field: "Activo"
+    }
   },
   {
-    tableName: "workers",
+    tableName: "Workers",
     timestamps: false,
   }
 );

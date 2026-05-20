@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
   try {
     const decoded = tokenHelper.verify(token);
     
-    const user = await userRepository.findById(decoded.id, ['id', 'username', 'email', 'role']);
+    const user = await userRepository.findById(decoded.id);
 
     if (!user) {
       return res.status(404).json({ error: "Usuario no encontrado en la base de datos." });

@@ -18,13 +18,13 @@ class StatsService {
     ).length;
 
     const entrancesToday = assistancesToday.filter(a => a.hora_entrada).length;
-    const exitsToda = assistancesToday.filter(a => a.hora_salida).length;
+    const exitsToday = assistancesToday.filter(a => a.hora_salida).length;
 
     return {
       totalTrabajadores: allWorkers.length,
       empleadosActivos: activeWorkers,
       entradasHoy: entrancesToday,
-      salidasHoy: exitsToda
+      salidasHoy: exitsToday
     };
   }
 

@@ -1,25 +1,31 @@
-// Servicio para gestión de trabajadores
-const userRepository = require("../repositories/userRepository");
-// Servicio Worker - Operaciones de trabajadores (crear, listar, actualizar)
-// Gestiona registros de empleados en el sistema
-
+// Lógica de trabajadores — crear, listar, actualizar, eliminar
+const userRepository   = require("../repositories/userRepository");
 const workerRepository = require("../repositories/workerRepository");
-const passwordHelper = require("../utils/passwordHelper");
-const tokenHelper = require("../utils/tokenHelper");
-const roleMapper = require("../utils/roleMapper");
-const sequelize = require("../config/db");
+const passwordHelper   = require("../utils/passwordHelper");
+const tokenHelper      = require("../utils/tokenHelper");
+const catalogService   = require("./catalogService");
+const sequelize        = require("../config/db");
 
 class WorkerService {
   async getAllWorkers() {
-    return await workerRepository.findAll(true);
+    const workers = await workerRepository.findAll(true);
+    return Promise.all(workers.map(async w => {
+      const plainWorker = w.get({ plain: true });
+      plainWorker.area = await catalogService.getAreaName(plainWorker.area);
+      plainWorker.rol  = await catalogService.getCargoName(plainWorker.rol);
+      return plainWorker;
+    }));
   }
 
   async getWorkerById(id) {
     const worker = await workerRepository.findById(id, true);
-    if (!worker) {
-      throw new Error("Trabajador no encontrado");
-    }
-    return worker;
+    if (!worker) throw new Error("Trabajador no encontrado");
+    
+    const plainWorker = worker.get({ plain: true });
+    plainWorker.area = await catalogService.getAreaName(plainWorker.area);
+    plainWorker.rol  = await catalogService.getCargoName(plainWorker.rol);
+    
+    return plainWorker;
   }
 
   async createWorker(workerData) {
@@ -30,21 +36,17 @@ class WorkerService {
     }
 
     const existingUser = await userRepository.findByUsername(dni.trim());
-    if (existingUser) {
-      throw new Error("Ya existe un usuario con ese DNI");
-    }
+    if (existingUser) throw new Error("Ya existe un usuario con ese DNI");
 
     const existingEmail = await userRepository.findByEmail(correo);
-    if (existingEmail) {
-      throw new Error("El correo ya está registrado");
-    }
+    if (existingEmail) throw new Error("El correo ya está registrado");
 
     const transaction = await sequelize.transaction();
-    
+
     try {
-      const username = dni.trim();
+      const username     = dni.trim();
       const passwordHash = await passwordHelper.hash(dni.trim());
-      const userRole = roleMapper.toDatabase(rol);
+      const userRole     = catalogService.getRoleId(rol);
 
       const user = await userRepository.create({
         nombre,
@@ -58,8 +60,8 @@ class WorkerService {
         nombre,
         dni,
         correo,
-        area,
-        rol,
+        area: await catalogService.getAreaId(area),
+        rol:  await catalogService.getCargoId(rol),
         salario_hora: salario_hora || 0,
         qr_token: tokenHelper.generateQRToken(),
         userId: user.id
@@ -75,36 +77,28 @@ class WorkerService {
 
   async updateWorker(id, workerData) {
     const { nombre, dni, correo, area, rol, salario_hora } = workerData;
-    
-    const worker = await workerRepository.findById(id);
-    if (!worker) {
-      throw new Error("Trabajador no encontrado");
-    }
 
-    const updatedWorker = await workerRepository.update(id, {
-      nombre: nombre ?? worker.nombre,
-      dni: dni ?? worker.dni,
-      correo: correo ?? worker.correo,
-      area: area ?? worker.area,
-      rol: rol ?? worker.rol,
+    const worker = await workerRepository.findById(id);
+    if (!worker) throw new Error("Trabajador no encontrado");
+
+    return await workerRepository.update(id, {
+      nombre:       nombre       ?? worker.nombre,
+      dni:          dni          ?? worker.dni,
+      correo:       correo       ?? worker.correo,
+      area:         area         ? await catalogService.getAreaId(area)  : worker.area,
+      rol:          rol          ? await catalogService.getCargoId(rol)  : worker.rol,
       salario_hora: salario_hora ?? worker.salario_hora
     });
-
-    return updatedWorker;
   }
 
   async deleteWorker(id) {
     const worker = await workerRepository.findById(id);
-    if (!worker) {
-      throw new Error("Trabajador no encontrado");
-    }
+    if (!worker) throw new Error("Trabajador no encontrado");
 
     const userId = worker.userId;
     await workerRepository.delete(id);
 
-    if (userId) {
-      await userRepository.delete(userId);
-    }
+    if (userId) await userRepository.delete(userId);
 
     return true;
   }

@@ -8,6 +8,10 @@ require("./models/User");
 require("./models/Worker");
 require("./models/Assistance");
 require("./models/Shift");
+require("./models/Area");
+require("./models/Cargo");
+require("./models/Plan");
+require("./models/Estado");
 require("./models/associations");
 
 const authRoutes = require("./routes/authRoutes");
@@ -18,6 +22,7 @@ const statsRoutes = require("./routes/statsRoutes");
 const shiftRoutes = require("./routes/shiftRoutes");
 const reportesRoutes = require("./routes/reportesRoutes");
 const qrRoutes = require("./routes/qrRoutes");
+const catalogRoutes = require("./routes/catalogRoutes");
 
 const app = express();
 app.use(cors());
@@ -40,6 +45,7 @@ app.use("/api/shifts", shiftRoutes);
 app.use("/api/stats", statsRoutes);
 app.use("/api/reportes", reportesRoutes);
 app.use("/api/qr", qrRoutes);
+app.use("/api/catalogs", catalogRoutes);
 
 const PORT = process.env.PORT || 3000;
 
@@ -50,19 +56,13 @@ app.listen(PORT, '0.0.0.0', () => {
 sequelize
   .authenticate()
   .then(async () => {
-    console.log("Conectado a MySQL");
+    console.log("Conectado a SQL Server exitosamente");
     
-    // Forzar nulabilidad de organizationId si existe la restricción
-    try {
-      await sequelize.query("ALTER TABLE users MODIFY COLUMN organizationId INT NULL");
-      await sequelize.query("ALTER TABLE workers MODIFY COLUMN organizationId INT NULL");
-      console.log("Esquema de BD ajustado manualmente (NULL enabled)");
-    } catch (e) {
-      // Ignorar si la columna no existe aún
-    }
-
-    await sequelize.sync({ alter: true });
-    console.log("Base de datos sincronizada y actualizada");
+    // Evitamos usar sync({ alter: true }) porque ya creamos las tablas optimizadas 
+    // manualmente en SSMS con sus restricciones y llaves foráneas.
+    // Solo usamos sync() para que Sequelize reconozca los modelos, sin sobreescribir.
+    await sequelize.sync();
+    console.log("Modelos de base de datos vinculados correctamente");
   })
   .catch((err) => {
     console.error("Error al conectar con la BD:", err.message);
