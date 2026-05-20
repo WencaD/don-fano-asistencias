@@ -57,10 +57,6 @@ sequelize
   .authenticate()
   .then(async () => {
     console.log("Conectado a la Base de Datos SQLite exitosamente");
-    
-    // Evitamos usar sync({ alter: true }) porque ya creamos las tablas optimizadas 
-    // manualmente en SSMS con sus restricciones y llaves foráneas.
-    // Solo usamos sync() para que Sequelize reconozca los modelos, sin sobreescribir.
     await sequelize.sync();
     console.log("Modelos de base de datos vinculados correctamente");
   })
