@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 class TokenHelper {
   constructor() {
     if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET no está definido en .env. Agrega una clave secreta segura.');
+      console.warn('ADVERTENCIA: JWT_SECRET no está definido. Usando clave de respaldo temporaria.');
     }
-    this.secret    = process.env.JWT_SECRET;
+    this.secret    = process.env.JWT_SECRET || "worksync_secret_fallback_key_123_change_in_production";
     this.expiresIn = process.env.JWT_EXPIRES_IN || "8h";
   }
 
