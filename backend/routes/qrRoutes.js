@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const qrService = require("../services/qrService");
 const assistanceController = require("../controllers/assistanceController");
-const Worker = require("../models/Worker");
+const workerRepository = require("../repositories/workerRepository");
 
 router.get("/current", (req, res) => {
   const actual = qrService.getCodigoActual();
@@ -23,7 +23,7 @@ router.post("/mark", async (req, res) => {
       return res.status(400).json({ error: "Código inválido o expirado" });
     }
 
-    const worker = await Worker.findByPk(workerId);
+    const worker = await workerRepository.findById(workerId);
     if (!worker || !worker.qr_token) {
       return res.status(404).json({ error: "Trabajador no encontrado o sin QR" });
     }

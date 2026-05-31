@@ -1,6 +1,7 @@
 // Controlador HTTP para gestión de usuarios
 const workerService = require("../services/workerService");
 const userRepository = require("../repositories/userRepository");
+const catalogService = require("../services/catalogService");
 
 exports.createUser = async (req, res) => {
   try {
@@ -18,14 +19,13 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const catalogService = require("../services/catalogService");
     const users = await userRepository.findAll({
-      include: [{ model: require("../models/Worker") }],
+      include: true,
       order: [["id", "ASC"]],
     });
 
     const mappedUsers = await Promise.all(users.map(async (u) => {
-      const plainUser = u.get({ plain: true });
+      const plainUser = typeof u.get === 'function' ? u.get({ plain: true }) : u;
       if (plainUser.Worker) {
         plainUser.Worker.area = await catalogService.getAreaName(plainUser.Worker.area);
         plainUser.Worker.rol = await catalogService.getCargoName(plainUser.Worker.rol);
