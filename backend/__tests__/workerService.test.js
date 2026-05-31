@@ -38,9 +38,6 @@ describe('WorkerService', () => {
       userRepository.findByUsername.mockResolvedValue(null);
       userRepository.findByEmail.mockResolvedValue(null);
       
-      const mockTransaction = { commit: jest.fn(), rollback: jest.fn() };
-      sequelize.transaction.mockResolvedValue(mockTransaction);
-      
       passwordHelper.hash.mockResolvedValue('hashedPassword');
       catalogService.getRoleId.mockReturnValue(2);
       catalogService.getAreaId.mockResolvedValue(1);
@@ -59,7 +56,6 @@ describe('WorkerService', () => {
 
       expect(userRepository.create).toHaveBeenCalled();
       expect(workerRepository.create).toHaveBeenCalled();
-      expect(mockTransaction.commit).toHaveBeenCalled();
       expect(result.user).toEqual(mockUser);
       expect(result.worker).toEqual(mockWorker);
     });

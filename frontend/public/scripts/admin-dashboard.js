@@ -142,8 +142,7 @@ async function cargarTablaEstado() {
 
   try {
     // 1. Obtener TODOS los trabajadores
-    const allUsers = await apiRequest("/api/users/all");
-    const workers = allUsers.filter(u => u.Worker);
+    const workers = await apiRequest("/api/workers/all");
     
     // 2. Obtener las asistencias de HOY
     const todayAssistance = await apiRequest("/api/assistance/today");
@@ -159,8 +158,7 @@ async function cargarTablaEstado() {
 
     tbody.innerHTML = "";
 
-    workers.forEach(u => {
-      const w = u.Worker;
+    workers.forEach(w => {
       const asistencia = assistanceMap.get(w.id);
       
       let estado;

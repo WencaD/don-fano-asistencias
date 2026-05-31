@@ -52,13 +52,12 @@ async function cargarTrabajadoresSelect() {
   const sel = document.getElementById("workerReporte");
   
   try {
-    const users = await apiRequest("/api/users/all"); // Usa apiRequest para TOKEN
+    const workers = await apiRequest("/api/workers/all"); // Usa apiRequest para TOKEN
 
-    users.forEach((u) => {
-      if (!u.Worker) return;
+    workers.forEach((w) => {
       const opt = document.createElement("option");
-      opt.value = u.Worker.id;
-      opt.textContent = u.Worker.nombre;
+      opt.value = w.id;
+      opt.textContent = w.nombre;
       sel.appendChild(opt);
     });
   } catch (err) {

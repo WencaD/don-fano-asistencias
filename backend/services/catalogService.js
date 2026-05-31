@@ -1,18 +1,18 @@
 class CatalogService {
   constructor() {
     this._areas = [
-      { id: 1, nombre: "Sistemas", activo: true },
-      { id: 2, nombre: "Operaciones", activo: true },
-      { id: 3, nombre: "Administración", activo: true },
-      { id: 4, nombre: "Ventas", activo: true },
-      { id: 5, nombre: "Recursos Humanos", activo: true }
+      { id: 1, nombre: "Cocina", activo: true },
+      { id: 2, nombre: "Caja", activo: true },
+      { id: 3, nombre: "Delivery", activo: true },
+      { id: 4, nombre: "Administración", activo: true },
+      { id: 5, nombre: "Limpieza", activo: true }
     ];
 
     this._cargos = [
-      { id: 1, nombre: "Gerente", activo: true },
-      { id: 2, nombre: "Supervisor", activo: true },
-      { id: 3, nombre: "Operario", activo: true },
-      { id: 4, nombre: "Analista", activo: true },
+      { id: 1, nombre: "Administrador", activo: true },
+      { id: 2, nombre: "Empleado", activo: true },
+      { id: 3, nombre: "Supervisor", activo: true },
+      { id: 4, nombre: "Operario", activo: true },
       { id: 5, nombre: "Asistente", activo: true }
     ];
 
@@ -37,6 +37,8 @@ class CatalogService {
 
   async getAreaId(nombre) {
     if (!nombre) return null;
+    if (typeof nombre === 'number') return nombre;
+    if (!isNaN(nombre)) return parseInt(nombre);
     const areas = await this.getAreas();
     const normalized = nombre.toString().toLowerCase();
     const match = areas.find(a => a.nombre.toLowerCase().includes(normalized) || normalized.includes(a.nombre.toLowerCase()));
@@ -57,6 +59,8 @@ class CatalogService {
 
   async getCargoId(nombre) {
     if (!nombre) return null;
+    if (typeof nombre === 'number') return nombre;
+    if (!isNaN(nombre)) return parseInt(nombre);
     const cargos = await this.getCargos();
     const normalized = nombre.toString().toLowerCase();
     const match = cargos.find(c => c.nombre.toLowerCase().includes(normalized) || normalized.includes(c.nombre.toLowerCase()));

@@ -44,20 +44,17 @@ async function cargarTrabajadoresSelect() {
   const select = document.getElementById("workerId");
 
   try {
-    const users = await apiRequest("/api/users/all");
+    const workers = await apiRequest("/api/workers/all");
     
     // === SOLUCIÓN FINAL: LIMPIAR Y AÑADIR OPCIÓN POR DEFECTO ===
     select.innerHTML = ''; 
     select.innerHTML = '<option value="">-- Seleccionar Trabajador --</option>';
 
-    users.forEach((u) => {
-      if (u.Worker) { // Solo si tiene data de Worker
-        const w = u.Worker;
-        const option = document.createElement("option");
-        option.value = w.id; // ID del Worker
-        option.textContent = `${w.nombre} (${w.area})`;
-        select.appendChild(option);
-      }
+    workers.forEach((w) => {
+      const option = document.createElement("option");
+      option.value = w.id; // ID del Worker
+      option.textContent = `${w.nombre} (${w.area})`;
+      select.appendChild(option);
     });
     
     cargarTurnos(); 
