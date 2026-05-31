@@ -4,7 +4,6 @@ const workerRepository = require("../repositories/workerRepository");
 const passwordHelper   = require("../utils/passwordHelper");
 const tokenHelper      = require("../utils/tokenHelper");
 const catalogService   = require("./catalogService");
-const sequelize        = require("../config/db");
 
 class WorkerService {
   async getAllWorkers() {
@@ -41,8 +40,6 @@ class WorkerService {
     const existingEmail = await userRepository.findByEmail(correo);
     if (existingEmail) throw new Error("El correo ya está registrado");
 
-    const transaction = await sequelize.transaction();
-
     try {
       const username     = dni.trim();
       const passwordHash = await passwordHelper.hash(dni.trim());
@@ -54,7 +51,7 @@ class WorkerService {
         email: correo,
         password_hash: passwordHash,
         role: userRole
-      }, transaction);
+      });
 
       const worker = await workerRepository.create({
         nombre,
@@ -65,12 +62,10 @@ class WorkerService {
         salario_hora: salario_hora || 0,
         qr_token: tokenHelper.generateQRToken(),
         userId: user.id
-      }, transaction);
+      });
 
-      await transaction.commit();
       return { user, worker };
     } catch (error) {
-      await transaction.rollback();
       throw error;
     }
   }
@@ -105,3 +100,4 @@ class WorkerService {
 }
 
 module.exports = new WorkerService();
+

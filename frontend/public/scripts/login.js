@@ -1,46 +1,98 @@
-// Autenticación - Maneja el login de usuarios
-// Valida credenciales y redirige según el rol (ADMIN o WORKER)
+// ── Toggle visibilidad contraseña ──────────────────
+const toggleBtn   = document.getElementById('togglePassword');
+const passInput   = document.getElementById('password');
 
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+toggleBtn.addEventListener('click', () => {
+  const isPass = passInput.type === 'password';
+  passInput.type = isPass ? 'text' : 'password';
+  toggleBtn.innerHTML = isPass
+    ? '<i class="fas fa-eye-slash"></i>'
+    : '<i class="fas fa-eye"></i>';
+});
 
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const errorText = document.getElementById("errorText");
+// ── Recordar sesión ────────────────────────────────
+const rememberMe  = document.getElementById('rememberMe');
+const usernameIn  = document.getElementById('username');
+const saved = localStorage.getItem('df_saved_user');
+if (saved) {
+  usernameIn.value = saved;
+  rememberMe.checked = true;
+}
 
-    errorText.textContent = "";
+// ── Login ──────────────────────────────────────────
+const form        = document.getElementById('loginForm');
+const errorText   = document.getElementById('errorText');
+const btnLogin    = document.getElementById('btnLogin');
+const spinner     = document.getElementById('loginSpinner');
+const btnText     = document.getElementById('btnLoginText');
+const btnArrow    = document.getElementById('btnArrow');
 
-    try {
-        const res = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password })
-        });
+function setLoading(loading) {
+  btnLogin.disabled    = loading;
+  spinner.style.display  = loading ? 'block' : 'none';
+  btnText.textContent    = loading ? 'Iniciando...' : 'Ingresar al Sistema';
+  btnArrow.style.display = loading ? 'none' : 'inline';
+}
 
-        const data = await res.json();
-        console.log("LOGIN RESPONSE:", data);
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorText.textContent = '';
 
-        if (!res.ok) {
-            errorText.textContent = data.error || "Error al iniciar sesión";
-            return;
-        }
+  const username = usernameIn.value.trim();
+  const password = passInput.value.trim();
 
-        // Guardar datos de sesión en localStorage
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("user", JSON.stringify(data.user));
+  if (!username || !password) {
+    errorText.textContent = 'Por favor completa todos los campos.';
+    return;
+  }
 
-        // Redirigir según el rol del usuario
-        if (data.role === "ADMIN") {
-            window.location.href = "/admin/admin-dashboard.html";
-        } else if (data.role === "WORKER") {
-            window.location.href = "/empleado/empleado-dashboard.html";
-        } else {
-            errorText.textContent = "Rol no válido";
-        }
+  setLoading(true);
 
-    } catch (err) {
-        console.error("LOGIN ERROR:", err);
-        errorText.textContent = "Error en conexión con servidor";
+  try {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      errorText.textContent = data.error || 'Credenciales incorrectas. Intenta de nuevo.';
+      setLoading(false);
+      return;
     }
+
+    // Guardar sesión
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('role',  data.role);
+    localStorage.setItem('user',  JSON.stringify(data.user));
+
+    if (rememberMe.checked) {
+      localStorage.setItem('df_saved_user', username);
+    } else {
+      localStorage.removeItem('df_saved_user');
+    }
+
+    // Redirigir según rol
+    if (data.role === 'ADMIN') {
+      window.location.href = '/admin/admin-dashboard.html';
+    } else if (data.role === 'WORKER') {
+      window.location.href = '/empleado/empleado-dashboard.html';
+    } else {
+      errorText.textContent = 'Rol de usuario no reconocido.';
+      setLoading(false);
+    }
+
+  } catch (err) {
+    console.error('Login error:', err);
+    errorText.textContent = 'Error de conexión con el servidor. Intenta de nuevo.';
+    setLoading(false);
+  }
+});
+
+// ── Olvidé contraseña ──────────────────────────────
+document.getElementById('forgotLink').addEventListener('click', (e) => {
+  e.preventDefault();
+  alert('Contacta al administrador del sistema para restablecer tu contraseña.\n\nAdmin: admin@donfano.com');
 });

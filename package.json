@@ -10,7 +10,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "jest --verbose",
-    "test:coverage": "jest --verbose --coverage"
+    "test:coverage": "jest --verbose --coverage",
+    "seed:firebase": "node backend/scripts/seed-firebase.js"
   },
   "jest": {
     "testEnvironment": "node",
@@ -26,19 +27,23 @@
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
+    "exceljs": "^4.4.0",
     "express": "^5.1.0",
+    "firebase-admin": "^13.10.0",
     "jsonwebtoken": "^9.0.2",
     "msnodesqlv8": "^5.2.0",
     "mysql2": "^3.15.3",
     "nanoid": "^5.1.6",
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
+    "qrcode": "^1.5.4",
     "sequelize": "^6.37.7",
     "sqlite3": "^6.0.1",
     "tedious": "^19.2.1"
   },
   "devDependencies": {
-    "jest": "^30.4.0",
-    "nodemon": "^3.1.11"
+    "jest": "^30.4.2",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.2.2"
   }
 }

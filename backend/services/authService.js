@@ -4,7 +4,6 @@ const organizationRepository = require("../repositories/organizationRepository")
 const passwordHelper         = require("../utils/passwordHelper");
 const tokenHelper            = require("../utils/tokenHelper");
 const catalogService         = require("./catalogService");
-const sequelize              = require("../config/db");
 
 class AuthService {
   async login(username, password) {
@@ -45,8 +44,6 @@ class AuthService {
       throw new Error("La contraseña debe tener al menos 6 caracteres");
     }
 
-    const transaction = await sequelize.transaction();
-
     try {
       const organization = await organizationRepository.create({
         nombre: organizationName,
@@ -57,7 +54,7 @@ class AuthService {
         telefono: phone,
         plan: await catalogService.getPlanId(plan),
         activo: true
-      }, transaction);
+      });
 
       const passwordHash = await passwordHelper.hash(adminPassword);
 
@@ -69,13 +66,10 @@ class AuthService {
         role: catalogService.getRoleId("ADMIN"),
         organizationId: organization.id,
         activo: true
-      }, transaction);
-
-      await transaction.commit();
+      });
 
       return { organization, user, message: "Registro exitoso" };
     } catch (error) {
-      await transaction.rollback();
       throw error;
     }
   }
@@ -91,3 +85,4 @@ class AuthService {
 }
 
 module.exports = new AuthService();
+

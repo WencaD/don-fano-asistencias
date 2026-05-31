@@ -1,19 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const sequelize = require("./config/db");
+const { db } = require("./config/firebase");
 
-require("./models/Organization");
-require("./models/User");
-require("./models/Worker");
-require("./models/Assistance");
-require("./models/Shift");
-require("./models/Area");
-require("./models/Cargo");
-require("./models/Plan");
-require("./models/Estado");
-require("./models/associations");
-
+// Las rutas siguen importando la misma firma del controlador/servicios
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const workerRoutes = require("./routes/workerRoutes");
@@ -30,11 +20,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../frontend/public")));
 
 app.get("/", (req, res) => {
-  res.json({ status: "ok", message: "Don Fano Asistencias API" });
+  res.json({ status: "ok", message: "Don Fano Asistencias API (Firebase Backend)" });
 });
 
 app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
+  res.json({ status: "ok", firebase: db ? "connected" : "credentials_required" });
 });
 
 app.use("/api/auth", authRoutes);
@@ -51,17 +41,11 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log("Servidor iniciado en puerto:", PORT);
+  if (db) {
+    console.log("Conectado a Firebase Cloud Firestore exitosamente.");
+  } else {
+    console.warn("ADVERTENCIA: Firebase no está configurado de manera completa. Por favor provee 'firebase-service-account.json' en backend/config/ para que el sistema funcione.");
+  }
 });
-
-sequelize
-  .authenticate()
-  .then(async () => {
-    console.log("Conectado a la Base de Datos SQLite exitosamente");
-    await sequelize.sync();
-    console.log("Modelos de base de datos vinculados correctamente");
-  })
-  .catch((err) => {
-    console.error("Error al conectar con la BD:", err.message);
-  });
 
 module.exports = app;

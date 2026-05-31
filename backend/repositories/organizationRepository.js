@@ -1,44 +1,69 @@
-// Repositorio para acceso a datos de organizaciones en BD
-const Organization = require("../models/Organization");
+const { db } = require("../config/firebase");
 
 class OrganizationRepository {
-  // Busca organización por ID
   async findById(id) {
-    return await Organization.findByPk(id);
+    if (!db) return null;
+    const doc = await db.collection("organizations").doc(id.toString()).get();
+    return doc.exists ? { id: doc.id, ...doc.data() } : null;
   }
 
-  // Busca organización por alias
   async findByAlias(alias) {
-    return await Organization.findOne({ where: { alias } });
+    if (!db) return null;
+    const snapshot = await db.collection("organizations").where("alias", "==", alias).limit(1).get();
+    if (snapshot.empty) return null;
+    const doc = snapshot.docs[0];
+    return { id: doc.id, ...doc.data() };
   }
 
-  // Busca organización por nombre
   async findByName(nombre) {
-    return await Organization.findOne({ where: { nombre } });
+    if (!db) return null;
+    const snapshot = await db.collection("organizations").where("nombre", "==", nombre).limit(1).get();
+    if (snapshot.empty) return null;
+    const doc = snapshot.docs[0];
+    return { id: doc.id, ...doc.data() };
   }
 
-  // Busca todas las organizaciones
   async findAll(options = {}) {
-    return await Organization.findAll(options);
+    if (!db) return [];
+    const snapshot = await db.collection("organizations").get();
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   }
 
-  // Crea nueva organización
   async create(organizationData, transaction = null) {
-    return await Organization.create(organizationData, transaction ? { transaction } : {});
+    if (!db) return null;
+    let docRef;
+    if (organizationData.id) {
+      docRef = db.collection("organizations").doc(organizationData.id.toString());
+    } else {
+      docRef = db.collection("organizations").doc();
+    }
+    
+    const data = { ...organizationData };
+    delete data.id;
+    
+    await docRef.set(data);
+    return { id: docRef.id, ...data };
   }
 
-  // Actualiza datos de la organización
   async update(id, organizationData) {
-    const org = await this.findById(id);
-    if (!org) return null;
-    return await org.update(organizationData);
+    if (!db) return null;
+    const docRef = db.collection("organizations").doc(id.toString());
+    const doc = await docRef.get();
+    if (!doc.exists) return null;
+    
+    const data = { ...organizationData };
+    delete data.id;
+    
+    await docRef.update(data);
+    return { id, ...doc.data(), ...data };
   }
 
-  // Elimina una organización
   async delete(id) {
-    const org = await this.findById(id);
-    if (!org) return false;
-    await org.destroy();
+    if (!db) return false;
+    const docRef = db.collection("organizations").doc(id.toString());
+    const doc = await docRef.get();
+    if (!doc.exists) return false;
+    await docRef.delete();
     return true;
   }
 }

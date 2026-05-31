@@ -1,152 +1,106 @@
-/* =====================================================
-   Don Fano - Dashboard Admin 🚀 Estilo Premium Moderno
-   ===================================================== */
+/* =========================================================
+   Dashboard Admin - WorkSync SaaS | Minimalist & Clean Design
+   ========================================================= */
 
 /* Grid del dashboard adaptativo */
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
-  gap: 40px;
+  gap: 32px;
   align-items: start;
 }
 
 @media (max-width: 1400px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
-    gap: 32px;
   }
 }
 
 .dashboard-header {
-  margin-bottom: 48px;
+  margin-bottom: 32px;
 }
 
-/* === Cards de estadísticas Premium === */
+/* === Cards de estadísticas Minimalistas === */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
-  margin-bottom: 48px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
 }
 
 .stats-grid .card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.stats-grid .card::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-}
-
-.stats-grid .card:hover::after {
-  opacity: 1;
 }
 
 .stats-grid .card:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px var(--primary-glow);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-card-title {
   font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-weight: 500;
   color: var(--text-secondary);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .stat-card-number {
-  font-size: clamp(40px, 5vw, 64px);
-  font-weight: 800;
-  font-family: 'Outfit', sans-serif;
-  color: #fff;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text);
   line-height: 1;
-  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  background: linear-gradient(135deg, #FFF, #A0A0AB);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
-/* Colores de neón sutiles para los íconos */
-.stats-grid .card:nth-child(1) .stat-card-title i {
-  color: #10B981;
-  text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-}
-
-.stats-grid .card:nth-child(2) .stat-card-title i {
-  color: #F59E0B;
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
-}
-
-.stats-grid .card:nth-child(3) .stat-card-title i {
-  color: #3B82F6;
-  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-}
-
-.stats-grid .card:nth-child(4) .stat-card-title i {
-  color: #8B5CF6;
-  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
-}
+/* Colores para íconos */
+.stats-grid .card:nth-child(1) .stat-card-title i { color: #10B981; }
+.stats-grid .card:nth-child(2) .stat-card-title i { color: #F59E0B; }
+.stats-grid .card:nth-child(3) .stat-card-title i { color: #3B82F6; }
+.stats-grid .card:nth-child(4) .stat-card-title i { color: #8B5CF6; }
 
 /* === Sección de gráficos === */
 .charts-section {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: var(--radius-lg);
-  padding: 40px;
-  box-shadow: var(--shadow-lg);
+  background: #FFFFFF;
+  border-radius: var(--radius-md);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .charts-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: 16px;
 }
 
 .charts-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(24px, 3vw, 28px);
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 600;
   color: var(--text);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .filter-buttons {
   display: flex;
-  background: rgba(0, 0, 0, 0.3);
+  background: #F8FAFC;
   padding: 4px;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
 }
 
@@ -154,12 +108,12 @@
   background: transparent;
   border: none;
   color: var(--text-secondary);
-  padding: 8px 16px;
+  padding: 6px 14px;
   font-size: 13px;
-  font-weight: 600;
-  border-radius: 12px;
+  font-weight: 500;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 
 .filter-btn:hover {
@@ -167,36 +121,28 @@
 }
 
 .filter-btn.active {
-  background: rgba(255, 255, 255, 0.1);
+  background: #FFFFFF;
   color: var(--primary);
   box-shadow: var(--shadow-sm);
 }
 
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
 }
 
 .chart-card {
-  background: rgba(0, 0, 0, 0.2);
+  background: #FFFFFF;
   border-radius: var(--radius-md);
-  padding: 32px;
+  padding: 24px;
   border: 1px solid var(--border);
-  transition: all 0.3s;
-}
-
-.chart-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: var(--shadow-md);
 }
 
 .chart-card h3 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 24px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 20px;
   color: var(--text-secondary);
   display: flex;
   align-items: center;
@@ -206,55 +152,54 @@
 .side-attendance-column {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 .attendance-status-section {
-  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(255, 255, 255, 0.01) 100%);
-  backdrop-filter: blur(12px);
-  border-radius: var(--radius-lg);
-  padding: 32px;
+  background: #FFFFFF;
+  border-radius: var(--radius-md);
+  padding: 24px;
   border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 .attendance-status-section h2 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   color: var(--text);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
 }
 
 /* Estado Pills */
 .estado-pill {
-  padding: 6px 12px;
-  border-radius: 20px;
+  padding: 4px 10px;
+  border-radius: 12px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
 .estado-pill.presente {
-  background: rgba(16, 185, 129, 0.1);
-  color: #34D399;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
 }
 
 .estado-pill.tarde {
-  background: rgba(245, 158, 11, 0.1);
-  color: #FBBF24;
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: #FEF3C7;
+  color: #D97706;
+  border: 1px solid #FDE68A;
 }
 
 .estado-pill.ausente {
-  background: rgba(239, 68, 68, 0.1);
-  color: #F87171;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
 }

@@ -1,27 +1,38 @@
-// Servicio de catálogos — lee Areas, Cargos, Planes y Estados desde SQL Server.
-// Usa caché en memoria para no consultar la BD en cada request.
-const Area   = require("../models/Area");
-const Cargo  = require("../models/Cargo");
-const Plan   = require("../models/Plan");
-const Estado = require("../models/Estado");
-
 class CatalogService {
   constructor() {
-    this._cache = {
-      areas:   null,
-      cargos:  null,
-      planes:  null,
-      estados: null
-    };
+    this._areas = [
+      { id: 1, nombre: "Sistemas", activo: true },
+      { id: 2, nombre: "Operaciones", activo: true },
+      { id: 3, nombre: "Administración", activo: true },
+      { id: 4, nombre: "Ventas", activo: true },
+      { id: 5, nombre: "Recursos Humanos", activo: true }
+    ];
+
+    this._cargos = [
+      { id: 1, nombre: "Gerente", activo: true },
+      { id: 2, nombre: "Supervisor", activo: true },
+      { id: 3, nombre: "Operario", activo: true },
+      { id: 4, nombre: "Analista", activo: true },
+      { id: 5, nombre: "Asistente", activo: true }
+    ];
+
+    this._planes = [
+      { id: 1, nombre: "Básico", activo: true },
+      { id: 2, nombre: "Premium", activo: true },
+      { id: 3, nombre: "Enterprise", activo: true }
+    ];
+
+    this._estados = [
+      { id: 1, nombre: "Puntual", activo: true },
+      { id: 2, nombre: "Tardanza", activo: true },
+      { id: 3, nombre: "Falta", activo: true },
+      { id: 4, nombre: "Justificado", activo: true }
+    ];
   }
 
   // ─── Áreas ────────────────────────────────────────────────────────────────
-
   async getAreas() {
-    if (!this._cache.areas) {
-      this._cache.areas = await Area.findAll({ where: { activo: true }, order: [["id", "ASC"]] });
-    }
-    return this._cache.areas;
+    return this._areas;
   }
 
   async getAreaId(nombre) {
@@ -36,16 +47,12 @@ class CatalogService {
     if (!id) return null;
     const areas = await this.getAreas();
     const match = areas.find(a => a.id === id || a.id === parseInt(id));
-    return match ? match.nombre : null;
+    return match ? match.nombre : id;
   }
 
   // ─── Cargos ───────────────────────────────────────────────────────────────
-
   async getCargos() {
-    if (!this._cache.cargos) {
-      this._cache.cargos = await Cargo.findAll({ where: { activo: true }, order: [["id", "ASC"]] });
-    }
-    return this._cache.cargos;
+    return this._cargos;
   }
 
   async getCargoId(nombre) {
@@ -60,20 +67,16 @@ class CatalogService {
     if (!id) return null;
     const cargos = await this.getCargos();
     const match = cargos.find(c => c.id === id || c.id === parseInt(id));
-    return match ? match.nombre : null;
+    return match ? match.nombre : id;
   }
 
   // ─── Planes ───────────────────────────────────────────────────────────────
-
   async getPlanes() {
-    if (!this._cache.planes) {
-      this._cache.planes = await Plan.findAll({ where: { activo: true }, order: [["id", "ASC"]] });
-    }
-    return this._cache.planes;
+    return this._planes;
   }
 
   async getPlanId(nombre) {
-    if (!nombre) return 1; // Básico por defecto
+    if (!nombre) return 1;
     const planes = await this.getPlanes();
     const normalized = nombre.toString().toLowerCase();
     const match = planes.find(p => p.nombre.toLowerCase().includes(normalized) || normalized.includes(p.nombre.toLowerCase()));
@@ -81,12 +84,8 @@ class CatalogService {
   }
 
   // ─── Estados ──────────────────────────────────────────────────────────────
-
   async getEstados() {
-    if (!this._cache.estados) {
-      this._cache.estados = await Estado.findAll({ where: { activo: true }, order: [["id", "ASC"]] });
-    }
-    return this._cache.estados;
+    return this._estados;
   }
 
   async getEstadoId(nombre) {
@@ -97,8 +96,7 @@ class CatalogService {
     return match ? match.id : 1;
   }
 
-  // ─── Roles (estáticos — son parte del sistema, no datos del negocio) ──────
-  // Los roles son fijos en la lógica de la app: 1=ADMIN, 2=WORKER, 3=SUPERADMIN
+  // ─── Roles (estáticos) ───────────────────────────────────────────────────
   getRoleId(roleStr) {
     if (!roleStr) return 2;
     const r = roleStr.toString().toUpperCase();
@@ -113,10 +111,7 @@ class CatalogService {
     return 'WORKER';
   }
 
-  // ─── Utilidad: limpiar caché (útil si se modifican catálogos en la BD) ───
-  clearCache() {
-    this._cache = { areas: null, cargos: null, planes: null, estados: null };
-  }
+  clearCache() {}
 }
 
 module.exports = new CatalogService();

@@ -1,266 +1,206 @@
-/* =====================================================
-   Don Fano - Panel Empleado 🚀 Estilo Premium Moderno
-   ===================================================== */
+/* =========================================================
+   Panel Empleado - WorkSync SaaS | Minimalist & Clean Design
+   ========================================================= */
 
 .emp-container {
   width: 100%;
-  max-width: var(--max-content-width);
+  max-width: 1200px;
   margin: 0 auto;
   padding-bottom: 60px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 32px;
 }
 
-/* Header del empleado Premium */
+/* Header del empleado Minimalista */
 .emp-header {
-  padding: 60px;
-  background: linear-gradient(135deg, rgba(255,107,53,0.1) 0%, rgba(245,158,11,0.05) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: var(--radius-xl);
-  color: #FFF;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border-glow);
-  box-shadow: 0 10px 40px rgba(255, 107, 53, 0.1);
+  padding: 48px;
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  transition: all 0.3s;
-}
-
-.emp-header::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at 100% 0%, rgba(255,107,53,0.15) 0%, transparent 60%);
-  pointer-events: none;
 }
 
 @media (max-width: 768px) {
-    .emp-header { padding: 40px 24px; }
+  .emp-header { padding: 32px 24px; }
 }
 
 .emp-header h2 {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 800;
-  color: #FFF;
-  margin-bottom: 12px;
-  line-height: 1.1;
-  position: relative;
-  z-index: 1;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
 }
 
 .emp-header h2 span {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(255, 107, 53, 0.3);
+  color: var(--primary);
 }
 
 .emp-email {
-  font-size: clamp(14px, 2vw, 18px);
+  font-size: 15px;
   color: var(--text-secondary);
   font-weight: 500;
-  position: relative;
-  z-index: 1;
 }
 
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 8px 16px;
-  border-radius: 20px;
+  background: #F8FAFC;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
   font-size: 13px;
-  font-weight: 600;
-  margin-top: 20px;
+  font-weight: 500;
+  margin-top: 16px;
   width: fit-content;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
 }
 
 .chip i { color: var(--primary); }
 
-/* Grid Adaptativo Multinivel */
+/* Grid Adaptativo */
 .emp-grid-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-  gap: 40px;
+  gap: 32px;
 }
 
 @media (max-width: 1200px) {
-    .emp-grid-layout { grid-template-columns: 1fr; gap: 32px; }
+  .emp-grid-layout { grid-template-columns: 1fr; }
 }
 
-/* Cards del empleado Premium */
+/* Cards del empleado */
 .emp-card {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #FFFFFF;
   border-radius: var(--radius-lg);
-  padding: 40px;
-  box-shadow: var(--shadow-md);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
-  position: relative;
   display: flex;
   flex-direction: column;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.emp-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,107,53,0.3), transparent);
-}
-
-.emp-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg), 0 0 30px rgba(255, 107, 53, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 768px) {
-    .emp-card { padding: 32px 24px; }
+  .emp-card { padding: 24px; }
 }
 
 .emp-card h3 {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(20px, 3vw, 24px);
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   color: var(--text);
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .emp-card h3 i {
   color: var(--primary);
-  background: rgba(255, 107, 53, 0.1);
-  padding: 10px;
-  border-radius: 12px;
+  background: #EFF6FF;
+  padding: 8px;
+  border-radius: 8px;
 }
 
 .status-entry-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 32px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .status-entry-container > div {
-  background: rgba(0, 0, 0, 0.2);
+  background: #F8FAFC;
   border-radius: var(--radius-md);
-  padding: 24px 20px;
+  padding: 16px;
   text-align: center;
   border: 1px solid var(--border);
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
-  transition: all 0.3s;
-}
-
-.status-entry-container > div:hover {
-    background: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 107, 53, 0.2);
 }
 
 .label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--text-secondary);
-    margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
 }
 
 .value {
-  font-size: clamp(24px, 4vw, 32px);
-  font-weight: 800;
+  font-size: 24px;
+  font-weight: 700;
   color: var(--text);
-  font-family: 'Outfit', sans-serif;
-  line-height: 1;
 }
 
 .estado-hoy {
   text-align: center;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 30px;
-  padding: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  padding: 12px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.03);
+  background: #F8FAFC;
   border: 1px solid var(--border);
 }
 
 .btn-qr-scan {
   width: 100%;
-  padding: 20px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  padding: 14px;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: var(--radius-md);
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 8px;
   margin-top: auto;
 }
 
 .btn-qr-scan:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 15px 35px rgba(255, 107, 53, 0.5);
+  background: var(--primary-hover);
 }
 
 .emp-status-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 16px;
 }
 
 @media (max-width: 600px) { .emp-status-grid { grid-template-columns: 1fr; } }
 
 .status-box {
-  background: rgba(0, 0, 0, 0.2);
+  background: #FFFFFF;
   border-radius: var(--radius-md);
-  padding: 24px 16px;
+  padding: 20px 16px;
   text-align: center;
   border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 10px;
-  transition: all 0.3s;
-}
-
-.status-box:hover {
-  border-color: rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.02);
+  gap: 8px;
 }
 
 .status-box .value {
-  font-size: clamp(24px, 4vw, 32px);
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 800;
+  font-size: 28px;
+  color: var(--primary);
+  font-weight: 700;
 }
 
-/* === Modal QR Premium === */
+/* === Modal QR Minimalista === */
 #modalQR {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(10, 10, 11, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
   z-index: 9999;
   align-items: center;
   justify-content: center;
@@ -268,76 +208,66 @@
 }
 
 .modal-qr-content {
-  background: var(--bg-card);
-  border-radius: var(--radius-xl);
-  padding: 48px;
-  max-width: 500px;
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  max-width: 400px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(255, 107, 53, 0.1);
+  box-shadow: var(--shadow-lg);
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
 }
 
 .modal-qr-content h2 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 24px;
-  font-weight: 800;
-  color: #FFF;
-  margin-bottom: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 20px;
 }
 
 .modal-qr-buttons {
   display: flex;
-  gap: 10px;
-  margin-bottom: 24px;
+  gap: 8px;
+  margin-bottom: 20px;
   justify-content: center;
 }
 
 .btn-camera {
-  padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #FFF;
-  border-radius: 20px;
+  padding: 8px 16px;
+  background: #F8FAFC;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.2s;
 }
 
 .btn-camera:hover {
-  background: rgba(255, 107, 53, 0.2);
-  border-color: var(--primary);
+  background: #EFF6FF;
+  color: var(--primary);
+  border-color: #BFDBFE;
 }
 
 #qr-reader {
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   margin-bottom: 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .btn-cancel {
-  padding: 14px 40px;
-  background: rgba(239, 68, 68, 0.1);
-  color: #F87171;
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  border-radius: 30px;
-  font-size: 15px;
-  font-weight: 600;
+  padding: 10px 24px;
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 
 .btn-cancel:hover {
-  background: rgba(239, 68, 68, 0.2);
-  color: #FFF;
-  border-color: rgba(239, 68, 68, 0.4);
-  transform: translateY(-2px);
+  background: #FEE2E2;
 }
-
-

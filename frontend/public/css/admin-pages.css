@@ -148,3 +148,20 @@
   color: var(--secondary);
 }
 
+/* ===== Utility Classes ===== */
+.text-center { text-align: center; }
+.p-16 { padding: 16px; }
+.p-24 { padding: 24px; }
+.p-32 { padding: 32px; }
+.text-secondary { color: var(--text-secondary); }
+.text-primary { color: var(--primary); }
+.text-primary-dark { color: var(--primary-dark); }
+.text-success { color: #16a34a; }
+.text-warning { color: #d97706; }
+.text-info { color: #0284c7; }
+.text-purple { color: #7c3aed; }
+.text-danger { color: #dc2626; }
+.mr-6 { margin-right: 6px; }
+.mr-8 { margin-right: 8px; }
+.mt-15 { margin-top: 15px; }
+.font-bold { font-weight: bold; }

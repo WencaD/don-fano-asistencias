@@ -1,53 +1,155 @@
-// Repositorio para acceso a datos de trabajadores
-const Worker = require("../models/Worker");
-const User = require("../models/User");
+const { db } = require("../config/firebase");
 
 class WorkerRepository {
   async findById(id, includeUser = false) {
-    const options = includeUser 
-      ? { include: [{ model: User, attributes: ["id", "username", "email", "role"] }] }
-      : {};
-    return await Worker.findByPk(id, options);
+    if (!db) return null;
+    const doc = await db.collection("workers").doc(id.toString()).get();
+    if (!doc.exists) return null;
+    
+    const data = doc.data();
+    const worker = {
+      id: doc.id,
+      ...data,
+      get(options) {
+        if (options && options.plain) {
+          return { id: doc.id, ...data, User: worker.User };
+        }
+        return this;
+      }
+    };
+    
+    if (includeUser && data.userId) {
+      const userDoc = await db.collection("users").doc(data.userId.toString()).get();
+      if (userDoc.exists) {
+        worker.User = { id: userDoc.id, ...userDoc.data() };
+      }
+    }
+    
+    return worker;
   }
 
   async findByQRToken(qrToken) {
-    return await Worker.findOne({ where: { qr_token: qrToken } });
+    if (!db) return null;
+    const snapshot = await db.collection("workers").where("qr_token", "==", qrToken).limit(1).get();
+    if (snapshot.empty) return null;
+    const doc = snapshot.docs[0];
+    const data = doc.data();
+    return {
+      id: doc.id,
+      ...data,
+      get(options) {
+        if (options && options.plain) {
+          return { id: doc.id, ...data };
+        }
+        return this;
+      }
+    };
   }
 
   async findAll(includeUser = false) {
-    const options = {
-      order: [["id", "ASC"]]
-    };
+    if (!db) return [];
+    const snapshot = await db.collection("workers").get();
     
-    if (includeUser) {
-      options.include = [{ 
-        model: User, 
-        attributes: ["id", "username", "email", "role"] 
-      }];
+    const workers = [];
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      const worker = {
+        id: doc.id,
+        ...data,
+        get(options) {
+          if (options && options.plain) {
+            return { id: doc.id, ...data, User: worker.User };
+          }
+          return this;
+        }
+      };
+      
+      if (includeUser && data.userId) {
+        const userDoc = await db.collection("users").doc(data.userId.toString()).get();
+        if (userDoc.exists) {
+          worker.User = { id: userDoc.id, ...userDoc.data() };
+        }
+      }
+      workers.push(worker);
     }
     
-    return await Worker.findAll(options);
+    return workers;
   }
 
   async create(workerData, transaction = null) {
-    return await Worker.create(workerData, transaction ? { transaction } : {});
+    if (!db) return null;
+    let docRef;
+    if (workerData.id) {
+      docRef = db.collection("workers").doc(workerData.id.toString());
+    } else {
+      docRef = db.collection("workers").doc();
+    }
+    
+    const data = { ...workerData };
+    delete data.id;
+    
+    await docRef.set(data);
+    const savedWorker = {
+      id: docRef.id,
+      ...data,
+      get(options) {
+        if (options && options.plain) {
+          return { id: docRef.id, ...data };
+        }
+        return this;
+      }
+    };
+    return savedWorker;
   }
 
   async update(id, workerData) {
-    const worker = await this.findById(id);
-    if (!worker) return null;
-    return await worker.update(workerData);
+    if (!db) return null;
+    const docRef = db.collection("workers").doc(id.toString());
+    const doc = await docRef.get();
+    if (!doc.exists) return null;
+    
+    const data = { ...workerData };
+    delete data.id;
+    
+    await docRef.update(data);
+    return {
+      id,
+      ...doc.data(),
+      ...data,
+      get(options) {
+        if (options && options.plain) {
+          return { id, ...doc.data(), ...data };
+        }
+        return this;
+      }
+    };
   }
 
   async delete(id) {
-    const worker = await this.findById(id);
-    if (!worker) return false;
-    await worker.destroy();
+    if (!db) return false;
+    const docRef = db.collection("workers").doc(id.toString());
+    const doc = await docRef.get();
+    if (!doc.exists) return false;
+    await docRef.delete();
     return true;
   }
 
   async findByUserId(userId) {
-    return await Worker.findOne({ where: { userId } });
+    if (!db) return null;
+    const snapshot = await db.collection("workers").where("userId", "==", userId).limit(1).get();
+    if (snapshot.empty) return null;
+    const doc = snapshot.docs[0];
+    const data = doc.data();
+    return {
+      id: doc.id,
+      ...data,
+      get(options) {
+        if (options && options.plain) {
+          return { id: doc.id, ...data };
+        }
+        return this;
+      }
+    };
   }
 }
 

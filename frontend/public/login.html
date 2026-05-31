@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Iniciar sesión en Don Fano - Sistema de Asistencias de personal">
-  <title>Iniciar Sesión – Don Fano</title>
+  <meta name="description" content="Iniciar sesión en WorkSync - Sistema de Control de Asistencias">
+  <title>Iniciar Sesión – WorkSync</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/login.css">
 </head>
@@ -19,13 +19,13 @@
 
       <!-- Logo -->
       <div class="card-logo">
-        <img src="img/logo.png" alt="Logo Don Fano">
+        <div class="logo-icon"><i class="fas fa-clock"></i></div>
       </div>
 
       <!-- Título -->
       <div class="card-header">
-        <h1>Don Fano</h1>
-        <p class="tagline">Sistema de Asistencias</p>
+        <h1>WorkSync</h1>
+        <p class="tagline">Plataforma SaaS</p>
       </div>
 
       <!-- Formulario -->
@@ -94,8 +94,8 @@
 
       <!-- Footer de la tarjeta -->
       <div class="card-footer">
-        <p>¿Problemas para acceder? <a href="mailto:admin@donfano.com">Contacta al administrador</a></p>
-        <p style="margin-top: 15px;"><a href="index.html" style="color: var(--text-light); text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: color 0.3s;"><i class="fas fa-arrow-left"></i> Volver al inicio</a></p>
+        <p>¿Problemas para acceder? <a href="mailto:soporte@worksync.com">Contacta a soporte</a></p>
+        <p class="back-link-container"><a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver al inicio</a></p>
       </div>
 
     </div>
@@ -103,109 +103,10 @@
 
   <!-- Pie de página -->
   <footer class="page-footer">
-    Footer info: Trattoria &amp; Don Fano (RS)
+    WorkSync SaaS &copy; 2026 - Plataforma de Asistencia
   </footer>
 
-  <script>
-    // ── Toggle visibilidad contraseña ──────────────────
-    const toggleBtn   = document.getElementById('togglePassword');
-    const passInput   = document.getElementById('password');
-
-    toggleBtn.addEventListener('click', () => {
-      const isPass = passInput.type === 'password';
-      passInput.type = isPass ? 'text' : 'password';
-      toggleBtn.innerHTML = isPass
-        ? '<i class="fas fa-eye-slash"></i>'
-        : '<i class="fas fa-eye"></i>';
-    });
-
-    // ── Recordar sesión ────────────────────────────────
-    const rememberMe  = document.getElementById('rememberMe');
-    const usernameIn  = document.getElementById('username');
-    const saved = localStorage.getItem('df_saved_user');
-    if (saved) {
-      usernameIn.value = saved;
-      rememberMe.checked = true;
-    }
-
-    // ── Login ──────────────────────────────────────────
-    const form        = document.getElementById('loginForm');
-    const errorText   = document.getElementById('errorText');
-    const btnLogin    = document.getElementById('btnLogin');
-    const spinner     = document.getElementById('loginSpinner');
-    const btnText     = document.getElementById('btnLoginText');
-    const btnArrow    = document.getElementById('btnArrow');
-
-    function setLoading(loading) {
-      btnLogin.disabled    = loading;
-      spinner.style.display  = loading ? 'block' : 'none';
-      btnText.textContent    = loading ? 'Iniciando...' : 'Ingresar al Sistema';
-      btnArrow.style.display = loading ? 'none' : 'inline';
-    }
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorText.textContent = '';
-
-      const username = usernameIn.value.trim();
-      const password = passInput.value.trim();
-
-      if (!username || !password) {
-        errorText.textContent = 'Por favor completa todos los campos.';
-        return;
-      }
-
-      setLoading(true);
-
-      try {
-        const res = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          errorText.textContent = data.error || 'Credenciales incorrectas. Intenta de nuevo.';
-          setLoading(false);
-          return;
-        }
-
-        // Guardar sesión
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('role',  data.role);
-        localStorage.setItem('user',  JSON.stringify(data.user));
-
-        if (rememberMe.checked) {
-          localStorage.setItem('df_saved_user', username);
-        } else {
-          localStorage.removeItem('df_saved_user');
-        }
-
-        // Redirigir según rol
-        if (data.role === 'ADMIN') {
-          window.location.href = '/admin/admin-dashboard.html';
-        } else if (data.role === 'WORKER') {
-          window.location.href = '/empleado/empleado-dashboard.html';
-        } else {
-          errorText.textContent = 'Rol de usuario no reconocido.';
-          setLoading(false);
-        }
-
-      } catch (err) {
-        console.error('Login error:', err);
-        errorText.textContent = 'Error de conexión con el servidor. Intenta de nuevo.';
-        setLoading(false);
-      }
-    });
-
-    // ── Olvidé contraseña ──────────────────────────────
-    document.getElementById('forgotLink').addEventListener('click', (e) => {
-      e.preventDefault();
-      alert('Contacta al administrador del sistema para restablecer tu contraseña.\n\nAdmin: admin@donfano.com');
-    });
-  </script>
+  <script src="scripts/login.js"></script>
 
 </body>
 </html>

@@ -59,26 +59,26 @@
         
             <section class="stats-grid">
               <div class="card">
-                <div class="stat-card-title"><i class="fas fa-user-check" style="color:#16a34a;margin-right:6px"></i>Empleados activos</div>
+                <div class="stat-card-title"><i class="fas fa-user-check text-success mr-6"></i>Empleados activos</div>
                 <div id="empleadosActivos" class="stat-card-number">0</div>
               </div>
               <div class="card">
-                <div class="stat-card-title"><i class="fas fa-sign-in-alt" style="color:#d97706;margin-right:6px"></i>Entradas hoy</div>
+                <div class="stat-card-title"><i class="fas fa-sign-in-alt text-warning mr-6"></i>Entradas hoy</div>
                 <div id="entradasHoy" class="stat-card-number">0</div>
               </div>
               <div class="card">
-                <div class="stat-card-title"><i class="fas fa-sign-out-alt" style="color:#0284c7;margin-right:6px"></i>Salidas hoy</div>
+                <div class="stat-card-title"><i class="fas fa-sign-out-alt text-info mr-6"></i>Salidas hoy</div>
                 <div id="salidasHoy" class="stat-card-number">0</div>
               </div>
               <div class="card">
-                <div class="stat-card-title"><i class="fas fa-users" style="color:#7c3aed;margin-right:6px"></i>Total trabajadores</div>
+                <div class="stat-card-title"><i class="fas fa-users text-purple mr-6"></i>Total trabajadores</div>
                 <div id="totalTrabajadores" class="stat-card-number">0</div>
               </div>
             </section>
         
             <section class="charts-section">
               <div class="charts-header">
-                <h2 class="charts-title"><i class="fas fa-chart-bar" style="color:var(--primary);margin-right:8px"></i>Estadísticas por período</h2>
+                <h2 class="charts-title"><i class="fas fa-chart-bar text-primary mr-8"></i>Estadísticas por período</h2>
                 <div class="filter-buttons">
                   <button class="filter-btn active" data-period="week">Esta semana</button>
                   <button class="filter-btn" data-period="month">Último mes</button>
@@ -88,11 +88,11 @@
         
               <div class="charts-grid">
                 <div class="chart-card">
-                  <h3><i class="fas fa-exclamation-circle" style="color:#dc2626;margin-right:6px"></i>Tardanzas / Faltas</h3>
+                  <h3><i class="fas fa-exclamation-circle text-danger mr-6"></i>Tardanzas / Faltas</h3>
                   <canvas id="chartTardanzas"></canvas>
                 </div>
                 <div class="chart-card">
-                  <h3><i class="fas fa-clock" style="color:#d97706;margin-right:6px"></i>Minutos de tardanza</h3>
+                  <h3><i class="fas fa-clock text-warning mr-6"></i>Minutos de tardanza</h3>
                   <canvas id="chartMinutos"></canvas>
                 </div>
               </div>
@@ -113,8 +113,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr><td colspan="4" style="text-align:center;padding:24px;color:var(--text-secondary)">
-                      <i class="fas fa-spinner fa-spin" style="margin-right:8px"></i>Cargando estado...
+                    <tr><td colspan="4" class="text-center p-24 text-secondary">
+                      <i class="fas fa-spinner fa-spin mr-8"></i>Cargando estado...
                     </td></tr>
                   </tbody>
                 </table>
