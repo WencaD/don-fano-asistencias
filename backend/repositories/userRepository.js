@@ -14,7 +14,7 @@ class UserRepository {
         return { id: doc.id, ...data };
       },
       async comparePassword(candidatePassword) {
-        const bcrypt = require("bcrypt");
+        const bcrypt = require("bcryptjs");
         return await bcrypt.compare(candidatePassword, data.password_hash);
       }
     };
@@ -33,7 +33,7 @@ class UserRepository {
         return { id: doc.id, ...data };
       },
       async comparePassword(candidatePassword) {
-        const bcrypt = require("bcrypt");
+        const bcrypt = require("bcryptjs");
         return await bcrypt.compare(candidatePassword, data.password_hash);
       }
     };
@@ -52,7 +52,7 @@ class UserRepository {
         return { id: doc.id, ...data };
       },
       async comparePassword(candidatePassword) {
-        const bcrypt = require("bcrypt");
+        const bcrypt = require("bcryptjs");
         return await bcrypt.compare(candidatePassword, data.password_hash);
       }
     };

@@ -39,13 +39,20 @@ app.use("/api/catalogs", catalogRoutes);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log("Servidor iniciado en puerto:", PORT);
+if (!process.env.VERCEL) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log("Servidor iniciado en puerto:", PORT);
+    if (db) {
+      console.log("Conectado a Firebase Cloud Firestore exitosamente.");
+    } else {
+      console.warn("ADVERTENCIA: Firebase no está configurado de manera completa. Por favor provee 'firebase-service-account.json' en backend/config/ para que el sistema funcione.");
+    }
+  });
+} else {
   if (db) {
-    console.log("Conectado a Firebase Cloud Firestore exitosamente.");
-  } else {
-    console.warn("ADVERTENCIA: Firebase no está configurado de manera completa. Por favor provee 'firebase-service-account.json' en backend/config/ para que el sistema funcione.");
+    console.log("Conectado a Firebase Cloud Firestore (entorno Vercel).");
   }
-});
+}
 
 module.exports = app;
+

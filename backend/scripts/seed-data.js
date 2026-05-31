@@ -1,7 +1,7 @@
 // Script para crear admin inicial en la base de datos
 const sequelize = require("../config/db");
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 require("../models/associations");
 

@@ -1,7 +1,7 @@
 // Script para crear usuario administrador
 const User = require("../models/User");
 const sequelize = require("../config/db");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 require("../models/associations");
 
 async function crearAdmin() {

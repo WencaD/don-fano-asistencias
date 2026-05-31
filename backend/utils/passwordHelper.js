@@ -1,5 +1,5 @@
 // Encriptación de contraseñas con bcrypt
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 class PasswordHelper {
   constructor(saltRounds = 10) {
