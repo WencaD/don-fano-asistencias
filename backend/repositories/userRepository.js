@@ -1,23 +1,44 @@
 const { db } = require("../config/firebase");
 
 class UserRepository {
+  _mapUser(id, data) {
+    if (!data) return null;
+    const catalogService = require("../services/catalogService");
+    
+    // Si el rol es numérico, lo convertimos a string ('ADMIN', 'WORKER', etc.)
+    let roleName = data.role;
+    if (roleName !== undefined && roleName !== null) {
+      if (typeof roleName === 'number' || (!isNaN(roleName) && !isNaN(parseFloat(roleName)))) {
+        roleName = catalogService.getRoleName(parseInt(roleName));
+      } else {
+        roleName = roleName.toString().toUpperCase();
+      }
+    } else {
+      roleName = 'WORKER';
+    }
+
+    const mapped = {
+      id: id.toString(),
+      ...data,
+      role: roleName,
+      toJSON() {
+        return { id: id.toString(), ...data, role: roleName };
+      }
+    };
+
+    mapped.comparePassword = async function(candidatePassword) {
+      const bcrypt = require("bcryptjs");
+      return await bcrypt.compare(candidatePassword, data.password_hash);
+    };
+
+    return mapped;
+  }
+
   async findById(id) {
     if (!db) return null;
     const doc = await db.collection("users").doc(id.toString()).get();
     if (!doc.exists) return null;
-    
-    const data = doc.data();
-    return {
-      id: doc.id,
-      ...data,
-      toJSON() {
-        return { id: doc.id, ...data };
-      },
-      async comparePassword(candidatePassword) {
-        const bcrypt = require("bcryptjs");
-        return await bcrypt.compare(candidatePassword, data.password_hash);
-      }
-    };
+    return this._mapUser(doc.id, doc.data());
   }
 
   async findByUsername(username) {
@@ -25,18 +46,7 @@ class UserRepository {
     const snapshot = await db.collection("users").where("username", "==", username).limit(1).get();
     if (snapshot.empty) return null;
     const doc = snapshot.docs[0];
-    const data = doc.data();
-    return {
-      id: doc.id,
-      ...data,
-      toJSON() {
-        return { id: doc.id, ...data };
-      },
-      async comparePassword(candidatePassword) {
-        const bcrypt = require("bcryptjs");
-        return await bcrypt.compare(candidatePassword, data.password_hash);
-      }
-    };
+    return this._mapUser(doc.id, doc.data());
   }
 
   async findByEmail(email) {
@@ -44,18 +54,7 @@ class UserRepository {
     const snapshot = await db.collection("users").where("email", "==", email).limit(1).get();
     if (snapshot.empty) return null;
     const doc = snapshot.docs[0];
-    const data = doc.data();
-    return {
-      id: doc.id,
-      ...data,
-      toJSON() {
-        return { id: doc.id, ...data };
-      },
-      async comparePassword(candidatePassword) {
-        const bcrypt = require("bcryptjs");
-        return await bcrypt.compare(candidatePassword, data.password_hash);
-      }
-    };
+    return this._mapUser(doc.id, doc.data());
   }
 
   async findAll(options = {}) {
@@ -66,14 +65,7 @@ class UserRepository {
     
     const users = [];
     for (const doc of snapshot.docs) {
-      const data = doc.data();
-      const user = {
-        id: doc.id,
-        ...data,
-        toJSON() {
-          return { id: doc.id, ...data };
-        }
-      };
+      const user = this._mapUser(doc.id, doc.data());
       
       if (options.include) {
         const workerSnapshot = await db.collection("workers").where("userId", "==", doc.id).limit(1).get();
@@ -103,14 +95,7 @@ class UserRepository {
     delete data.id;
     
     await docRef.set(data);
-    const savedUser = {
-      id: docRef.id,
-      ...data,
-      toJSON() {
-        return { id: docRef.id, ...data };
-      }
-    };
-    return savedUser;
+    return this._mapUser(docRef.id, data);
   }
 
   async update(id, userData) {
@@ -123,14 +108,8 @@ class UserRepository {
     delete data.id;
     
     await docRef.update(data);
-    return {
-      id,
-      ...doc.data(),
-      ...data,
-      toJSON() {
-        return { id, ...doc.data(), ...data };
-      }
-    };
+    const updatedData = { ...doc.data(), ...data };
+    return this._mapUser(id, updatedData);
   }
 
   async delete(id) {
@@ -144,3 +123,4 @@ class UserRepository {
 }
 
 module.exports = new UserRepository();
+
