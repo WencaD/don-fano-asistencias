@@ -25,6 +25,11 @@ const token = localStorage.getItem("token");
 
   // Verifica si la respuesta fue OK (status 200-299)
   if (!res.ok) {
+    if (res.status === 401 || res.status === 403) {
+      localStorage.clear();
+      window.location.href = "../login.html";
+      return;
+    }
     // Si hay un error, intentamos obtener el mensaje detallado del backend
     const errorMessage = data.error || `Error en la petición (Status: ${res.status}).`;
     throw new Error(errorMessage);

@@ -24,6 +24,11 @@ const token = localStorage.getItem("token");
   }
 
   if (!res.ok) {
+    if (res.status === 401 || res.status === 403) {
+      localStorage.clear();
+      window.location.href = "../login.html";
+      return;
+    }
     const errorMessage = data.error || `Error ${res.status}: Fallo de conexión o servidor.`;
     throw new Error(errorMessage);
   }

@@ -38,6 +38,11 @@ async function onScanSuccess(decodedText, decodedResult) {
     const data = await res.json();
 
     if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        localStorage.clear();
+        window.location.href = "../login.html";
+        return;
+      }
       throw new Error(data.error || "Fallo de servidor al marcar.");
     }
 

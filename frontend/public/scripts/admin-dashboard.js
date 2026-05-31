@@ -24,6 +24,11 @@ async function apiRequest(url, options = {}) {
   }
 
   if (!res.ok) {
+    if (res.status === 401 || res.status === 403) {
+      localStorage.clear();
+      window.location.href = "../login.html";
+      return;
+    }
     throw new Error(data.error || "Error en la petición");
   }
   return data;

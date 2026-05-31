@@ -2,6 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <script>
+    if (!localStorage.getItem("token") || localStorage.getItem("role") !== "WORKER") {
+      window.location.href = "../login.html";
+    }
+  </script>
   <title>Mi Panel - Don Fano</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Panel personal de asistencias - Don Fano">
