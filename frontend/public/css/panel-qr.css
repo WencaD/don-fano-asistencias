@@ -1,3 +1,7 @@
+/* =========================================================
+   Panel QR - WorkSync SaaS | Premium Futuristic Cyber-Dark Theme
+   ========================================================= */
+
 .qr-page-wrapper {
   display: flex;
   align-items: center;
@@ -8,30 +12,39 @@
 
 .qr-main-card {
   background: var(--bg-card);
-  border-radius: 24px;
-  padding: 44px 40px;
-  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-lg);
+  padding: 50px 40px;
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(99, 102, 241, 0.1);
   border: 1px solid var(--border);
   text-align: center;
-  max-width: 420px;
+  max-width: 440px;
   width: 100%;
   position: relative;
+  transition: all 0.3s ease;
+}
+
+.qr-main-card:hover {
+  border-color: var(--border-active);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(6, 182, 212, 0.15);
 }
 
 .qr-main-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 20px; right: 20px;
+  top: 0; left: 24px; right: 24px;
   height: 3px;
-  background: linear-gradient(90deg, var(--pizza-red), var(--pizza-amber), var(--pizza-red));
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
   border-radius: 0 0 4px 4px;
 }
 
 .qr-pizza-emoji {
-  font-size: 40px;
-  margin-bottom: 12px;
+  font-size: 44px;
+  margin-bottom: 16px;
   display: block;
-  animation: spin 8s linear infinite;
+  animation: spin 10s linear infinite;
+  text-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
 }
 
 @keyframes spin {
@@ -40,11 +53,12 @@
 }
 
 .qr-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--text);
-  margin-bottom: 4px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
 }
 
 .qr-subtitle {
@@ -55,26 +69,32 @@
 
 .qr-canvas-wrapper {
   display: inline-block;
-  padding: 16px;
+  padding: 20px;
   background: white;
-  border-radius: 16px;
-  border: 3px solid rgba(192,57,43,0.2);
-  box-shadow: var(--shadow-md);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.2);
   margin-bottom: 24px;
+  transition: transform 0.3s ease;
+}
+
+.qr-canvas-wrapper:hover {
+  transform: scale(1.02);
 }
 
 #qr-canvas {
   display: block;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .qr-code-display {
-  font-family: 'Playfair Display', serif;
-  font-size: 30px;
-  font-weight: 900;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
   letter-spacing: 6px;
-  color: var(--pizza-red);
-  margin-bottom: 12px;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
 }
 
 .qr-timer {
@@ -82,16 +102,17 @@
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  background: var(--bg-alt);
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+  font-weight: 700;
+  color: #22D3EE;
+  background: rgba(6, 182, 212, 0.1);
+  padding: 10px 24px;
+  border-radius: 50px;
+  border: 1px solid rgba(6, 182, 212, 0.3);
   margin-bottom: 12px;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.15);
 }
 
-.qr-timer i { color: var(--pizza-amber); }
+.qr-timer i { color: #22D3EE; }
 
 #estado {
   font-size: 13px;
@@ -104,7 +125,7 @@
 .qr-divider {
   height: 1px;
   background: var(--border);
-  margin: 20px 0;
+  margin: 24px 0;
 }
 
 .qr-info {
@@ -113,15 +134,15 @@
   gap: 10px;
   font-size: 13px;
   color: var(--text-secondary);
-  background: var(--bg-alt);
+  background: rgba(17, 24, 39, 0.6);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 14px;
+  border-radius: 12px;
+  padding: 14px 16px;
   text-align: left;
 }
 
 .qr-info i {
-  color: var(--pizza-amber);
+  color: #22D3EE;
   flex-shrink: 0;
   margin-top: 2px;
 }

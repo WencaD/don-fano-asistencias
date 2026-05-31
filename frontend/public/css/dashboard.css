@@ -1,5 +1,5 @@
 /* =========================================================
-   Dashboard Admin - WorkSync SaaS | Premium Modern Light Theme
+   Dashboard Admin - WorkSync SaaS | Premium Futuristic Cyber-Dark Theme
    ========================================================= */
 
 /* Grid del dashboard adaptativo */
@@ -20,7 +20,7 @@
   margin-bottom: 36px;
 }
 
-/* === Cards de estadísticas Minimalistas Premium === */
+/* === Cards de estadísticas Futuristas Holográficas === */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -29,7 +29,9 @@
 }
 
 .stats-grid .card {
-  background: #FFFFFF;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 24px;
@@ -51,12 +53,13 @@
   height: 4px;
   background: var(--primary);
   opacity: 0;
-  transition: opacity 0.25s;
+  transition: all 0.25s;
 }
 
 .stats-grid .card:hover {
   transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg), 0 0 15px rgba(99, 102, 241, 0.15);
+  border-color: var(--border-active);
 }
 
 .stats-grid .card:hover::before {
@@ -64,46 +67,59 @@
 }
 
 .stat-card-title {
-  font-size: 14px;
-  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
   color: var(--text-secondary);
   margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.08em;
 }
 
 .stat-card-number {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 38px;
-  font-weight: 800;
-  color: var(--text);
+  font-weight: 700;
+  color: #FFFFFF;
   line-height: 1;
   letter-spacing: -0.02em;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
 /* Colores para las barras y los íconos de las cards */
-.stats-grid .card:nth-child(1) .stat-card-title i { color: var(--success); }
+.stats-grid .card:nth-child(1) .stat-card-title i { color: var(--success); text-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
 .stats-grid .card:nth-child(1)::before { background: var(--success); }
+.stats-grid .card:nth-child(1):hover { border-color: rgba(16, 185, 129, 0.4); box-shadow: var(--shadow-lg), 0 0 15px rgba(16, 185, 129, 0.2); }
 
-.stats-grid .card:nth-child(2) .stat-card-title i { color: var(--warning); }
+.stats-grid .card:nth-child(2) .stat-card-title i { color: var(--warning); text-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
 .stats-grid .card:nth-child(2)::before { background: var(--warning); }
+.stats-grid .card:nth-child(2):hover { border-color: rgba(245, 158, 11, 0.4); box-shadow: var(--shadow-lg), 0 0 15px rgba(245, 158, 11, 0.2); }
 
-.stats-grid .card:nth-child(3) .stat-card-title i { color: var(--info); }
-.stats-grid .card:nth-child(3)::before { background: var(--info); }
+.stats-grid .card:nth-child(3) .stat-card-title i { color: var(--accent); text-shadow: 0 0 10px rgba(6, 182, 212, 0.5); }
+.stats-grid .card:nth-child(3)::before { background: var(--accent); }
+.stats-grid .card:nth-child(3):hover { border-color: rgba(6, 182, 212, 0.4); box-shadow: var(--shadow-lg), 0 0 15px rgba(6, 182, 212, 0.2); }
 
-.stats-grid .card:nth-child(4) .stat-card-title i { color: var(--primary); }
+.stats-grid .card:nth-child(4) .stat-card-title i { color: var(--primary); text-shadow: 0 0 10px rgba(99, 102, 241, 0.5); }
 .stats-grid .card:nth-child(4)::before { background: var(--primary); }
+.stats-grid .card:nth-child(4):hover { border-color: rgba(99, 102, 241, 0.4); box-shadow: var(--shadow-lg), 0 0 15px rgba(99, 102, 241, 0.2); }
 
 /* === Sección de gráficos === */
 .charts-section {
-  background: #FFFFFF;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
   border-radius: var(--radius-md);
   padding: 32px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   border: 1px solid var(--border);
   margin-bottom: 32px;
+  transition: border-color 0.3s;
+}
+
+.charts-section:hover {
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .charts-header {
@@ -116,18 +132,24 @@
 }
 
 .charts-title {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 20px;
   font-weight: 700;
-  color: var(--text);
+  color: #FFFFFF;
   display: flex;
   align-items: center;
   gap: 10px;
   letter-spacing: -0.02em;
 }
 
+.charts-title i {
+  color: var(--primary);
+  text-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+}
+
 .filter-buttons {
   display: flex;
-  background: #F1F5F9;
+  background: rgba(17, 24, 39, 0.8);
   padding: 4px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
@@ -142,17 +164,17 @@
   font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s;
 }
 
 .filter-btn:hover {
-  color: var(--text);
+  color: #FFFFFF;
 }
 
 .filter-btn.active {
-  background: #FFFFFF;
-  color: var(--primary);
-  box-shadow: var(--shadow-sm);
+  background: var(--primary);
+  color: #FFFFFF;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
 }
 
 .charts-grid {
@@ -162,7 +184,7 @@
 }
 
 .chart-card {
-  background: #FFFFFF;
+  background: rgba(10, 15, 30, 0.5);
   border-radius: var(--radius-md);
   padding: 24px;
   border: 1px solid var(--border);
@@ -170,15 +192,16 @@
 }
 
 .chart-card h3 {
-  font-size: 15px;
-  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
   margin-bottom: 20px;
-  color: var(--text-secondary);
+  color: #A5B4FC;
   display: flex;
   align-items: center;
   gap: 8px;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
 }
 
 /* === Columna lateral de asistencia === */
@@ -189,17 +212,19 @@
 }
 
 .attendance-status-section {
-  background: #FFFFFF;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
   border-radius: var(--radius-md);
   padding: 28px;
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
 }
 
 .attendance-status-section h2 {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 18px;
   font-weight: 700;
-  color: var(--text);
+  color: #FFFFFF;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
@@ -209,33 +234,36 @@
   letter-spacing: -0.02em;
 }
 
-/* Estado Pills */
+/* Estado Pills Neon */
 .estado-pill {
   padding: 4px 12px;
   border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.05em;
 }
 
 .estado-pill.presente {
-  background: #ECFDF5;
-  color: #059669;
-  border: 1px solid #A7F3D0;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  text-shadow: 0 0 6px rgba(16, 185, 129, 0.3);
 }
 
 .estado-pill.tarde {
-  background: #FEF3C7;
-  color: #D97706;
-  border: 1px solid #FDE68A;
+  background: rgba(245, 158, 11, 0.1);
+  color: #F59E0B;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  text-shadow: 0 0 6px rgba(245, 158, 11, 0.3);
 }
 
 .estado-pill.ausente {
-  background: #FEF2F2;
-  color: #DC2626;
-  border: 1px solid #FECACA;
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  text-shadow: 0 0 6px rgba(239, 68, 68, 0.3);
 }
