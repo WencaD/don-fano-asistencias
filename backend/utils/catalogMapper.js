@@ -64,6 +64,11 @@ class CatalogMapper {
     const map = { 1: 'Pizzero', 2: 'Ayudante de Cocina', 3: 'Cajero', 4: 'Repartidor', 5: 'Gerente de Turno' };
     return map[cargoId] || 'Cajero';
   }
+
+  static getEstadoName(estadoId) {
+    const map = { 1: 'Puntual', 2: 'Tardanza', 3: 'Falta', 4: 'Justificado' };
+    return map[estadoId] || 'Puntual';
+  }
 }
 
 module.exports = CatalogMapper;

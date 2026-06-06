@@ -5,25 +5,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --primary: #4F46E5; /* Royal Indigo */
-  --primary-hover: #4338CA;
-  --primary-light: #EEF2FF; /* Warm Lavender */
-  --accent: #7C3AED; /* Warm Violet */
-  --accent-light: #F5F3FF;
+  --primary: #EF4444; /* Warm Tomato Red */
+  --primary-hover: #DC2626;
+  --primary-light: #FEE2E2; /* Soft Red */
+  --accent: #F59E0B; /* Golden Cheese / Warm Amber */
+  --accent-light: #FFFBEB; /* Soft Cream */
   
   --secondary: #0F172A; /* Slate 900 */
 
   /* Fondos Light Mode */
-  --bg: #FAF9F6; /* Soft warm alabaster */
+  --bg: #FAF6F0; /* Soft warm dough alabaster */
   --bg-card: #FFFFFF;
-  --bg-card-hover: #FAF9F6;
+  --bg-card-hover: #FAF6F0;
 
   /* Sidebar */
   --sidebar-bg: #FFFFFF;
-  --sidebar-bd: #E2E8F0;
+  --sidebar-bd: #F1EFE9;
 
   /* Bordes */
-  --border: #E2E8F0;
+  --border: #F1EFE9;
   
   /* Texto */
   --text: #0F172A;
@@ -59,8 +59,8 @@ body {
   font-family: 'Inter', -apple-system, sans-serif;
   background: var(--bg);
   background-image: 
-    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.02) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.02) 0%, transparent 40%);
+    radial-gradient(circle at 10% 20%, rgba(239, 68, 68, 0.02) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.02) 0%, transparent 40%);
   background-attachment: fixed;
   color: var(--text);
   min-height: 100vh;
@@ -153,7 +153,7 @@ body {
 }
 
 .sidebar-logo::before {
-  content: '\f017'; /* fa-clock */
+  content: '\f818'; /* fa-pizza-slice */
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
   font-size: 24px;
@@ -430,7 +430,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.15);
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.15);
 }
 
 .btn-primary:hover {

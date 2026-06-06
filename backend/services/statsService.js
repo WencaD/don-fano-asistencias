@@ -92,7 +92,7 @@ class StatsService {
         date.setDate(date.getDate() - 7);
     }
     
-    return date.toISOString().split("T")[0];
+    return timeHelper.formatDate(date);
   }
 
   _buildStatsMap(assistances) {
@@ -124,10 +124,12 @@ class StatsService {
     const minutosTarde = [];
     const faltas = [];
 
-    const startDate = new Date(desde);
-    const endDate = new Date(hasta);
+    const [sYear, sMonth, sDay] = desde.split("-").map(Number);
+    const [eYear, eMonth, eDay] = hasta.split("-").map(Number);
+    const startDate = new Date(Date.UTC(sYear, sMonth - 1, sDay));
+    const endDate = new Date(Date.UTC(eYear, eMonth - 1, eDay));
 
-    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+    for (let d = new Date(startDate); d <= endDate; d.setUTCDate(d.getUTCDate() + 1)) {
       const dateStr = d.toISOString().split("T")[0];
       const stats = statsMap[dateStr] || { tardanzas: 0, minutosTarde: 0, asistencias: 0 };
       

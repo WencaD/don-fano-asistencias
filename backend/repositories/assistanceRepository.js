@@ -1,4 +1,5 @@
 const { db } = require("../config/firebase");
+const CatalogMapper = require("../utils/catalogMapper");
 
 class AssistanceRepository {
   async findById(id) {
@@ -7,6 +8,10 @@ class AssistanceRepository {
     if (!doc.exists) return null;
     
     const data = doc.data();
+    const estadoId = data.estadoId || data.estado || 1;
+    data.estadoId = Number(estadoId);
+    data.estado = CatalogMapper.getEstadoName(data.estadoId);
+
     return {
       id: doc.id,
       ...data,
@@ -17,7 +22,7 @@ class AssistanceRepository {
         await db.collection("assistances").doc(doc.id).update({
           hora_salida: this.hora_salida || null,
           estadoId: this.estadoId || null,
-          estado: this.estado || null
+          estado: this.estadoId || null
         });
       }
     };
@@ -35,6 +40,10 @@ class AssistanceRepository {
     
     const doc = snapshot.docs[0];
     const data = doc.data();
+    const estadoId = data.estadoId || data.estado || 1;
+    data.estadoId = Number(estadoId);
+    data.estado = CatalogMapper.getEstadoName(data.estadoId);
+
     return {
       id: doc.id,
       ...data,
@@ -45,7 +54,7 @@ class AssistanceRepository {
         await db.collection("assistances").doc(doc.id).update({
           hora_salida: this.hora_salida || null,
           estadoId: this.estadoId || null,
-          estado: this.estado || null
+          estado: this.estadoId || null
         });
       }
     };
@@ -61,6 +70,10 @@ class AssistanceRepository {
     const assistances = [];
     for (const doc of snapshot.docs) {
       const data = doc.data();
+      const estadoId = data.estadoId || data.estado || 1;
+      data.estadoId = Number(estadoId);
+      data.estado = CatalogMapper.getEstadoName(data.estadoId);
+
       const assistance = {
         id: doc.id,
         ...data,
@@ -71,7 +84,7 @@ class AssistanceRepository {
           await db.collection("assistances").doc(doc.id).update({
             hora_salida: this.hora_salida || null,
             estadoId: this.estadoId || null,
-            estado: this.estado || null
+            estado: this.estadoId || null
           });
         }
       };
@@ -98,10 +111,9 @@ class AssistanceRepository {
     const assistances = [];
     for (const doc of snapshot.docs) {
       const data = doc.data();
-      
-      if (data.estado && !data.estadoId) {
-        data.estadoId = data.estado;
-      }
+      const estadoId = data.estadoId || data.estado || 1;
+      data.estadoId = Number(estadoId);
+      data.estado = CatalogMapper.getEstadoName(data.estadoId);
       
       const assistance = {
         id: doc.id,
@@ -113,7 +125,7 @@ class AssistanceRepository {
           await db.collection("assistances").doc(doc.id).update({
             hora_salida: this.hora_salida || null,
             estadoId: this.estadoId || null,
-            estado: this.estado || null
+            estado: this.estadoId || null
           });
         }
       };
@@ -141,22 +153,33 @@ class AssistanceRepository {
       data.workerId = data.workerId.toString();
     }
     
-    if (data.estado && !data.estadoId) {
-      data.estadoId = data.estado;
+    const inputEstado = data.estado;
+    let numericId = 1;
+    if (typeof inputEstado === "string") {
+      numericId = CatalogMapper.getEstadoId(inputEstado);
+    } else if (typeof inputEstado === "number") {
+      numericId = inputEstado;
     }
     
+    data.estadoId = numericId;
+    data.estado = numericId;
+
     await docRef.set(data);
+
+    const returnedData = { ...data };
+    returnedData.estado = CatalogMapper.getEstadoName(numericId);
+
     const savedAssistance = {
       id: docRef.id,
-      ...data,
+      ...returnedData,
       toJSON() {
-        return { id: docRef.id, ...data };
+        return { id: docRef.id, ...returnedData };
       },
       async save() {
         await db.collection("assistances").doc(docRef.id).update({
           hora_salida: this.hora_salida || null,
           estadoId: this.estadoId || null,
-          estado: this.estado || null
+          estado: this.estadoId || null
         });
       }
     };
@@ -176,13 +199,30 @@ class AssistanceRepository {
       data.workerId = data.workerId.toString();
     }
     
+    const inputEstado = data.estado;
+    if (inputEstado !== undefined) {
+      let numericId = 1;
+      if (typeof inputEstado === "string") {
+        numericId = CatalogMapper.getEstadoId(inputEstado);
+      } else if (typeof inputEstado === "number") {
+        numericId = inputEstado;
+      }
+      data.estadoId = numericId;
+      data.estado = numericId;
+    }
+    
     await docRef.update(data);
+
+    const mergedData = { ...doc.data(), ...data };
+    const estadoId = mergedData.estadoId || mergedData.estado || 1;
+    mergedData.estadoId = Number(estadoId);
+    mergedData.estado = CatalogMapper.getEstadoName(mergedData.estadoId);
+
     return {
       id,
-      ...doc.data(),
-      ...data,
+      ...mergedData,
       toJSON() {
-        return { id, ...doc.data(), ...data };
+        return { id, ...mergedData };
       }
     };
   }

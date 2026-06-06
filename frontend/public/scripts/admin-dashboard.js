@@ -148,8 +148,30 @@ async function cargarTablaEstado() {
     const todayAssistance = await apiRequest("/api/assistance/today");
     const assistanceMap = new Map();
     todayAssistance.forEach(a => {
-      assistanceMap.set(a.workerId, a);
+      assistanceMap.set(String(a.workerId), a);
     });
+
+    // 3. Obtener los turnos de HOY
+    let todayShiftsMap = new Map();
+    let shiftsLoaded = false;
+    try {
+      const hoyStr = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "America/Lima",
+        year: "numeric", month: "2-digit", day: "2-digit"
+      }).format(new Date());
+
+      const shifts = await apiRequest("/api/shifts");
+      if (Array.isArray(shifts)) {
+        shifts.forEach(s => {
+          if (s.fecha === hoyStr) {
+            todayShiftsMap.set(String(s.workerId), s);
+          }
+        });
+        shiftsLoaded = true;
+      }
+    } catch (e) {
+      console.warn("No se pudieron cargar los turnos del día:", e);
+    }
 
     if (!workers.length) {
         tbody.innerHTML = `<tr><td colspan="4">No hay trabajadores registrados.</td></tr>`;
@@ -159,7 +181,7 @@ async function cargarTablaEstado() {
     tbody.innerHTML = "";
 
     workers.forEach(w => {
-      const asistencia = assistanceMap.get(w.id);
+      const asistencia = assistanceMap.get(String(w.id));
       
       let estado;
       let entrada = "--";
@@ -173,8 +195,13 @@ async function cargarTablaEstado() {
         estado = `<span style="color:blue;">Completo (${asistencia.estado})</span>`;
         entrada = asistencia.hora_entrada;
       } else {
-        // NO hay registro de entrada: FALTA
-        estado = `<span style="color:red;font-weight:bold;">FALTA</span>`;
+        // NO hay registro de entrada: FALTA (si tiene turno hoy o si no cargaron los turnos) o NO PROGRAMADO
+        const tieneTurnoHoy = !shiftsLoaded || todayShiftsMap.has(String(w.id));
+        if (tieneTurnoHoy) {
+          estado = `<span style="color:red;font-weight:bold;">FALTA</span>`;
+        } else {
+          estado = `<span style="color:gray;">No Programado</span>`;
+        }
       }
 
       const row = `

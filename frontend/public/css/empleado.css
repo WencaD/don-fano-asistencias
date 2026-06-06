@@ -34,7 +34,7 @@
   top: -20%;
   width: 250px;
   height: 250px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.03) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.03) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -75,7 +75,7 @@
   font-weight: 600;
   margin-top: 18px;
   width: fit-content;
-  border: 1px solid rgba(79, 70, 229, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.1);
   color: var(--primary);
   letter-spacing: 0.02em;
 }
@@ -150,7 +150,7 @@
 }
 
 .status-entry-container > div:hover {
-  border-color: rgba(79, 70, 229, 0.2);
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .label {
@@ -197,14 +197,14 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
   margin-top: auto;
 }
 
 .btn-qr-scan:hover {
   background: var(--primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.25);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.25);
 }
 
 .btn-qr-scan:active {
@@ -240,7 +240,7 @@
 .status-box:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 15px rgba(0,0,0,0.03);
-  border-color: rgba(79, 70, 229, 0.2);
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .status-box .value {

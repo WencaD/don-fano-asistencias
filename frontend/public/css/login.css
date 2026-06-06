@@ -5,20 +5,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --primary: #4F46E5; /* Royal Indigo */
-  --primary-hover: #4338CA;
-  --accent: #7C3AED; /* Warm Violet */
-  --accent-light: #F5F3FF;
+  --primary: #EF4444; /* Warm Tomato Red */
+  --primary-hover: #DC2626;
+  --accent: #F59E0B; /* Golden Cheese / Warm Amber */
+  --accent-light: #FFFBEB; /* Soft Cream */
   
-  --bg-page: #FAF9F6; /* Soft warm alabaster */
+  --bg-page: #FAF6F0; /* Soft warm dough alabaster */
   --bg-card: #FFFFFF; /* Pure White */
   --text-main: #1E293B; /* Slate 800 */
   --text-muted: #64748B; /* Slate 500 */
-  --border-color: #E2E8F0; /* Soft gray border */
+  --border-color: #F1EFE9; /* Warm border gray */
   
   --input-bg: #FFFFFF;
   --input-border: #CBD5E1;
-  --input-focus: #4F46E5;
+  --input-focus: #EF4444;
   
   --radius-card: 20px;
   --radius-input: 10px;
@@ -51,9 +51,9 @@ body {
   inset: 0;
   z-index: -1;
   background: 
-    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.04) 0%, transparent 45%),
-    #FAF9F6;
+    radial-gradient(circle at 10% 20%, rgba(239, 68, 68, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.04) 0%, transparent 45%),
+    #FAF6F0;
   overflow: hidden;
 }
 
@@ -103,7 +103,7 @@ body {
   justify-content: center;
   font-size: 26px;
   color: var(--accent);
-  box-shadow: 0 4px 10px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.1);
   animation: bounceLogo 3s infinite ease-in-out;
 }
 
@@ -275,7 +275,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.15);
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.15);
   transition: all 0.2s ease;
   margin-top: 8px;
 }

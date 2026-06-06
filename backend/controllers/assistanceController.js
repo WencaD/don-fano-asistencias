@@ -1,6 +1,7 @@
 // Controlador HTTP para registro de asistencias — Marcación de entrada/salida, historial y estadísticas
 
 const assistanceService = require("../services/assistanceService");
+const timeHelper = require("../utils/timeHelper");
 
 exports.markAssistance = async (req, res) => {
   try {
@@ -40,10 +41,14 @@ exports.markAssistance = async (req, res) => {
 
 exports.getTodayAssistance = async (req, res) => {
   try {
+    const workerId = req.params.id;
     const asistencias = await assistanceService.getAllAssistances();
-    const hoy = new Date().toISOString().split("T")[0];
+    const hoy = timeHelper.getCurrentDate();
     
-    const asistenciasHoy = asistencias.filter(a => a.fecha === hoy);
+    let asistenciasHoy = asistencias.filter(a => a.fecha === hoy);
+    if (workerId) {
+      asistenciasHoy = asistenciasHoy.filter(a => String(a.workerId) === String(workerId));
+    }
     res.json(asistenciasHoy);
   } catch (error) {
     console.error("getTodayAssistance error:", error);
@@ -54,12 +59,11 @@ exports.getTodayAssistance = async (req, res) => {
 exports.getMonthlyHistory = async (req, res) => {
   try {
     const workerId = req.params.id;
-    const hoy = new Date();
-    const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
-    const fin = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0);
-
-    const desde = inicio.toISOString().split("T")[0];
-    const hasta = fin.toISOString().split("T")[0];
+    const dateStr = timeHelper.getCurrentDate();
+    const [year, month] = dateStr.split("-");
+    const desde = `${year}-${month}-01`;
+    const lastDay = new Date(parseInt(year), parseInt(month), 0).getDate();
+    const hasta = `${year}-${month}-${String(lastDay).padStart(2, '0')}`;
 
     const asistencias = await assistanceService.getWorkerAssistances(workerId);
     

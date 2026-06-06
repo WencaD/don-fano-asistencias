@@ -165,7 +165,7 @@
   background: var(--accent-light);
   padding: 10px 24px;
   border-radius: 50px;
-  border: 1px solid rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.1);
   display: inline-block;
   margin-bottom: 16px;
 }
@@ -189,7 +189,7 @@
   font-weight: 700;
   color: var(--primary);
   background: var(--primary-light);
-  border: 1px solid rgba(79, 70, 229, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.1);
   padding: 8px 20px;
   border-radius: 20px;
   letter-spacing: 0.02em;

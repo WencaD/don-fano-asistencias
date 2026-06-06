@@ -10,12 +10,16 @@ class TimeHelper {
     return difference > 0 ? Math.ceil(difference) : Math.floor(difference);
   }
 
-  static getCurrentDate() {
+  static formatDate(date) {
     const formatter = new Intl.DateTimeFormat("en-CA", {
       timeZone: "America/Lima",
       year: "numeric", month: "2-digit", day: "2-digit"
     });
-    return formatter.format(new Date());
+    return formatter.format(date);
+  }
+
+  static getCurrentDate() {
+    return this.formatDate(new Date());
   }
 
   static getCurrentTime() {
