@@ -4,17 +4,14 @@ const workerRepository = require('../repositories/workerRepository');
 const passwordHelper = require('../utils/passwordHelper');
 const tokenHelper = require('../utils/tokenHelper');
 const catalogService = require('../services/catalogService');
-const sequelize = require('../config/db');
+
 
 jest.mock('../repositories/userRepository');
 jest.mock('../repositories/workerRepository');
 jest.mock('../utils/passwordHelper');
 jest.mock('../utils/tokenHelper');
 jest.mock('../services/catalogService');
-jest.mock('../config/db', () => ({
-  transaction: jest.fn(),
-  define: jest.fn(() => ({}))
-}));
+
 
 describe('WorkerService', () => {
   beforeEach(() => {

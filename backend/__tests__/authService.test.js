@@ -19,10 +19,7 @@ jest.mock("../utils/tokenHelper", () => ({
   generate: jest.fn(),
 }));
 
-jest.mock("../config/db", () => ({
-  define:      jest.fn(() => ({})),
-  transaction: jest.fn(),
-}));
+
 
 jest.mock("../services/catalogService", () => ({
   getPlanId: jest.fn().mockReturnValue(1),
@@ -35,7 +32,7 @@ const userRepository         = require("../repositories/userRepository");
 const organizationRepository = require("../repositories/organizationRepository");
 const passwordHelper         = require("../utils/passwordHelper");
 const tokenHelper            = require("../utils/tokenHelper");
-const sequelize              = require("../config/db");
+
 
 // --- Login ---
 describe("AuthService — Login", () => {
@@ -95,7 +92,7 @@ describe("AuthService — Registro", () => {
     organizationRepository.findByAlias.mockResolvedValue(null);
     userRepository.findByEmail.mockResolvedValue(null);
     passwordHelper.hash.mockResolvedValue("$2b$10$hash");
-    sequelize.transaction.mockResolvedValue({ commit: jest.fn(), rollback: jest.fn() });
+
     organizationRepository.create.mockResolvedValue({ id: 10, alias: "donfano", plan: "basico" });
     userRepository.create.mockResolvedValue({ id: 5, role: "ADMIN", organizationId: 10 });
   });
