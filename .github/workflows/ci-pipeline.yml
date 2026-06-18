@@ -1,0 +1,31 @@
+name: Pipeline de Calidad y Pruebas - Don Fano
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    name: Instalación, Compilación y Ejecución de Pruebas
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar Código Fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Instalar Dependencias del Proyecto
+        run: npm ci
+
+      - name: Ejecutar Pruebas Unitarias (Jest)
+        run: npm test -- --testPathPattern="__tests__" --verbose --forceExit
+
+      - name: Generar Reporte de Cobertura de Código
+        run: npm run test:coverage -- --testPathPattern="__tests__" --forceExit
