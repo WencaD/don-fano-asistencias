@@ -22,7 +22,8 @@ jobs:
           cache: 'npm'
 
       - name: Instalar Dependencias del Proyecto
-        run: npm ci
+        run: npm install
+
 
       - name: Ejecutar Pruebas Unitarias (Jest)
         run: npm test -- --testPathPattern="__tests__" --verbose --forceExit
